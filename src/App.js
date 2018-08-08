@@ -21,10 +21,15 @@ class App extends Component {
         if (user) {
           this.props.updateUser(user)
         } else {
-          this.props.history.push('/logout')
+          <Redirect to='/logout' />
         }
       })
     }
+  }
+
+  checkLogin = () => {
+    const loggedIn = localStorage.getItem('token')
+    return loggedIn ? null : this.props.history.push('/login')
   }
 
   render() {
@@ -32,7 +37,8 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path='/' render={props => {
-            return <Redirect to='/login' />
+            this.checkLogin()
+            return <Redirect to='/home' />
           }}/>
           <Route path='/signup' render={props => {
             return <AuthContainer authRequest='signup' />
@@ -41,12 +47,14 @@ class App extends Component {
             return <AuthContainer authRequest='login' />
           }} />
           <Route path='/chat' render={props => {
+            this.checkLogin()
             return <ChatContainer chatReq='chat' />
           }} />
           <Route path='/logout' render={props => {
             return <AuthContainer authRequest='logout' />
           }} />
           <Route path='/home' render={props => {
+            this.checkLogin()
             return <ChatContainer chatReq='home' />
           }}/>
         </Switch>

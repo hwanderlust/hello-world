@@ -1,10 +1,6 @@
 import { UPDATE_USER, UPDATE_CHAT, UPDATE_MESSAGES, UPDATE_RECIPIENT_USER, REMOVE_USER } from './types'
 
-// Define and export your action creators here
-// EXAMPLE:
-
 export const updateUser = (user) => {
-  console.log(`INSIDE ACTIONS`, user);
   return {
     type: UPDATE_USER,
     payload: user

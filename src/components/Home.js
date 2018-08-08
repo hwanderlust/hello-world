@@ -11,12 +11,15 @@ class Home extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(`HOME COMPONENTDIDUPDATE`, this.state);
+    if(prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
+    } else {
+      this.renderUsers()
+    }
   }
 
   renderUsers = () => {
     const { users } = this.state
-    return users ? users.map(user => <li key={user.id} onClick={() => this.handleClick(user)}>{user.username}</li>) : null
+    return users ? users.map(user => <li key={user.id} style={{border: '1px solid black', listStyle: 'none', padding: '20px', textAlign: 'center'}} onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
   handleClick = (clickedUser) => {
@@ -25,10 +28,9 @@ class Home extends React.Component {
   }
 
   handleReceivedUser = (response) => {
-    // const { users } = this.props
-    // this.props.users().then(users => this.setState({users}, () => console.log(this.state)))
-    const { handleUsers } = this.props
-    handleUsers()
+    this.setState({...this.state,
+      users: [...this.state.users, response]
+    })
   }
 
   render() {

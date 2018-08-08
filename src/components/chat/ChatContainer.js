@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Home from '../Home';
-import Chat from '../Chat';
+import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
 
@@ -47,7 +47,7 @@ class ChatContainer extends React.Component {
   }
 
   renderHome = () => {
-    return this.state.users ? <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
+    return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
   }
 
   setChatMessages = () => {
@@ -95,9 +95,9 @@ class ChatContainer extends React.Component {
     if(this.state.users) {
       switch(this.props.chatReq) {
         case 'home':
-        return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
+          return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
         case 'chat':
-        return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+          return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
         default:
         console.log(`Chat request is wrong`);
         break
@@ -121,38 +121,3 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(connect(mapStateToProps)(ChatContainer));
-
-
-// newMessage = (message) => {
-//   const users = {sender_id: this.state.currentUser.id, recipient_id: this.state.recipientUser.id}
-//   createMessage({...message, ...users})
-// }
-//
-// setChatMessages = () => {
-//   getChatMessages(this.state.currentUser.id).then(messages => this.setState({messages}))
-// }
-//
-// passChatMessages = () => {
-//   if(this.state.recipientUser) {
-//     const { messages, currentUser, recipientUser } = this.state
-//
-//     const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
-//
-//     if(currentUser.id === recipientUser.id) {
-//       var flags = {};
-//       var filtered = sentMsgs.filter(msg => {
-//         if (flags[msg.id]) {
-//           return false;
-//         }
-//           flags[msg.id] = true;
-//           return true;
-//         });
-//       return filtered
-//     } else {
-//       const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
-//
-//       const allMsgs = [...sentMsgs, ...recMsgs]
-//       return allMsgs
-//     }
-//   }
-// }

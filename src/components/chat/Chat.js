@@ -1,16 +1,18 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
+import Message from './Message'
 
 class Chat extends React.Component {
   constructor(props) {
     super(props)
-    this.chatWindow = React.createRef()
+    this.chatWindow = React.createRef();
+    this.form = React.createRef();
     this.state = {
       chat: '',
       messages: '',
       text: '',
-    }
-  }
+    };
+  };
 
   componentDidMount() {
     if(this.props.chat) {
@@ -28,6 +30,10 @@ class Chat extends React.Component {
     if(this.state.messages !== this.props.messages) {
       this.setState({messages: this.props.messages})
     }
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   handleChange = (e) => {
@@ -50,6 +56,7 @@ class Chat extends React.Component {
   handleReceiveMsgs = response => {
     console.log(response);
     this.props.setChatMessages()
+    this.scrollToBottom()
   }
 
   renderMsgActionCable = () => {
@@ -62,7 +69,7 @@ class Chat extends React.Component {
 
   renderMessages = () => {
     const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-    return sortedMessages.map(msg => <li key={msg.id}>{msg.text}</li>)
+    return sortedMessages.map(msg => <Message key={msg.id} msg={msg} />)
   }
 
   render() {
@@ -75,6 +82,7 @@ class Chat extends React.Component {
         <h1>Chat Window</h1>
         <div ref={this.chatWindow} id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
           { this.state.messages ? this.renderMessages() : null}
+          <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
         </div>
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
