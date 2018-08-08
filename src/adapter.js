@@ -33,7 +33,7 @@ export function getUser(id) {
   return fetch(url, options).then(r => r.json())
 }
 
-export function allUsers() {
+export function getAllUsers() {
   const url = `${API_ROOT}/users`
   return fetch(url).then(r => r.json())
 }
