@@ -38,13 +38,25 @@ export function allUsers() {
   return fetch(url).then(r => r.json())
 }
 
-export function createChat() {
+export function createChat(users) {
   const url = `${API_ROOT}/chats`
   const options = {
     method: 'POST',
-    headers: HEADERS
+    headers: HEADERS,
+    body: JSON.stringify({chat: users})
   }
   return fetch(url, options).then(r => r.json())
+}
+
+export function createMessage(message) {
+  const url = `${API_ROOT}/messages`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({message})
+  }
+
+  fetch(url, options)
 }
 
 export function getChatMessages(id) {

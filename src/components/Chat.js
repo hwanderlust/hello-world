@@ -2,10 +2,14 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 
 class Chat extends React.Component {
-  state = {
-    chat: '',
-    messages: '',
-    text: '',
+  constructor(props) {
+    super(props)
+    this.chatWindow = React.createRef()
+    this.state = {
+      chat: '',
+      messages: '',
+      text: '',
+    }
   }
 
   componentDidMount() {
@@ -22,7 +26,7 @@ class Chat extends React.Component {
       this.setState({chat: this.props.chat})
     }
     if(this.state.messages !== this.props.messages) {
-      this.setState({messages: this.props.messages}, () => console.log(this.state))
+      this.setState({messages: this.props.messages})
     }
   }
 
@@ -45,7 +49,7 @@ class Chat extends React.Component {
 
   handleReceiveMsgs = response => {
     console.log(response);
-    this.props.chatMessages()
+    this.props.setChatMessages()
   }
 
   renderMsgActionCable = () => {
@@ -57,18 +61,19 @@ class Chat extends React.Component {
   }
 
   renderMessages = () => {
-    return this.state.messages.map(msg => <li>{msg.text}</li>)
+    const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
+    return sortedMessages.map(msg => <li key={msg.id}>{msg.text}</li>)
   }
 
   render() {
-    { console.log(this.state) }
+
     return (
       <div>
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
         { this.renderMsgActionCable() }
 
         <h1>Chat Window</h1>
-        <div style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
+        <div ref={this.chatWindow} id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
           { this.state.messages ? this.renderMessages() : null}
         </div>
         <form onSubmit={(e) => this.handleSubmit(e)}>

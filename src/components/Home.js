@@ -14,16 +14,11 @@ class Home extends React.Component {
     return this.state.users ? this.state.users.map(user => <li key={user.id} onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
-  handleClick = (user) => {
-    // post request to create a chat
-    debugger
-    this.props.newChat()
+  handleClick = (clickedUser) => {
+    this.props.newChat({sender_id: this.props.currentUser.id, recipient_id: clickedUser.id})
+    // this.props.newChat()
     this.props.history.push('/chat')
-    // open/render/redirect to chat
   }
-
-  // user logs in and a broadcast starts
-  // click on a user to start a chat
 
   render() {
     return (
