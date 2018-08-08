@@ -1,100 +1,29 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-import Signup from './components/Signup'
-import Login from './components/Login'
-import Home from './components/Home'
-import Chat from './components/Chat'
-import { login, signup, getUser, getAllUsers, createChat, getChatMessages, createMessage } from './adapter'
+import AuthContainer from './components/auth/AuthContainer'
+import ChatContainer from './components/chat/ChatContainer'
+
+import { getUser } from './adapter'
+import { updateUser } from './actions/index'
+
+// App will check to see if a user is already logged in with getUser
+// AuthController will take care of login and signup though
+//
 
 class App extends Component {
-  state = {
-    currentUser: null,
-    chat: null,
-    messages: null,
-    recipientUser: null,
-  }
 
   componentDidMount() {
     const loggedIn = localStorage.getItem('token')
     if (loggedIn) {
       getUser(loggedIn).then(user => {
         if (user) {
-          this.setState({currentUser: user}, () => this.setChatMessages())
+          this.props.updateUser(user)
         } else {
-          this.handleLogout()
-          this.props.history.push('/login')
+          this.props.history.push('/logout')
         }
       })
-    }
-  }
-
-  handleLogin = (user) => {
-    login(user).then(userData => {
-      localStorage.setItem('token', userData.id)
-      this.setState({currentUser: userData}, () => {
-        this.setChatMessages()
-        this.props.history.push('/home')
-      })
-    })
-  }
-
-  handleSignup = (user) => {
-    signup(user).then(userData => {
-      localStorage.setItem('token', userData.id)
-      this.setState({currentUser: userData}, () => {
-        this.setChatMessages()
-        this.props.history.push('/home')
-      })
-    })
-  }
-
-  handleLogout = () => {
-    localStorage.removeItem("token")
-    this.setState({currentUser: null})
-  }
-
-  setAllUsers = () => {
-    getAllUsers()
-  }
-
-  newChat = (users) => {
-    getUser(users.recipient_id).then(user => this.setState({recipientUser: user}))
-    createChat(users)
-      .then(chat => this.setState({chat}, () => console.log(this.state)))
-  }
-
-  newMessage = (message) => {
-    const users = {sender_id: this.state.currentUser.id, recipient_id: this.state.recipientUser.id}
-    createMessage({...message, ...users})
-  }
-
-  setChatMessages = () => {
-    getChatMessages(this.state.currentUser.id).then(messages => this.setState({messages}))
-  }
-
-  passChatMessages = () => {
-    if(this.state.recipientUser) {
-      const { messages, currentUser, recipientUser } = this.state
-
-      const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
-
-      if(currentUser.id === recipientUser.id) {
-        var flags = {};
-        var filtered = sentMsgs.filter(msg => {
-          if (flags[msg.id]) {
-            return false;
-          }
-            flags[msg.id] = true;
-            return true;
-          });
-        return filtered
-      } else {
-        const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
-
-        const allMsgs = [...sentMsgs, ...recMsgs]
-        return allMsgs
-      }
     }
   }
 
@@ -106,20 +35,19 @@ class App extends Component {
             return <Redirect to='/login' />
           }}/>
           <Route path='/signup' render={props => {
-            return <Signup  signup={this.handleSignup} />
+            return <AuthContainer authRequest='signup' />
           }} />
           <Route path='/login' render={props => {
-            return <Login login={this.handleLogin} currentUser={this.state.currentUser} />
+            return <AuthContainer authRequest='login' />
           }} />
           <Route path='/chat' render={props => {
-            return <Chat chat={this.state.chat} newMessage={this.newMessage} setChatMessages={this.setChatMessages} messages={this.passChatMessages()}  />
+            return <ChatContainer chatReq='chat' />
           }} />
           <Route path='/logout' render={props => {
-            this.handleLogout()
-            return <Redirect to='/login' />
-          }}/>
+            return <AuthContainer authRequest='logout' />
+          }} />
           <Route path='/home' render={props => {
-            return this.state.currentUser ? <Home users={getAllUsers} newChat={this.newChat} currentUser={this.state.currentUser} /> : <Redirect to='/login' />
+            return <ChatContainer chatReq='home' />
           }}/>
         </Switch>
       </div>
@@ -127,4 +55,10 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateUser: (user) => dispatch(updateUser(user))
+  }
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(App));

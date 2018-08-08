@@ -34,6 +34,7 @@ export function getUser(id) {
 }
 
 export function getAllUsers() {
+  console.log(`ADAPTER getAllUsers`);
   const url = `${API_ROOT}/users`
   return fetch(url).then(r => r.json())
 }

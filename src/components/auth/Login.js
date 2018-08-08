@@ -7,11 +7,11 @@ class Login extends React.Component {
     password: '',
   }
 
-  handleRedirect = () => {
-    if(this.props.currentUser) {
-      this.props.history.push('/home')
-    }
-  }
+  // handleRedirect = () => {
+  //   if(this.props.currentUser) {
+  //     this.props.history.push('/home')
+  //   }
+  // }
 
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value})
@@ -19,11 +19,12 @@ class Login extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.login(this.state)
+    console.log(this.state);
+    this.props.handleLogin(this.state)
   }
 
   render() {
-    this.handleRedirect()
+    // this.handleRedirect()
     return (
       <div>
         <form onSubmit={(e) => this.handleSubmit(e)}>
