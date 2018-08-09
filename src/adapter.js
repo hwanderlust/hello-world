@@ -63,3 +63,14 @@ export function getChatMessages(id) {
   const url = `${API_ROOT}/users/${id}`
   return fetch(url).then(r => r.json())
 }
+
+export function getChat(id) {
+  const url = `${API_ROOT}/chats/${id}`
+  return fetch(url).then(r => r.json())
+}
+
+export function getMsgs(ids) {
+  const url = `${API_ROOT}/messages`
+
+  return Promise.all(ids.split(',').map(id => fetch(`${url}/${Number(id)}`).then(r => r.json())))
+}

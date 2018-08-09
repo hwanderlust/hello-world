@@ -51,7 +51,9 @@ class AuthContainer extends React.Component {
   }
 
   handleLogout = () => {
-    localStorage.removeItem("token")
+    localStorage.removeItem('token')
+    localStorage.removeItem('chat')
+    localStorage.removeItem('msgs')
     removeUser()
     this.props.history.push('/login')
   }

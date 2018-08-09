@@ -1,12 +1,15 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
+import { connect } from 'react-redux'
 import Message from './Message'
 
 class Chat extends React.Component {
   constructor(props) {
     super(props)
+
     this.chatWindow = React.createRef();
     this.form = React.createRef();
+
     this.state = {
       chat: '',
       messages: '',
@@ -16,20 +19,19 @@ class Chat extends React.Component {
 
   componentDidMount() {
     if(this.props.chat) {
-      this.setState({chat: this.props.chat})
+      this.setState({chat: this.props.chat}, () => console.log(this.state))
     }
     if(this.props.messages) {
       this.setState({messages: this.props.messages}, () => console.log(this.state))
     }
+    console.log('Chat componentDidMount');
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.chat !== this.props.chat) {
-      this.setState({chat: this.props.chat})
-    }
     if(this.state.messages !== this.props.messages) {
       this.setState({messages: this.props.messages})
     }
+    console.log('Chat componentDidUpdate');
   }
 
   scrollToBottom = () => {
@@ -42,15 +44,18 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.newMessage({chat_id: this.state.chat.id, text: this.state.text})
-    this.setState({text: ''})
+
+    if(this.props.chat){
+      this.props.newMessage({chat_id: this.props.chat.id, text: this.state.text})
+      this.setState({text: ''})
+    } else {
+      console.log(`still not working`, this.state)
+    }
   }
 
   handleReceivedChat = response => {
     console.log(response);
-    if(this.state.chat) {
-      this.setState({chat: response})
-    }
+    this.setState({chat: response}, () => console.log(this.state))
   }
 
   handleReceiveMsgs = response => {
@@ -60,9 +65,9 @@ class Chat extends React.Component {
   }
 
   renderMsgActionCable = () => {
-    if(this.state.chat) {
+    if(this.props.chat) {
       return (
-        <ActionCable channel={{ channel: 'MessagesChannel', chat: this.state.chat.id }} onReceived={this.handleReceiveMsgs} />
+        <ActionCable channel={{ channel: 'MessagesChannel', chat: this.props.chat.id }} onReceived={this.handleReceiveMsgs} />
       )
     }
   }
@@ -84,6 +89,7 @@ class Chat extends React.Component {
           { this.state.messages ? this.renderMessages() : null}
           <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
         </div>
+
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
           <input type='submit' />
@@ -93,4 +99,11 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat
+const mapStateToProps = (state) => {
+  return {
+    chat: state.appState.chat,
+    messages: state.appState.messages
+  }
+}
+
+export default connect(mapStateToProps)(Chat);

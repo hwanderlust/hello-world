@@ -5,6 +5,7 @@ import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
+import { updateChat } from '../../actions/index'
 
 // renders available users to chat with
 
@@ -26,6 +27,18 @@ class ChatContainer extends React.Component {
 
   componentDidMount() {
     this.handleUsers()
+    console.log(this.state);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('ChatContainer componentDidUpdate');
+    if(this.state.messages) {
+      // need recipientUser
+      // filter messages before setting state
+      // then pass down messages as regular react props 
+      // then remove mapStateToProps for messages in Chat component
+      this.setState({messages: this.props.messages}, () => console.log(this.state))
+    }
   }
 
   handleUsers = () => {
@@ -37,8 +50,13 @@ class ChatContainer extends React.Component {
   }
 
   createNewChat = (user) => {
-    createChat({...user, sender_id: this.props.currentUser.id})
-      .then(chat => this.setState({chat}, () => console.log(this.state)))
+    const { currentUser, updateChat } = this.props
+
+    createChat({...user, sender_id: currentUser.id})
+      .then(chat => {
+        updateChat(chat)
+        localStorage.setItem('chat', chat.id)
+      })
   }
 
   handleNewChat = (user) => {
@@ -53,13 +71,15 @@ class ChatContainer extends React.Component {
   setChatMessages = () => {
     getChatMessages(this.props.currentUser.id).then(messages => {
       this.setState({messages: this.filterChatMessages(messages)})
+      const msgs = messages.map(msg => msg.id)
+      localStorage.setItem('msgs', msgs)
     })
   }
 
   filterChatMessages = (messages) => {
       const { recipientUser } = this.state
       const { currentUser } = this.props
-      // debugger
+
       const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
 
       if(currentUser.id === recipientUser.id) {
@@ -97,7 +117,7 @@ class ChatContainer extends React.Component {
         case 'home':
           return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
         case 'chat':
-          return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+          return <Chat messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
         default:
         console.log(`Chat request is wrong`);
         break
@@ -116,8 +136,15 @@ class ChatContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.appState.currentUser
+    currentUser: state.appState.currentUser,
+    messages: state.appState.messages
   }
 }
 
-export default withRouter(connect(mapStateToProps)(ChatContainer));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateChat: (chat) => dispatch(updateChat(chat))
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatContainer));

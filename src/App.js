@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
 
-import { getUser } from './adapter'
-import { updateUser } from './actions/index'
+import { getUser, getChat, getMsgs } from './adapter'
+import { updateUser, updateChat, updateMessages } from './actions/index'
 
 // App will check to see if a user is already logged in with getUser
 // AuthController will take care of login and signup though
@@ -21,10 +21,26 @@ class App extends Component {
         if (user) {
           this.props.updateUser(user)
         } else {
-          <Redirect to='/logout' />
+          this.props.history.push('/logout')
         }
       })
+
+      const chat = localStorage.getItem('chat')
+      if (chat) {
+        getChat(chat).then(chat => this.props.updateChat(chat))
+      }
+
+      const msgs = localStorage.getItem('msgs')
+      if (msgs) {
+        debugger
+        this.props.updateMessages(msgs)
+      }
     }
+    console.log('App componentDidMount');
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('App componentDidUpdate');
   }
 
   checkLogin = () => {
@@ -65,7 +81,9 @@ class App extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUser: (user) => dispatch(updateUser(user))
+    updateUser: (user) => dispatch(updateUser(user)),
+    updateChat: (chat) => dispatch(updateChat(chat)),
+    updateMessages: updateMessages
   }
 }
 
