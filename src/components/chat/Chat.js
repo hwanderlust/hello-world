@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import Message from './Message'
+import SelectLang from './SelectLang'
 
 class Chat extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Chat extends React.Component {
       chat: '',
       messages: '',
       text: '',
+      langPrompt: false,
     };
   };
 
@@ -62,10 +64,14 @@ class Chat extends React.Component {
     this.scrollToBottom()
   }
 
+  handleMsgClick = () => {
+    this.setState({langPrompt: !this.state.langPrompt})
+  }
+
   render() {
     const renderMessages = () => {
       const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-      return sortedMessages.map(msg => <Message key={msg.id} msg={msg} />)
+      return sortedMessages.map(msg => <Message handleMsgClick={this.handleMsgClick} key={msg.id} msg={msg} />)
     }
 
     const renderMsgActionCable = () => {
@@ -86,6 +92,8 @@ class Chat extends React.Component {
           { this.state.messages ? renderMessages() : null}
           <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
         </div>
+
+        { this.state.langPrompt ? <SelectLang handleMsgClick={this.handleMsgClick} /> : null }
 
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />

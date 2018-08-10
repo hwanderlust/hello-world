@@ -63,3 +63,14 @@ export function getChatMessages(id) {
   const url = `${API_ROOT}/users/${id}`
   return fetch(url).then(r => r.json())
 }
+
+export function translateText(msg) {
+  const url = `${API_ROOT}/translate`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({message: {msg}})
+  }
+  console.log(url, msg);
+  return fetch(url, options).then(r => r.json())
+}
