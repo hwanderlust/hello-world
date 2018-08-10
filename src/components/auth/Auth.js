@@ -1,17 +1,17 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
 
-class Login extends React.Component {
+class Auth extends React.Component {
   state = {
     username: '',
     password: '',
+    login: false
   }
 
-  // handleRedirect = () => {
-  //   if(this.props.currentUser) {
-  //     this.props.history.push('/home')
-  //   }
-  // }
+  componentDidMount() {
+    if(window.location.pathname === '/login') {
+      this.setState({login: !this.state.login}, () => console.log(this.state))
+    }
+  }
 
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value})
@@ -20,13 +20,17 @@ class Login extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     console.log(this.state);
-    this.props.handleLogin(this.state)
+    this.props.handleAuth(this.state)
   }
 
   render() {
-    // this.handleRedirect()
+    const renderHeader = () => {
+      return this.state.login ? <h1>Login</h1> : <h1>Signup</h1>
+    }
+
     return (
       <div>
+        { renderHeader() }
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <label htmlFor='username'>Username</label>
           <input type='text' name='username' value={this.state.username} onChange={(e) => this.handleChange(e)}/>
@@ -39,4 +43,4 @@ class Login extends React.Component {
   }
 }
 
-export default withRouter(Login)
+export default Auth;

@@ -46,8 +46,13 @@ class ChatContainer extends React.Component {
     this.createNewChat(user)
   }
 
-  renderHome = () => {
-    return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
+  // renderHome = () => {
+  //   return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
+  // }
+
+  renderChat = () => {
+    this.setChatMessages()
+    this.props.history.push('/chat')
   }
 
   setChatMessages = () => {
@@ -81,34 +86,30 @@ class ChatContainer extends React.Component {
       }
   }
 
-  renderChat = () => {
-    this.setChatMessages()
-    this.props.history.push('/chat')
-  }
-
   newMessage = (message) => {
     const users = {sender_id: this.props.currentUser.id, recipient_id: this.state.recipientUser.id}
     createMessage({...message, ...users})
   }
 
-  renderChatComponents = () => {
-    if(this.state.users) {
-      switch(this.props.chatReq) {
-        case 'home':
-          return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
-        case 'chat':
-          return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
-        default:
-        console.log(`Chat request is wrong`);
-        break
-      }
-    }
-  }
 
   render() {
+    const renderChatComponents = () => {
+      if(this.state.users) {
+        switch(this.props.chatReq) {
+          case 'home':
+            return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
+          case 'chat':
+            return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+          default:
+          console.log(`Chat request is wrong`);
+          break
+        }
+      }
+    }
+
     return (
       <div>
-        { this.renderChatComponents() }
+        { renderChatComponents() }
       </div>
     );
   };

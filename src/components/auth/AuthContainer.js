@@ -2,8 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Signup from './Signup'
-import Login from './Login'
+import Auth from './Auth'
 
 import { login, signup } from '../../adapter'
 import { updateUser, removeUser } from '../../actions/index'
@@ -18,19 +17,14 @@ import { updateUser, removeUser } from '../../actions/index'
 
 class AuthContainer extends React.Component {
 
-  renderAuthComponents = () => {
-    const { authRequest } = this.props
-
-    switch(authRequest) {
-      case 'signup':
-        return <Signup handleSignup={this.handleSignup} />
-      case 'login':
-        return <Login handleLogin={this.handleLogin} />
-      case 'logout':
-        this.handleLogout()
-        break
-      default:
-        console.log('auth request failed');
+  componentDidMount() {
+    if(window.location.pathname === '/logout') {
+      this.handleLogout()
+    } else {
+      const loggedIn = localStorage.getItem('token')
+      if(loggedIn) {
+        this.props.history.push('/home')
+      }
     }
   }
 
@@ -42,16 +36,14 @@ class AuthContainer extends React.Component {
     history.push('/home')
   }
 
-  handleLogin = (user) => {
-    login(user).then(userData => this.setupUser(userData))
-  }
-
-  handleSignup = (user) => {
-    signup(user).then(userData => this.setupUser(userData))
+  handleAuth = (user) => {
+    window.location.pathname === '/login' ? login(user).then(userData => this.setupUser(userData)) : signup(user).then(userData => this.setupUser(userData))
   }
 
   handleLogout = () => {
     localStorage.removeItem("token")
+    // localStorage.removeItem("chat")
+    // localStorage.removeItem("msgs")
     removeUser()
     this.props.history.push('/login')
   }
@@ -60,7 +52,7 @@ class AuthContainer extends React.Component {
 
     return (
       <div>
-        { this.renderAuthComponents() }
+        <Auth handleAuth={this.handleAuth}/>
       </div>
     )
   }

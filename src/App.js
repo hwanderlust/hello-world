@@ -21,7 +21,7 @@ class App extends Component {
         if (user) {
           this.props.updateUser(user)
         } else {
-          <Redirect to='/logout' />
+          this.props.history.push('/logout')
         }
       })
     }
@@ -41,17 +41,17 @@ class App extends Component {
             return <Redirect to='/home' />
           }}/>
           <Route path='/signup' render={props => {
-            return <AuthContainer authRequest='signup' />
+            return <AuthContainer />
           }} />
           <Route path='/login' render={props => {
-            return <AuthContainer authRequest='login' />
+            return <AuthContainer />
           }} />
           <Route path='/chat' render={props => {
             this.checkLogin()
             return <ChatContainer chatReq='chat' />
           }} />
           <Route path='/logout' render={props => {
-            return <AuthContainer authRequest='logout' />
+            return <AuthContainer />
           }} />
           <Route path='/home' render={props => {
             this.checkLogin()

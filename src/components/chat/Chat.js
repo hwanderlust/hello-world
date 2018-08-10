@@ -28,7 +28,10 @@ class Chat extends React.Component {
       this.setState({chat: this.props.chat})
     }
     if(this.state.messages !== this.props.messages) {
-      this.setState({messages: this.props.messages})
+      this.setState({messages: this.props.messages}, () => {
+        console.log(this.state)
+        this.scrollToBottom()
+      })
     }
   }
 
@@ -59,31 +62,31 @@ class Chat extends React.Component {
     this.scrollToBottom()
   }
 
-  renderMsgActionCable = () => {
-    if(this.state.chat) {
-      return (
-        <ActionCable channel={{ channel: 'MessagesChannel', chat: this.state.chat.id }} onReceived={this.handleReceiveMsgs} />
-      )
-    }
-  }
-
-  renderMessages = () => {
-    const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-    return sortedMessages.map(msg => <Message key={msg.id} msg={msg} />)
-  }
-
   render() {
+    const renderMessages = () => {
+      const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
+      return sortedMessages.map(msg => <Message key={msg.id} msg={msg} />)
+    }
+
+    const renderMsgActionCable = () => {
+      if(this.state.chat) {
+        return (
+          <ActionCable channel={{ channel: 'MessagesChannel', chat: this.state.chat.id }} onReceived={this.handleReceiveMsgs} />
+        )
+      }
+    }
 
     return (
       <div>
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
-        { this.renderMsgActionCable() }
+        { renderMsgActionCable() }
 
         <h1>Chat Window</h1>
         <div ref={this.chatWindow} id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
-          { this.state.messages ? this.renderMessages() : null}
+          { this.state.messages ? renderMessages() : null}
           <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
         </div>
+
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
           <input type='submit' />
