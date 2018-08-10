@@ -7,12 +7,6 @@ class Login extends React.Component {
     password: '',
   }
 
-  // handleRedirect = () => {
-  //   if(this.props.currentUser) {
-  //     this.props.history.push('/home')
-  //   }
-  // }
-
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value})
   }
@@ -24,7 +18,6 @@ class Login extends React.Component {
   }
 
   render() {
-    // this.handleRedirect()
     return (
       <div>
         <form onSubmit={(e) => this.handleSubmit(e)}>

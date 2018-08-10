@@ -1,4 +1,5 @@
 import { API_ROOT, HEADERS } from './constants'
+import { updateMessages } from './actions/index'
 
 export function login(user) {
   const url = `${API_ROOT}/login`
@@ -20,6 +21,7 @@ export function signup(user) {
   return fetch(url, options).then(r => r.json())
 }
 
+// make dynamic for login user and msg recipient user
 export function getUser(id) {
   const url = `${API_ROOT}/get_user`
   const options = {
@@ -38,6 +40,7 @@ export function getAllUsers() {
   return fetch(url).then(r => r.json())
 }
 
+// update store
 export function createChat(users) {
   const url = `${API_ROOT}/chats`
   const options = {
@@ -55,20 +58,36 @@ export function createMessage(message) {
     headers: HEADERS,
     body: JSON.stringify({message})
   }
-
-  fetch(url, options)
+  console.log('CREATEMESSAGE ADAPTER', message);
+  return fetch(url, options).then(r => r.json())
 }
 
-export function getChatMessages(id) {
-  const url = `${API_ROOT}/users/${id}`
+// update store
+// export function getChatMessages(userId) {
+//   return (dispatch) => {
+//     const url = `${API_ROOT}/users/${userId}`
+//     fetch(url).then(r => r.json())
+//       .then(messages => {
+//         debugger
+//         updateMessages(messages)
+//         const msgs = messages.map(msg => msg.id)
+//         localStorage.setItem('msgs', msgs)
+//       })
+//   }
+// }
+
+export function getChatMessages(userId) {
+  const url = `${API_ROOT}/users/${userId}`
   return fetch(url).then(r => r.json())
 }
 
+// update store
 export function getChat(id) {
   const url = `${API_ROOT}/chats/${id}`
   return fetch(url).then(r => r.json())
 }
 
+// update store
 export function getMsgs(ids) {
   const url = `${API_ROOT}/messages`
 

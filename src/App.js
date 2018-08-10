@@ -30,11 +30,10 @@ class App extends Component {
         getChat(chat).then(chat => this.props.updateChat(chat))
       }
 
-      const msgs = localStorage.getItem('msgs')
-      if (msgs) {
-        debugger
-        this.props.updateMessages(msgs)
-      }
+      // const msgs = localStorage.getItem('msgs')
+      // if (msgs) {
+      //   getMsgs(msgs).then(messages => this.props.updateMessages(messages))
+      // }
     }
     console.log('App componentDidMount');
   }
@@ -83,7 +82,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateUser: (user) => dispatch(updateUser(user)),
     updateChat: (chat) => dispatch(updateChat(chat)),
-    updateMessages: updateMessages
+    updateMessages: (msgs) => dispatch(updateMessages(msgs))
   }
 }
 

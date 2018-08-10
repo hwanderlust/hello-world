@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Signup from './Signup'
 import Login from './Login'
 
+// import { login, signup } from '../../adapter'
 import { login, signup } from '../../adapter'
 import { updateUser, removeUser } from '../../actions/index'
 
@@ -18,22 +19,6 @@ import { updateUser, removeUser } from '../../actions/index'
 
 class AuthContainer extends React.Component {
 
-  renderAuthComponents = () => {
-    const { authRequest } = this.props
-
-    switch(authRequest) {
-      case 'signup':
-        return <Signup handleSignup={this.handleSignup} />
-      case 'login':
-        return <Login handleLogin={this.handleLogin} />
-      case 'logout':
-        this.handleLogout()
-        break
-      default:
-        console.log('auth request failed');
-    }
-  }
-
   setupUser = (userData) => {
     const { updateUser, history } = this.props
 
@@ -44,6 +29,11 @@ class AuthContainer extends React.Component {
 
   handleLogin = (user) => {
     login(user).then(userData => this.setupUser(userData))
+    // could fetch for users' messages and save to store here and in signup
+
+    // this doesn't work...
+    // this.props.login(user)
+    // this.props.history.push('/home')
   }
 
   handleSignup = (user) => {
@@ -60,9 +50,25 @@ class AuthContainer extends React.Component {
 
   render() {
 
+    const renderAuthComponents = () => {
+      const { authRequest } = this.props
+
+      switch(authRequest) {
+        case 'signup':
+          return <Signup handleSignup={this.handleSignup} />
+        case 'login':
+          return <Login handleLogin={this.handleLogin} />
+        case 'logout':
+          this.handleLogout()
+          break
+        default:
+          console.log('auth request failed');
+      }
+    }
+
     return (
       <div>
-        { this.renderAuthComponents() }
+        { this.props.authRequest ? renderAuthComponents() : null }
       </div>
     )
   }
@@ -71,7 +77,9 @@ class AuthContainer extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateUser: (user) => dispatch(updateUser(user)),
-    removeUser: () => dispatch(removeUser())
+    removeUser: () => dispatch(removeUser()),
+    // login: (user) => dispatch(loginAction(user))
+    // updateUsers: (users) => dispatch(updateUsers(users))
   }
 }
 

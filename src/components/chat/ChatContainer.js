@@ -5,7 +5,7 @@ import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
-import { updateChat } from '../../actions/index'
+import { updateChat, updateRecipientUser, updateMessages, message360, updateUsers } from '../../actions/index'
 
 // renders available users to chat with
 
@@ -26,19 +26,16 @@ class ChatContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.handleUsers()
-    console.log(this.state);
+    // this.handleUsers()
+    // this.setState({users: this.props.users}, () => console.log(this.state))
+    console.log('CHATCONTAINER DIDMOUNT');
+    getAllUsers().then(users => this.props.updateUsers(users))
+    .then(nada => {
+      this.setState({users: this.props.users}, () => console.log(this.state))
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('ChatContainer componentDidUpdate');
-    if(this.state.messages) {
-      // need recipientUser
-      // filter messages before setting state
-      // then pass down messages as regular react props 
-      // then remove mapStateToProps for messages in Chat component
-      this.setState({messages: this.props.messages}, () => console.log(this.state))
-    }
   }
 
   handleUsers = () => {
@@ -46,7 +43,17 @@ class ChatContainer extends React.Component {
   }
 
   setRecipient = (user) => {
-    getUser(user.recipient_id).then(user => this.setState({recipientUser: user}, () => console.log(this.state)))
+    // add recipientUser to store here
+    // messages are already saved in the store so access with mapStateToProps in Chat
+    // filter for messages in Chat using recipientUser and msgs from store
+
+    // getUser(user.recipient_id)
+    //   .then(user => this.props.updateRecipientUser(user))
+    //   .then(x => this.filterChatMessages(this.props.messages))
+
+      getUser(user.id)
+        .then(user => this.props.updateRecipientUser(user))
+        // .then(x => this.filterChatMessages(this.props.messages))
   }
 
   createNewChat = (user) => {
@@ -60,75 +67,90 @@ class ChatContainer extends React.Component {
   }
 
   handleNewChat = (user) => {
+    // if(!this.props.messages){
+    //   // debugger
+    // }
+    this.setChatMessages()
     this.setRecipient(user)
     this.createNewChat(user)
+    this.renderChat()
   }
 
-  renderHome = () => {
-    return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
-  }
+  // renderHome = () => {
+  //   return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
+  // }
+
+  // setChatMessages = () => {
+  //   this.props.updateMessages(this.props.currentUser.id)
+  //   this.filterChatMessages()
+  // }
 
   setChatMessages = () => {
     getChatMessages(this.props.currentUser.id).then(messages => {
-      this.setState({messages: this.filterChatMessages(messages)})
+      const filtered = this.filterChatMessages(messages)
+      this.props.updateMessages(filtered)
       const msgs = messages.map(msg => msg.id)
       localStorage.setItem('msgs', msgs)
     })
   }
 
   filterChatMessages = (messages) => {
-      const { recipientUser } = this.state
-      const { currentUser } = this.props
+    const { recipientUser, currentUser } = this.props
+    // debugger
+    const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
+    console.log(messages);
+    if(currentUser.id === recipientUser.id) {
+      console.log('same user!');
+      const flags = {};
+      const filtered = sentMsgs.filter(msg => {
+        if (flags[msg.id]) {
+          return false;
+        }
+          flags[msg.id] = true;
+          return true;
+        });
+        this.setState({messages: filtered}, () => console.log(this.state))
+      return filtered
 
-      const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
+    } else {
+      console.log('diff user!');
+      const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
 
-      if(currentUser.id === recipientUser.id) {
-        const flags = {};
-        const filtered = sentMsgs.filter(msg => {
-          if (flags[msg.id]) {
-            return false;
-          }
-            flags[msg.id] = true;
-            return true;
-          });
-        return filtered
-
-      } else {
-        const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
-
-        const allMsgs = [...sentMsgs, ...recMsgs]
-        return allMsgs
-      }
+      const allMsgs = [...sentMsgs, ...recMsgs]
+      this.setState({messages: allMsgs}, () => console.log(this.state))
+      return allMsgs
+    }
   }
 
   renderChat = () => {
-    this.setChatMessages()
     this.props.history.push('/chat')
   }
 
   newMessage = (message) => {
-    const users = {sender_id: this.props.currentUser.id, recipient_id: this.state.recipientUser.id}
+    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+    console.log('NEWMESSAGE', message);
+    // this.props.message360({...message, ...users})
+    // console.log(this.props);
     createMessage({...message, ...users})
+    this.setChatMessages()
   }
 
-  renderChatComponents = () => {
-    if(this.state.users) {
+
+  render() {
+    const renderChatComponents = () => {
       switch(this.props.chatReq) {
         case 'home':
-          return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
+        return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} />
         case 'chat':
-          return <Chat messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+        return <Chat messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
         default:
         console.log(`Chat request is wrong`);
         break
       }
     }
-  }
-
-  render() {
     return (
       <div>
-        { this.renderChatComponents() }
+        { this.state.users ? renderChatComponents() : null }
       </div>
     );
   };
@@ -137,13 +159,19 @@ class ChatContainer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     currentUser: state.appState.currentUser,
-    messages: state.appState.messages
+    messages: state.appState.messages,
+    recipientUser: state.appState.recipientUser,
+    users: state.appState.users
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateChat: (chat) => dispatch(updateChat(chat))
+    updateChat: (chat) => dispatch(updateChat(chat)),
+    updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
+    updateMessages: (messages) => dispatch(updateMessages(messages)),
+    message360: (msg) => dispatch(message360(msg)),
+    updateUsers: (users) => dispatch(updateUsers(users))
   }
 }
 

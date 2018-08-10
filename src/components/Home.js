@@ -7,6 +7,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    console.log('HOME DID MOUNT');
     this.setState({users: this.props.users})
   }
 
@@ -23,8 +24,9 @@ class Home extends React.Component {
   }
 
   handleClick = (clickedUser) => {
-    this.props.handleNewChat({recipient_id: clickedUser.id})
-    this.props.renderChat()
+    // just send clickedUser through ?
+    // this.props.handleNewChat({recipient_id: clickedUser.id})
+    this.props.handleNewChat(clickedUser)
   }
 
   handleReceivedUser = (response) => {
@@ -39,7 +41,7 @@ class Home extends React.Component {
         <h1>Home</h1>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ul>
-          { this.renderUsers() }
+          { this.state.users ? this.renderUsers() : null }
         </ul>
       </div>
     )
