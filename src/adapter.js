@@ -64,13 +64,23 @@ export function getChatMessages(id) {
   return fetch(url).then(r => r.json())
 }
 
-export function translateText(msg) {
+export function detectLang(msg) {
+  const url = `${API_ROOT}/detect_language`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({detection: {msg}})
+  }
+  return fetch(url, options).then(r => r.json())
+}
+
+export function translateText(msg, lang) {
   const url = `${API_ROOT}/translate`
   const options = {
     method: 'POST',
     headers: HEADERS,
-    body: JSON.stringify({message: {msg}})
+    body: JSON.stringify({message: {msg, lang}})
   }
-  console.log(url, msg);
+  console.log(url, msg, lang);
   return fetch(url, options).then(r => r.json())
 }

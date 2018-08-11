@@ -1,6 +1,27 @@
 import React from 'react';
+import { connect } from 'react-redux'
+import { updateLang } from '../../actions'
+import { translateText, detectLang } from '../../adapter'
 
 class SelectLang extends React.Component {
+  state = {
+    detectedLang: 'English',
+    fromLang: null,
+    toLang: null,
+  }
+
+  componentDidMount() {
+    console.log(this.state);
+    detectLang(this.props.translateTerm)
+    .then(data => {
+      // returns en but need name to set state
+      // map through languages find code and return name
+      const lang = data["data"]["detections"][0][0]["language"]
+      const langOption = this.languages().find(item => item.code === lang)
+      console.log(langOption);
+      this.setState({detectedLang: langOption.name}, () => console.log(this.state))
+    })
+  }
 
   languages = () => {
     return [
@@ -48,11 +69,42 @@ class SelectLang extends React.Component {
     ]
   }
 
+  // move detect language feature to Message and do it after setting the term to store
+  // then on Mount of SelectLang set state based on store props
+  // doesn't rerender even tho mapStateToProps is here... render fn runs but the select and its options doesnt rerender
+
   handleChange = (e) => {
-    // pass up to Chat and then pass down to Message
-    // OR
-    // save in store and pass to Message
-    console.log(e.target.selectedOptions[0].id);
+    e.persist()
+    this.setState({[e.target.name]: e.target.selectedOptions[0].id}, () => console.log(this.state))
+
+    switch(e.target.name) {
+      case 'fromLang':
+        this.setState({detectedLang: e.target.selectedOptions[0].value})
+        break
+      case 'toLang':
+        this.handleTranslation(e)
+        break
+      default:
+        console.log('fked up');
+        break
+    }
+  }
+
+  handleTranslation = (e) => {
+    this.props.updateLang(e.target.selectedOptions[0].id)
+
+    // calls on adapter fn to fetch for translation
+    translateText(this.props.translateTerm, e.target.selectedOptions[0].id).then(r => {
+      console.log(r);
+      console.log(r.data.translations);
+      const data = r.data.translations[0].translatedText
+      const check = data.match(/=>(.*)\S/) ? true : false
+
+      const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
+      console.log(translation);
+    })
+
+    // unmounts component
     this.props.handleMsgClick()
   }
 
@@ -64,7 +116,10 @@ class SelectLang extends React.Component {
 
     return (
       <div>
-        <select onChange={this.handleChange} style={{width: '200px', height: '50px', zIndex: '5'}}>
+        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang} style={{width: '200px', height: '50px', zIndex: '5'}}>
+          { renderLanguages() }
+        </select>
+        <select onChange={this.handleChange} name='toLang' style={{width: '200px', height: '50px', zIndex: '5'}}>
           { renderLanguages() }
         </select>
       </div>
@@ -72,4 +127,17 @@ class SelectLang extends React.Component {
   }
 }
 
-export default SelectLang;
+const mapStateToProps = (state) => {
+  return {
+    language: state.appState.language,
+    translateTerm: state.appState.translateTerm,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateLang: (lang) => dispatch(updateLang(lang)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectLang);

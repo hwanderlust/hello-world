@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
+import { connect } from 'react-redux'
 
 class Home extends React.Component {
   state = {
@@ -46,4 +47,10 @@ class Home extends React.Component {
   }
 }
 
-export default Home
+// const mapStateToProps = (state) => {
+//   return {
+//     users: state.appState.users,
+//   }
+// }
+
+export default connect()(Home);

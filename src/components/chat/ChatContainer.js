@@ -5,6 +5,7 @@ import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
+import { updateUsers } from '../../actions'
 
 // renders available users to chat with
 
@@ -29,7 +30,11 @@ class ChatContainer extends React.Component {
   }
 
   handleUsers = () => {
-    getAllUsers().then(users => this.setState({users}, () => console.log(this.state)))
+    getAllUsers().then(users => {
+      const sortedUsers = users.slice().sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+      this.props.updateUsers(sortedUsers)
+      return sortedUsers
+    }).then(users => this.setState({users}, () => console.log(this.state)))
   }
 
   setRecipient = (user) => {
@@ -45,10 +50,6 @@ class ChatContainer extends React.Component {
     this.setRecipient(user)
     this.createNewChat(user)
   }
-
-  // renderHome = () => {
-  //   return this.state.users ? <Home users={this.state.users} handleNewChat={this.handleNewChat} renderChat={this.renderChat} /> : null
-  // }
 
   renderChat = () => {
     this.setChatMessages()
@@ -121,4 +122,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(ChatContainer));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateUsers: (users) => dispatch(updateUsers(users)),
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatContainer));
