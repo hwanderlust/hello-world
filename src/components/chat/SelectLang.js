@@ -5,9 +5,10 @@ import { translateText, detectLang } from '../../adapter'
 
 class SelectLang extends React.Component {
   state = {
-    detectedLang: 'English',
-    fromLang: null,
-    toLang: null,
+    detectedLang: {
+      name: 'English',
+      code: 'en'
+    },
   }
 
   componentDidMount() {
@@ -19,7 +20,7 @@ class SelectLang extends React.Component {
       const lang = data["data"]["detections"][0][0]["language"]
       const langOption = this.languages().find(item => item.code === lang)
       console.log(langOption);
-      this.setState({detectedLang: langOption.name}, () => console.log(this.state))
+      this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
     })
   }
 
@@ -75,11 +76,14 @@ class SelectLang extends React.Component {
 
   handleChange = (e) => {
     e.persist()
-    this.setState({[e.target.name]: e.target.selectedOptions[0].id}, () => console.log(this.state))
+    // this.setState({[e.target.name]: e.target.selectedOptions[0].id}, () => console.log(this.state))
 
     switch(e.target.name) {
       case 'fromLang':
-        this.setState({detectedLang: e.target.selectedOptions[0].value})
+        this.setState({detectedLang: {
+          name: e.target.selectedOptions[0].value,
+          code: e.target.selectedOptions[0].id
+        }}, () => console.log(this.state))
         break
       case 'toLang':
         this.handleTranslation(e)
@@ -94,7 +98,7 @@ class SelectLang extends React.Component {
     this.props.updateLang(e.target.selectedOptions[0].id)
 
     // calls on adapter fn to fetch for translation
-    translateText(this.props.translateTerm, e.target.selectedOptions[0].id).then(r => {
+    translateText(this.props.translateTerm, this.state.detectedLang.code, e.target.selectedOptions[0].id).then(r => {
       console.log(r);
       console.log(r.data.translations);
       const data = r.data.translations[0].translatedText
@@ -116,7 +120,7 @@ class SelectLang extends React.Component {
 
     return (
       <div>
-        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang} style={{width: '200px', height: '50px', zIndex: '5'}}>
+        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name} style={{width: '200px', height: '50px', zIndex: '5'}}>
           { renderLanguages() }
         </select>
         <select onChange={this.handleChange} name='toLang' style={{width: '200px', height: '50px', zIndex: '5'}}>
