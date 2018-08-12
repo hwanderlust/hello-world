@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import styles from './App.css'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
+import Profile from './components/user/Profile'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
@@ -56,6 +58,10 @@ class App extends Component {
           <Route path='/home' render={props => {
             this.checkLogin()
             return <ChatContainer chatReq='home' />
+          }}/>
+          <Route path='/user-profile' render={props => {
+            this.checkLogin()
+            return <Profile />
           }}/>
         </Switch>
       </div>

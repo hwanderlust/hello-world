@@ -6,8 +6,7 @@ import SelectLang from './SelectLang'
 class Chat extends React.Component {
   constructor(props) {
     super(props)
-    this.chatWindow = React.createRef();
-    this.form = React.createRef();
+
     this.state = {
       chat: '',
       messages: '',
@@ -87,8 +86,8 @@ class Chat extends React.Component {
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
         { renderMsgActionCable() }
 
-        <h1>Chat Window</h1>
-        <div ref={this.chatWindow} id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
+        <h1 className='header'>Chat Window</h1>
+        <div id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
           { this.state.messages ? renderMessages() : null}
           <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
         </div>

@@ -16,6 +16,9 @@ import { updateUser, removeUser } from '../../actions/index'
 // setChatMessages() => do this in ChatController instead
 
 class AuthContainer extends React.Component {
+  state ={
+    login: false,
+  }
 
   componentDidMount() {
     if(window.location.pathname === '/logout') {
@@ -32,16 +35,23 @@ class AuthContainer extends React.Component {
     const { updateUser, history } = this.props
 
     localStorage.setItem('token', userData.id)
+    this.setState({login: true}, () => console.log(this.state))
+
     updateUser(userData)
     history.push('/home')
   }
 
   handleAuth = (user) => {
-    window.location.pathname === '/login' ? login(user).then(userData => this.setupUser(userData)) : signup(user).then(userData => this.setupUser(userData))
+    window.location.pathname === '/login' ?
+
+    login(user).then(userData => this.setupUser(userData))
+
+    : signup(user).then(userData => this.setupUser(userData))
   }
 
   handleLogout = () => {
     localStorage.removeItem("token")
+    this.setState({login: false}, () => console.log(this.state))
     // localStorage.removeItem("chat")
     // localStorage.removeItem("msgs")
     removeUser()
@@ -52,7 +62,7 @@ class AuthContainer extends React.Component {
 
     return (
       <div>
-        <Auth handleAuth={this.handleAuth}/>
+        <Auth handleAuth={this.handleAuth} login={this.state.login} />
       </div>
     )
   }

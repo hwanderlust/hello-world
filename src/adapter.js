@@ -84,3 +84,13 @@ export function translateText(msg, fromLang, toLang) {
   console.log(url, msg, fromLang, toLang);
   return fetch(url, options).then(r => r.json())
 }
+
+export function uploadPic(imgUrl) {
+  const url = `${API_ROOT}/upload-picture`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({imgUrl})
+  }
+  return fetch(url, options).then(r => r.json())
+}

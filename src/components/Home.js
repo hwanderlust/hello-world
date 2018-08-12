@@ -8,7 +8,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({users: this.props.users})
+    this.setState({users: this.props.users}, () => console.log(this.state))
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -18,26 +18,29 @@ class Home extends React.Component {
     }
   }
 
-  renderUsers = () => {
-    const { users } = this.state
-    return users ? users.map(user => <li key={user.id} style={{border: '1px solid black', listStyle: 'none', padding: '20px', textAlign: 'center'}} onClick={() => this.handleClick(user)}>{user.username}</li>) : null
-  }
-
   handleClick = (clickedUser) => {
     this.props.handleNewChat({recipient_id: clickedUser.id})
     this.props.renderChat()
   }
 
   handleReceivedUser = (response) => {
+    const updatedUsers = [...this.state.users, response].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+
     this.setState({...this.state,
-      users: [...this.state.users, response]
-    })
+      users: updatedUsers
+    }, () => console.log(this.state))
+  }
+
+  renderUsers = () => {
+    const { users } = this.state
+    return users ? users.map(user => <li key={user.id} style={{border: '1px solid black', listStyle: 'none', padding: '20px', textAlign: 'center'}} onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
   render() {
+
     return (
       <div>
-        <h1>Home</h1>
+        <h1 className='header'>Hello World</h1>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ul>
           { this.renderUsers() }
