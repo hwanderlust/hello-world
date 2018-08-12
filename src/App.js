@@ -5,14 +5,11 @@ import styles from './App.css'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
+import Nav from './components/nav/Nav'
 import Profile from './components/user/Profile'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
-
-// App will check to see if a user is already logged in with getUser
-// AuthController will take care of login and signup though
-//
 
 class App extends Component {
 
@@ -37,6 +34,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Nav />
         <Switch>
           <Route exact path='/' render={props => {
             this.checkLogin()
@@ -59,7 +57,7 @@ class App extends Component {
             this.checkLogin()
             return <ChatContainer chatReq='home' />
           }}/>
-          <Route path='/user-profile' render={props => {
+          <Route path='/profile' render={props => {
             this.checkLogin()
             return <Profile />
           }}/>
