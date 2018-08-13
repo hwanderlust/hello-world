@@ -114,3 +114,12 @@ class Auth extends React.Component {
 }
 
 export default Auth;
+
+
+// username, password, pf pic form
+// about form
+  // location
+  // age
+  // languages - know and learning 
+  // passions and hobbies
+  // language learning goals

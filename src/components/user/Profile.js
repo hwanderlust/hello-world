@@ -107,17 +107,19 @@ class Profile extends React.Component {
 
         {/* make into component   */}
         <aside>
-          <h1>Saved Notes</h1>
-          <h3>List Name</h3>
-          <h3>List Name</h3>
-          <h3>List Name</h3>
+          <span><h1>Saved Notes</h1></span>
+          <main>
+            <h3>List Name</h3>
+            <h3>List Name</h3>
+            <h3>List Name</h3>
+          </main>
         </aside>
 
-        <form onSubmit={this.handleSubmit}>
+        {/* <form onSubmit={this.handleSubmit}>
           <input type='text' value={this.state.text} onChange={this.handleChange} />
           <select ref={this.selectedLang} id='selected-lang'>{ renderLanguages() }</select>
           <input type='submit'/>
-        </form>
+        </form> */}
         {/* <button onClick={this.handleClick}>Click Me</button> */}
 
       </div>

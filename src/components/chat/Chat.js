@@ -130,7 +130,7 @@ class Chat extends React.Component {
         { this.state.langPrompt ? <SelectLang handleMsgClick={this.handleMsgClick} /> : null }
 
         <form className='chat-input'onSubmit={(e) => this.handleSubmit(e)}>
-          <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
+          <input className='inputs' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
           <input type='submit' />
         </form>
       </React.Fragment>

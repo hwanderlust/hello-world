@@ -27,6 +27,7 @@ class Nav extends React.Component {
         <React.Fragment>
           <a href='/profile' className='nav-item'><li>Profile</li></a>
           <a href='/chat' className='nav-item'><li>Chat</li></a>
+          <a href='/logout' className='nav-item'><li>Logout</li></a>
         </React.Fragment>
       )
     }

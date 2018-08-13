@@ -11,7 +11,7 @@ body {
   grid-template-columns: 10vw auto;
   grid-template-rows: 20vh 60vh;
   grid-template-areas: 'nav banner' 'nav main';
-  padding: 2vw;
+  padding: 0.5vw;
   margin: 0;
   grid-gap: 1vw;
 }
@@ -31,7 +31,6 @@ body {
   min-height: 100vh;
   justify-content: flex-start;
   border: 1px solid black;
-  margin-top: 5vh;
   background-color: rgba(0, 98, 94, 1);
   border: 5px solid rgba(255, 103, 0, 1);
 }
@@ -45,6 +44,7 @@ body {
   margin: 1vw;
   text-decoration: none;
   color: black;
+  transition: ease-out 100ms;
 }
 
 .nav-item:first-child{
@@ -52,7 +52,7 @@ body {
 }
 
 .nav-item:hover {
-  transform: scale(2.3);
+  transform: scale(2);
   color: rgba(59, 204, 180, 1);
 }
 
@@ -91,31 +91,83 @@ body {
 .profile {
   grid-area: main;
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 40% 40% 20%;
   grid-auto-rows: 50% 50%;
-  grid-template-areas: 'tl tr' 'mid mid'
+  grid-template-areas: 'pic name list' 'details details list'
 }
 
 .profile h1 {
-  grid-area: tr;
+  grid-area: name;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile section {
-  grid-area: mid;
+  grid-area: details;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .profile aside {
-  grid-area: tr br;
+  grid-area: list;
+  border: 5px solid rgba(255, 103, 0, 1);
+  background-color: rgba(0, 98, 94, 1);
+  overflow-y: scroll;
+  min-height: 78.5vh;
+}
+
+.profile aside span {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(59, 204, 180, 1);
+}
+
+.profile aside span h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile aside main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.profile aside main h3 {
+  transition: ease-out 100ms;
+}
+
+.profile aside main h3:hover {
+  transform: scale(2.3);
+  color: rgba(59, 204, 180, 1);
+}
+
+.profile aside main h3:hover::before {
+  content: '';
+  display: block;
+  padding: 0.1rem;
+  border-top: 2px solid rgba(255, 103, 0, 1);
+}
+
+.profile aside main h3:hover::after {
+  content: '';
+  display: block;
+  padding: 0.1rem;
+  border-bottom: 2px solid rgba(255, 103, 0, 1);
 }
 
 .img-wrapper {
+  grid-area: pic;
   margin: 2px;
   display: flex;
   justify-content: center;
 }
 
 .img-wrapper img {
-  grid-area: tl;
   background-size: contain;
   background-repeat: no-repeat;
   max-width: 20vw;
@@ -149,10 +201,12 @@ body {
 
 .inputs {
   width: 10vw;
+  margin: 0.5rem;
 }
 
 .dropzone {
   border: 1px dashed black;
+  margin-bottom: 1rem;
 }
 
 .chat-container {
@@ -221,18 +275,19 @@ body {
   align-items: center;
   overflow-wrap: normal;
   word-break: normal;
+  color: white;
 }
 
 .sender {
   align-self: flex-start;
   justify-content: flex-start;
   padding: 1rem;
-  background-color: red;
+  background-color: rgba(0, 98, 94, 1);
 }
 
 .recipient {
   align-self: flex-end;
   justify-content: flex-end;
   padding: 1rem;
-  background-color: blue;
+  background-color: rgba(255, 103, 0, 1);
 }
