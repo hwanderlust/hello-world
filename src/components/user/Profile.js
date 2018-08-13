@@ -21,14 +21,6 @@ class Profile extends React.Component {
     text: '',
   }
 
-  componentDidMount() {
-
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-  }
-
   handleClick = () => {
     spoken.voices().then( voices => console.log(voices) );
     // spoken.recognition.language = 'en-AU';
@@ -93,22 +85,34 @@ class Profile extends React.Component {
 
   render() {
 
-    const renderPic = () => {
-      return (
-        <div>
-          <img src={this.props.currentUser.profile_picture} />
-        </div>
-      )
-    }
-
     const renderLanguages = () => {
       return this.languages().map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
     return (
-      <div>
-        <h1 className='header'>{ this.props.currentUser ? this.props.currentUser.username : null}</h1>
-        {this.props.currentUser ? renderPic() : null}
+      <div className='profile'>
+        {this.props.currentUser ? <h1 className='header'>{this.props.currentUser.username}</h1> : null}
+
+        {this.props.currentUser ? <div className='img-wrapper'><img src={this.props.currentUser.profile_picture}/></div> : null}
+
+        <section>
+          <h3>Languages</h3>
+          <p>English, Japanese, Korean</p>
+          <h3>Description</h3>
+          <p>Loves to travel</p>
+          <h3>Goals</h3>
+          <p>Brush up on language skills through daily conversation and about life</p>
+        </section>
+
+
+        {/* make into component   */}
+        <aside>
+          <h1>Saved Notes</h1>
+          <h3>List Name</h3>
+          <h3>List Name</h3>
+          <h3>List Name</h3>
+        </aside>
+
         <form onSubmit={this.handleSubmit}>
           <input type='text' value={this.state.text} onChange={this.handleChange} />
           <select ref={this.selectedLang} id='selected-lang'>{ renderLanguages() }</select>

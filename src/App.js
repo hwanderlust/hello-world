@@ -6,6 +6,9 @@ import styles from './App.css'
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
 import Nav from './components/nav/Nav'
+import Banner from './components/banner/Banner'
+import About from './components/About'
+import Contact from './components/Contact'
 import Profile from './components/user/Profile'
 
 import { getUser } from './adapter'
@@ -35,6 +38,7 @@ class App extends Component {
     return (
       <div className="App">
         <Nav />
+        <Banner />
         <Switch>
           <Route exact path='/' render={props => {
             this.checkLogin()
@@ -61,6 +65,8 @@ class App extends Component {
             this.checkLogin()
             return <Profile />
           }}/>
+          <Route path='/about' component={About} />
+          <Route path='/contact' component={Contact} />
         </Switch>
       </div>
     );

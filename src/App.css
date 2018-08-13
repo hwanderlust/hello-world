@@ -1,35 +1,238 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
 
+body {
+  background-color: rgba(21, 134, 115, 0.7);
+  /* background-color: rgba(0, 16, 54, 1); */
+}
+
 .App {
   text-align: center;
+  display: grid;
+  grid-template-columns: 10vw auto;
+  grid-template-rows: 20vh 60vh;
+  grid-template-areas: 'nav banner' 'nav main';
+  padding: 2vw;
+  margin: 0;
+  grid-gap: 1vw;
 }
 
 .header {
   font-family: 'Shrikhand', 'cursive';
   font-size: 6em;
+  margin: 0;
 }
 
-/* .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.nav {
+  grid-area: nav;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 10vw;
+  min-height: 100vh;
+  justify-content: flex-start;
+  border: 1px solid black;
+  margin-top: 5vh;
+  background-color: rgba(0, 98, 94, 1);
+  border: 5px solid rgba(255, 103, 0, 1);
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.nav-item {
+  font-family: 'Shrikhand', 'cursive';
+  font-size: 1em;
+  list-style: none;
+  align-self: center;
+  flex: 0.05;
+  margin: 1vw;
+  text-decoration: none;
+  color: black;
 }
 
-.App-title {
-  font-size: 1.5em;
+.nav-item:first-child{
+  padding-top: 1.2rem;
 }
 
-.App-intro {
-  font-size: large;
+.nav-item:hover {
+  transform: scale(2.3);
+  color: rgba(59, 204, 180, 1);
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-} */
+.nav-item:hover::before {
+  content: '';
+  display: block;
+  padding: 0.1rem;
+  border-top: 2px solid rgba(255, 103, 0, 1);
+}
+
+.nav-item:hover::after {
+  content: '';
+  display: block;
+  padding: 0.1rem;
+  border-bottom: 2px solid rgba(255, 103, 0, 1);
+}
+
+.banner {
+  grid-area: banner;
+  margin: 0;
+  background-color: rgba(0, 98, 94, 1);
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
+  border: 5px solid rgba(255, 103, 0, 1);
+}
+
+.banner-header {
+  font-size: 9em;
+  text-decoration: underline;
+  text-decoration-color: rgba(59, 204, 180, 1);
+}
+
+.profile {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-auto-rows: 50% 50%;
+  grid-template-areas: 'tl tr' 'mid mid'
+}
+
+.profile h1 {
+  grid-area: tr;
+}
+
+.profile section {
+  grid-area: mid;
+}
+
+.profile aside {
+  grid-area: tr br;
+}
+
+.img-wrapper {
+  margin: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+.img-wrapper img {
+  grid-area: tl;
+  background-size: contain;
+  background-repeat: no-repeat;
+  max-width: 20vw;
+  max-height: 25vh;
+  align-self: center;
+}
+
+.auth-container {
+  grid-area: main;
+  height: 40vh;
+  display: grid;
+  grid-template-columns: 35% auto 25%;
+  grid-template-areas: 'l m r'
+}
+
+.auth-wrapper {
+  grid-area: m;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-header {
+  margin: 0;
+}
+
+.auth-children {
+  align-self: center;
+}
+
+.inputs {
+  width: 10vw;
+}
+
+.dropzone {
+  border: 1px dashed black;
+}
+
+.chat-container {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 90% 10%;
+  grid-template-areas: 'l r' 'b r';
+  grid-gap: 1rem;
+}
+
+.messaging-area {
+  grid-area: l;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.users-list {
+  grid-area: r;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: baseline;
+  overflow: scroll;
+}
+
+.user {
+  align-self: center;
+  list-style: none;
+  border: 1px solid black;
+  margin: 0.5rem;
+  flex: 0;
+  width: 99%;
+  line-height: 2rem;
+  border-radius: 4px;
+}
+
+.chat-input {
+  grid-area: b;
+}
+
+#messages {
+  border: 1px solid black;
+  width: 80%;
+  height: 100%;
+  background-color: white;
+  opacity: 0.6;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.message {
+  list-style: none;
+  margin: 0.5rem;
+  border: 1px solid black;
+  width: 50%;
+  min-height: 2rem;
+  border-radius: 10px;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.sender {
+  align-self: flex-start;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: red;
+}
+
+.recipient {
+  align-self: flex-end;
+  justify-content: flex-end;
+  padding: 1rem;
+  background-color: blue;
+}

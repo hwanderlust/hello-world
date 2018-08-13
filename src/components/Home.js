@@ -40,7 +40,6 @@ class Home extends React.Component {
 
     return (
       <div>
-        <h1 className='header'>Hello World</h1>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ul>
           { this.renderUsers() }

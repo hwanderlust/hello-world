@@ -5,7 +5,7 @@ import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
-import { updateUsers } from '../../actions'
+import { updateUsers, updateRecipientUser } from '../../actions'
 
 // renders available users to chat with
 
@@ -38,7 +38,11 @@ class ChatContainer extends React.Component {
   }
 
   setRecipient = (user) => {
-    getUser(user.recipient_id).then(user => this.setState({recipientUser: user}, () => console.log(this.state)))
+    getUser(user.recipient_id).then(user => {
+      // save recipientUser to store and gain access to it from Message to help position messages 
+      this.props.updateRecipientUser(user)
+      this.setState({recipientUser: user}, () => console.log(this.state))
+    })
   }
 
   createNewChat = (user) => {
@@ -100,7 +104,7 @@ class ChatContainer extends React.Component {
           case 'home':
             return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
           case 'chat':
-            return <Chat chat={this.state.chat} messages={this.state.messages} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+            return <Chat users={this.state.users} chat={this.state.chat} messages={this.state.messages} handleNewChat={this.handleNewChat} renderChat={this.renderChat} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
           default:
           console.log(`Chat request is wrong`);
           break
@@ -109,7 +113,7 @@ class ChatContainer extends React.Component {
     }
 
     return (
-      <div>
+      <div className='chat-container'>
         { renderChatComponents() }
       </div>
     );
@@ -125,6 +129,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateUsers: (users) => dispatch(updateUsers(users)),
+    updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
   }
 }
 

@@ -41,6 +41,12 @@ export const setDetectedLang = (term) => {
   }
 }
 
+export const updateRecipientUser = (user) => {
+  return {
+    type: UPDATE_RECIPIENT_USER,
+    payload: user
+  }
+}
 
 export const updateChat = () => {
   return {
@@ -52,13 +58,6 @@ export const updateChat = () => {
 export const updateMessages = () => {
   return {
     type: UPDATE_MESSAGES,
-    payload: 'something'
-  }
-}
-
-export const updateRecipientUser = () => {
-  return {
-    type: UPDATE_RECIPIENT_USER,
     payload: 'something'
   }
 }

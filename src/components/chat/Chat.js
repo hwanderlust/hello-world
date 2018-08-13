@@ -8,6 +8,7 @@ class Chat extends React.Component {
     super(props)
 
     this.state = {
+      users: null,
       chat: '',
       messages: '',
       text: '',
@@ -16,6 +17,9 @@ class Chat extends React.Component {
   };
 
   componentDidMount() {
+    if(this.props.users) {
+      this.setState({users: this.props.users}, () => console.log(this.state))
+    }
     if(this.props.chat) {
       this.setState({chat: this.props.chat})
     }
@@ -25,15 +29,39 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if(prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
+    } else {
+      this.renderUsers()
+    }
+
     if(this.state.chat !== this.props.chat) {
       this.setState({chat: this.props.chat})
     }
+
     if(this.state.messages !== this.props.messages) {
       this.setState({messages: this.props.messages}, () => {
         console.log(this.state)
         this.scrollToBottom()
       })
     }
+  }
+
+  handleClick = (clickedUser) => {
+    this.props.handleNewChat({recipient_id: clickedUser.id})
+    this.props.renderChat()
+  }
+
+  handleReceivedUser = (response) => {
+    const updatedUsers = [...this.state.users, response].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+
+    this.setState({...this.state,
+      users: updatedUsers
+    }, () => console.log(this.state))
+  }
+
+  renderUsers = () => {
+    const { users } = this.state
+    return users ? users.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
   scrollToBottom = () => {
@@ -82,23 +110,30 @@ class Chat extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
+        <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
+        <aside className='users-list'>
+          { this.renderUsers() }
+        </aside>
+
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
         { renderMsgActionCable() }
 
-        <h1 className='header'>Chat Window</h1>
-        <div id='messages' style={{border: '1px solid black', width: '500px', height: '300px', listStyle: 'none', overflow: 'scroll'}}>
-          { this.state.messages ? renderMessages() : null}
-          <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
+        <div className='messaging-area'>
+          <h1 className='header'>Chat Window</h1>
+          <main id='messages' >
+            { this.state.messages ? renderMessages() : null}
+            <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
+          </main>
         </div>
 
         { this.state.langPrompt ? <SelectLang handleMsgClick={this.handleMsgClick} /> : null }
 
-        <form onSubmit={(e) => this.handleSubmit(e)}>
+        <form className='chat-input'onSubmit={(e) => this.handleSubmit(e)}>
           <input type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
           <input type='submit' />
         </form>
-      </div>
+      </React.Fragment>
     )
   }
 }

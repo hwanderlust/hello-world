@@ -3,6 +3,23 @@ import { connect } from 'react-redux'
 import { setTranslateTerm } from '../../actions'
 
 class Message extends React.Component {
+  state = {
+    sender: null,
+    recipient: null,
+  }
+
+  componentDidMount() {
+    // if(this.props.currentUser) {
+    //   this.setState({sender: this.props.currentUser}, () => console.log(this.state))
+    // }
+    // if(this.props.recipientUser) {
+    //   this.setState({recipient: this.props.recipientUser}, () => console.log(this.state))
+    // }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+  }
 
   handleClick = (message) => {
     this.props.handleMsgClick()
@@ -12,7 +29,7 @@ class Message extends React.Component {
     console.log(term);
     this.props.setTranslateTerm(term)
 
-    
+
     // must wait for user to select a language from the select dropdown first
     // translateText(term, language).then(r => {
     //   console.log(r);
@@ -36,19 +53,39 @@ class Message extends React.Component {
   }
 
   render() {
-    const { msg } = this.props
+    const { msg, currentUser } = this.props
+
+    const renderSenderMessages = () => {
+      return (
+          <li key={msg.id} className='message sender' onClick={() => this.handleClick(msg)}>{msg.text}</li>
+      )
+    }
+
+    const renderRecipientMessages = () => {
+      return (
+          <li key={msg.id} className='message recipient' onClick={() => this.handleClick(msg)}>{msg.text}</li>
+      )
+    }
+
+    const renderMessages = () => {
+      if(currentUser) {
+        return currentUser.id === msg.sender_id ? renderSenderMessages() : renderRecipientMessages()
+      }
+    }
 
     return (
-      <li key={msg.id} onClick={() => this.handleClick(msg)}>{msg.text}</li>
+      renderMessages()
     )
   }
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     language: state.appState.language
-//   }
-// }
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.appState.currentUser,
+    recipientUser: state.appState.recipientUser,
+    // language: state.appState.language
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -56,4 +93,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Message);
+export default connect(mapStateToProps, mapDispatchToProps)(Message);

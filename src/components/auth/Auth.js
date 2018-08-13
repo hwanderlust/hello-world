@@ -68,7 +68,7 @@ class Auth extends React.Component {
 
   render() {
     const renderHeader = () => {
-      return this.state.login ? <h1 className='header'>Login</h1> : <h1 className='header'>Signup</h1>
+      return this.state.login ? <h1 className='header auth-header'>Login</h1> : <h1 className='header auth-header'>Signup</h1>
     }
 
     const renderPicUpload = () => {
@@ -77,7 +77,9 @@ class Auth extends React.Component {
         <Dropzone
           multiple={false}
           accept="image/*"
-          onDrop={this.onImageDrop}>
+          onDrop={this.onImageDrop}
+          className='auth-children dropzone'
+        >
           <p>Drop an image or click to select a file to upload.</p>
         </Dropzone>
       )
@@ -85,24 +87,27 @@ class Auth extends React.Component {
 
     const renderForm = () => {
       return (
-        <form onSubmit={(e) => this.handleSubmit(e)}>
+        <form onSubmit={(e) => this.handleSubmit(e)} className='auth-children'>
           <label htmlFor='username'>Username</label>
-          <input type='text' name='username' value={this.state.username} onChange={(e) => this.handleChange(e)}/>
+          <input className='inputs' type='text' name='username' value={this.state.username} onChange={(e) => this.handleChange(e)}/>
+          <br />
           <label htmlFor='password'>Password</label>
-          <input type='password' name='password'  value={this.state.password} onChange={(e) => this.handleChange(e)} />
+          <input className='inputs' type='password' name='password'  value={this.state.password} onChange={(e) => this.handleChange(e)} />
+          <br />
           <input type='submit' />
         </form>
       )
     }
 
     return (
-      <div>
-        { renderHeader() }
+      <div className='auth-container'>
+        <main className='auth-wrapper'>
+          { renderHeader() }
 
-        { renderPicUpload() }
+          { renderPicUpload() }
 
-        { renderForm() }
-
+          { renderForm() }
+        </main>
       </div>
     )
   }
