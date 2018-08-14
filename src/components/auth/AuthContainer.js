@@ -42,11 +42,29 @@ class AuthContainer extends React.Component {
   }
 
   handleAuth = (user) => {
-    window.location.pathname === '/login' ?
+    if(window.location.pathname === '/login') {
+        login(user)
+          .then(userData => {
+            if(userData.error) {
+              alert(userData.error)
+            } else {
+              this.setupUser(userData)
+            }
+          })
 
-    login(user).then(userData => this.setupUser(userData))
+    } else {
+      signup(user).then(userData => {
+        if(userData.error) {
+          const firstErrorKey = Object.keys(userData.error)[0].replace(/^\w/, c => c.toUpperCase())
+          alert(`${firstErrorKey} ${userData.error[Object.keys(userData.error)[0]]}`)
+          window.location.reload();
+        } else {
+          this.setupUser(userData)
+        }
+      })
+    }
 
-    : signup(user).then(userData => this.setupUser(userData))
+
   }
 
   handleLogout = () => {

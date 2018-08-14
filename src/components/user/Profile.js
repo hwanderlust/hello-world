@@ -84,45 +84,73 @@ class Profile extends React.Component {
   }
 
   render() {
+    const { currentUser } = this.props
+
+    const renderTop = () => {
+      return (
+        <React.Fragment>
+          <h1 className='header'>{currentUser.username}</h1>
+          <div className='img-wrapper'><img src={currentUser.profile_picture}/></div>
+        </React.Fragment>
+      )
+    }
+
+    const renderDetails = () => {
+      return (
+        <React.Fragment>
+          <h3>Location</h3>
+          <p>{currentUser.location}</p>
+          <h3>Age</h3>
+          <p>{currentUser.age}</p>
+          <h3>Nationality</h3>
+          <p>{currentUser.nationality}</p>
+          <h3>Languages</h3>
+          <p>{currentUser.languages}</p>
+          <h3>Introduction</h3>
+          <p>{currentUser.introduction}</p>
+          <h3>Hobbies</h3>
+          <p>{currentUser.hobbies}</p>
+          <h3>Goals</h3>
+          <p>{currentUser.goals}</p>
+        </React.Fragment>
+      )
+    }
+
+    const renderLists = () => {
+
+    }
 
     const renderLanguages = () => {
       return this.languages().map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
     return (
-      <div className='profile'>
-        {this.props.currentUser ? <h1 className='header'>{this.props.currentUser.username}</h1> : null}
 
-        {this.props.currentUser ? <div className='img-wrapper'><img src={this.props.currentUser.profile_picture}/></div> : null}
+        <div className='profile'>
+          {this.props.currentUser ? renderTop() : null}
 
-        <section>
-          <h3>Languages</h3>
-          <p>English, Japanese, Korean</p>
-          <h3>Description</h3>
-          <p>Loves to travel</p>
-          <h3>Goals</h3>
-          <p>Brush up on language skills through daily conversation and about life</p>
-        </section>
+          <section>
+            {this.props.currentUser ? renderDetails() : null}
+          </section>
 
+          {/* make into component   */}
+          <aside>
+            <span><h1>Saved Notes</h1></span>
+            <main>
+              <h3>List Name</h3>
+              <h3>List Name</h3>
+              <h3>List Name</h3>
+            </main>
+          </aside>
 
-        {/* make into component   */}
-        <aside>
-          <span><h1>Saved Notes</h1></span>
-          <main>
-            <h3>List Name</h3>
-            <h3>List Name</h3>
-            <h3>List Name</h3>
-          </main>
-        </aside>
+          {/* <form onSubmit={this.handleSubmit}>
+            <input type='text' value={this.state.text} onChange={this.handleChange} />
+            <select ref={this.selectedLang} id='selected-lang'>{ renderLanguages() }</select>
+            <input type='submit'/>
+          </form> */}
+          {/* <button onClick={this.handleClick}>Click Me</button> */}
 
-        {/* <form onSubmit={this.handleSubmit}>
-          <input type='text' value={this.state.text} onChange={this.handleChange} />
-          <select ref={this.selectedLang} id='selected-lang'>{ renderLanguages() }</select>
-          <input type='submit'/>
-        </form> */}
-        {/* <button onClick={this.handleClick}>Click Me</button> */}
-
-      </div>
+        </div>
     )
   }
 }

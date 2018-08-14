@@ -7,7 +7,8 @@ export function login(user) {
     headers: HEADERS,
     body: JSON.stringify({user})
   }
-  return fetch(url, options).then(r => r.json())
+  return fetch(url, options)
+    .then(r => r.json())
 }
 
 export function signup(user) {
