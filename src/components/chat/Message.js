@@ -22,12 +22,12 @@ class Message extends React.Component {
   }
 
   handleClick = (message) => {
-    this.props.handleMsgClick()
-    console.log(message.text);
+    this.props.handleSpeechClick(message.text)
+    // console.log(message.text);
 
-    const term = encodeURI(message.text)
-    console.log(term);
-    this.props.setTranslateTerm(term)
+    // const term = encodeURI(message.text)
+    // console.log(term);
+    // this.props.setTranslateTerm(term)
 
 
     // must wait for user to select a language from the select dropdown first
@@ -52,18 +52,27 @@ class Message extends React.Component {
     // })
   }
 
+  handleDoubleClick = (message) => {
+    this.props.toggleTranslationForm()
+    console.log(message.text);
+
+    const term = encodeURI(message.text)
+    console.log(term);
+    this.props.setTranslateTerm(term)
+  }
+
   render() {
     const { msg, currentUser } = this.props
 
     const renderSenderMessages = () => {
       return (
-          <li key={msg.id} className='message sender' onClick={() => this.handleClick(msg)}>{msg.text}</li>
+          <li key={msg.id} className='message sender' onClick={() => this.handleClick(msg)} onDoubleClick={() => this.handleDoubleClick(msg)} >{msg.text}</li>
       )
     }
 
     const renderRecipientMessages = () => {
       return (
-          <li key={msg.id} className='message recipient' onClick={() => this.handleClick(msg)}>{msg.text}</li>
+          <li key={msg.id} className='message recipient' onClick={() => this.handleClick(msg)} onDoubleClick={() => this.handleDoubleClick(msg)} >{msg.text}</li>
       )
     }
 

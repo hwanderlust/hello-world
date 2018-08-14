@@ -109,7 +109,7 @@ class SelectLang extends React.Component {
     })
 
     // unmounts component
-    this.props.handleMsgClick()
+    this.props.toggleTranslationForm()
   }
 
   render() {

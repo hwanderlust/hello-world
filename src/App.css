@@ -291,3 +291,32 @@ body {
   padding: 1rem;
   background-color: rgba(255, 103, 0, 1);
 }
+
+.sender::after {
+  content: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-volume-high-128.png');
+  position: inherit;
+  transform: scale(0);
+  transition: transform ease-out 150ms;
+  background-color: rgba(255, 103, 0, 1);
+  border-radius: 50%;
+}
+
+.sender:hover::after{
+  transform: scale(0.5);
+}
+
+.recipient::before {
+  content: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-volume-high-128.png');
+  position: inherit;
+  transform: scale(0);
+  transition: transform ease-out 150ms;
+}
+
+.recipient:hover::before{
+  transform: scale(0.5);
+}
+
+#text-to-speech {
+  width: 3rem;
+  margin-bottom: 1rem;
+}

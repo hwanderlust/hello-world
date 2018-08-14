@@ -11,7 +11,7 @@ import spoken from '../../../node_modules/spoken/build/spoken.js';
 class Profile extends React.Component {
   constructor(props) {
     super(props)
-    this.selectedLang = React.createRef()
+    // this.selectedLang = React.createRef()
 
     this.state = {
       text: ''

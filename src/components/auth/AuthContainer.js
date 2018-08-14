@@ -38,7 +38,7 @@ class AuthContainer extends React.Component {
     this.setState({login: true}, () => console.log(this.state))
 
     updateUser(userData)
-    history.push('/home')
+    history.push('/chat')
   }
 
   handleAuth = (user) => {
