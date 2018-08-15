@@ -332,6 +332,11 @@ body {
   margin-bottom: 1rem;
 }
 
+.checkmark {
+  width: 4rem;
+  margin-bottom: 0.5rem;
+}
+
 .chat-container {
   grid-area: main;
   display: grid;

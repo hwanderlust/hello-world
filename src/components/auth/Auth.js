@@ -161,7 +161,7 @@ class Auth extends React.Component {
         <main className='auth-wrapper'>
           { renderHeader() }
 
-          { !this.state.accountForm || this.state.login ? null : renderPicUpload() }
+          { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/> : renderPicUpload() }
 
           { this.state.accountForm || this.state.login ? renderAccountForm() : null }
           { this.state.aboutForm ? renderAboutForm() : null }
