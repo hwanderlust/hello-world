@@ -5,6 +5,7 @@ class Nav extends React.Component {
 
   state = {
     loggedIn: false,
+    nav: 'nav is-closed',
   }
 
   componentDidMount() {
@@ -19,6 +20,17 @@ class Nav extends React.Component {
     }
   }
 
+  handleMouseOver = () => {
+    if(this.state.nav === 'nav is-closed') {
+      this.setState({nav: 'nav is-open'}, () => console.log(this.state))
+    }
+  }
+
+  handleMouseLeave = () => {
+    if(this.state.nav === 'nav is-open') {
+      this.setState({nav: 'nav is-closed'}, () => console.log(this.state))
+    }
+  }
 
   render() {
 
@@ -41,13 +53,39 @@ class Nav extends React.Component {
       )
     }
 
+    const renderHamburger = () => {
+      return (
+        <button className='hamburger' onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
+          <span className='hamb hamb-top'></span>
+          <span className='hamb hamb-mid'></span>
+          <span className='hamb hamb-bot'></span>
+        </button>
+      )
+    }
+
+    const renderNav = () => {
+      return (
+        <React.Fragment>
+          <a href='/home' className='nav-item'><li>Home</li></a>
+          <a href='/about' className='nav-item'><li>About</li></a>
+          <a href='/contact' className='nav-item'><li>Contact</li></a>
+          { this.state.loggedIn ? loggedInItems() : NotLoggedInItems() }
+        </React.Fragment>
+      )
+    }
+
     return (
-      <div className='nav' >
-        <a href='/home' className='nav-item'><li>Home</li></a>
-        <a href='/about' className='nav-item'><li>About</li></a>
-        <a href='/contact' className='nav-item'><li>Contact</li></a>
-        { this.state.loggedIn ? loggedInItems() : NotLoggedInItems() }
-      </div>
+      <React.Fragment>
+
+        { renderHamburger() }
+
+        <div className={this.state.nav} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
+
+          { renderNav() }
+
+        </div>
+
+      </React.Fragment>
     )
   }
 

@@ -79,9 +79,9 @@ class AuthContainer extends React.Component {
   render() {
 
     return (
-      <div>
+      <React.Fragment>
         <Auth handleAuth={this.handleAuth} login={this.state.login} />
-      </div>
+      </React.Fragment>
     )
   }
 };

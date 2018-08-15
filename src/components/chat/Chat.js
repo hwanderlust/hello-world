@@ -93,10 +93,6 @@ class Chat extends React.Component {
     this.scrollToBottom()
   }
 
-  // handleMsgClick = () => {
-    // this.setState({langPrompt: !this.state.langPrompt})
-  // }
-
   // handleClick = () => {
     // spoken.voices().then( voices => console.log(voices) );
     // spoken.recognition.language = 'en-AU';
@@ -153,24 +149,52 @@ class Chat extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    e.preventDefault()
-    const voice = this.voices().find(v => v.lang === e.target.querySelector('#selected-lang').value)
+    const voice = this.voices().find(v => v.lang === e.target.value)
     console.log(voice);
     spoken.say(this.state.speech, voice.name)
+    this.hideForms('speech')
   }
 
   handleSpeechClick = (msg) => {
+    this.checkRenderedForms('translation')
     this.handleSpeechChange(msg)
   }
 
-  toggleTranslationForm = () => {
-    this.setState({langPrompt: !this.state.langPrompt})
+  handleTranslationClick = () => {
+    this.checkRenderedForms('speech')
+    this.setState({langPrompt: true})
+  }
+
+  checkRenderedForms = (form) => {
+    switch(form) {
+      case 'speech':
+        return this.state.langPrompt ? this.hideForms('translation') : null
+      case 'translation':
+        return this.state.speech ? this.hideForms('speech') : null
+      default:
+        console.log('checkRenderedForms failed');
+        break
+    }
+  }
+
+  hideForms = (form) => {
+    switch(form) {
+      case 'speech':
+        this.setState({speech: ''})
+        break
+      case 'translation':
+        this.setState({langPrompt: false})
+        break
+      default:
+        console.log('hideForms failed');
+        break
+    }
   }
 
   render() {
     const renderMessages = () => {
       const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} toggleTranslationForm={this.toggleTranslationForm} key={msg.id} msg={msg} />)
+      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} key={msg.id} msg={msg} />)
     }
 
     const renderMsgActionCable = () => {
@@ -183,10 +207,10 @@ class Chat extends React.Component {
 
     const renderSpeechForm = () => {
       return (
-        <form onSubmit={this.handleSpeechSubmit}>
+        <form >
           <input type='text' value={this.state.speech} onChange={this.handleSpeechChange} />
-          <select id='selected-lang'>{ renderLanguages() }</select>
-          <input type='submit'/>
+          <select id='selected-lang' onChange={this.handleSpeechSubmit}>{ renderLanguages() }</select>
+          {/* <input type='submit'/> */}
         </form>
       )
     }
@@ -195,9 +219,24 @@ class Chat extends React.Component {
       return this.languages().map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
+    const renderChatInput = () => {
+      return (
+        <form className='chat-input-container'onSubmit={(e) => this.handleSubmit(e)}>
+          <div className='chat-input-wrapper'>
+            <input className='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
+            <input type='submit' className='chat-submit' />
+          </div>
+          <div className='chat-submit-wrapper'>
+          </div>
+        </form>
+      )
+    }
+
     return (
       <React.Fragment>
+
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
+
         <aside className='users-list'>
           { this.renderUsers() }
         </aside>
@@ -208,22 +247,25 @@ class Chat extends React.Component {
         <div className='messaging-area'>
           <h1 className='header'>Chat Window</h1>
 
-          <section>
+          <section className='chat-features'>
             { this.state.speech ? renderSpeechForm() : null}
           </section>
+          <div className='chat-features'>
+            { this.state.langPrompt ? <SelectLang hideForms={this.hideForms} /> : null }
+          </div>
 
           <main id='messages' >
+
             { this.state.messages ? renderMessages() : null}
+
             <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
           </main>
         </div>
 
-        { this.state.langPrompt ? <SelectLang toggleTranslationForm={this.toggleTranslationForm} /> : null }
 
-        <form className='chat-input'onSubmit={(e) => this.handleSubmit(e)}>
-          <input className='inputs' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
-          <input type='submit' />
-        </form>
+        { renderChatInput() }
+
+
       </React.Fragment>
     )
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
-import { uploadPic } from '../../adapter'
+// import { uploadPic } from '../../adapter'
 
 const CLOUDINARY_UPLOAD_PRESET = 'vsicareb';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/pablopawpaw/upload';
@@ -139,7 +139,6 @@ class Auth extends React.Component {
     }
 
     const renderPicUpload = () => {
-
       return (
         <Dropzone
           multiple={false}
@@ -153,7 +152,6 @@ class Auth extends React.Component {
     }
 
     const renderAccountForm = () => {
-      console.log('RENDERDETAILSFORM RENDERING');
       return (
         <form onSubmit={(e) => this.handleSubmit(e)} id='accountForm' className='auth-children'>
           <label htmlFor='username'>Username</label>
@@ -222,16 +220,3 @@ class Auth extends React.Component {
 }
 
 export default Auth;
-
-
-// account form - username, password, pf pic
-// about form
-  // location
-  // age
-  // nationality
-  // languages - know and learning
-    // knowledge of each beg intermediate fluent native
-// details form
-  // introduction
-  // passions and hobbies
-  // language learning goals

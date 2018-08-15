@@ -39,7 +39,7 @@ class ChatContainer extends React.Component {
 
   setRecipient = (user) => {
     getUser(user.recipient_id).then(user => {
-      // save recipientUser to store and gain access to it from Message to help position messages 
+      // save recipientUser to store and gain access to it from Message to help position messages
       this.props.updateRecipientUser(user)
       this.setState({recipientUser: user}, () => console.log(this.state))
     })
@@ -70,24 +70,26 @@ class ChatContainer extends React.Component {
       const { recipientUser } = this.state
       const { currentUser } = this.props
       // debugger
-      const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
+      if(currentUser && recipientUser) {
+        const sentMsgs = messages.filter(msg => msg.sender_id === currentUser.id && msg.recipient_id === recipientUser.id)
 
-      if(currentUser.id === recipientUser.id) {
-        const flags = {};
-        const filtered = sentMsgs.filter(msg => {
-          if (flags[msg.id]) {
-            return false;
-          }
+        if(currentUser.id === recipientUser.id) {
+          const flags = {};
+          const filtered = sentMsgs.filter(msg => {
+            if (flags[msg.id]) {
+              return false;
+            }
             flags[msg.id] = true;
             return true;
           });
-        return filtered
+          return filtered
 
-      } else {
-        const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
+        } else {
+          const recMsgs = messages.filter(msg => msg.recipient_id === currentUser.id && msg.sender_id === recipientUser.id)
 
-        const allMsgs = [...sentMsgs, ...recMsgs]
-        return allMsgs
+          const allMsgs = [...sentMsgs, ...recMsgs]
+          return allMsgs
+        }
       }
   }
 
@@ -95,7 +97,6 @@ class ChatContainer extends React.Component {
     const users = {sender_id: this.props.currentUser.id, recipient_id: this.state.recipientUser.id}
     createMessage({...message, ...users})
   }
-
 
   render() {
     const renderChatComponents = () => {

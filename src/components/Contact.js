@@ -4,7 +4,7 @@ class Contact extends React.Component {
 
   render() {
     return(
-      <div>
+      <div className='static'>
         <h1>Contact</h1>
         <h3>Email</h3>
         <p>pablo@test.com</p>

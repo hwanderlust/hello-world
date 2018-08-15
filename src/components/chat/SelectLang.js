@@ -109,7 +109,7 @@ class SelectLang extends React.Component {
     })
 
     // unmounts component
-    this.props.toggleTranslationForm()
+    this.props.hideForms('translation')
   }
 
   render() {
@@ -119,14 +119,14 @@ class SelectLang extends React.Component {
     }
 
     return (
-      <div>
-        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name} style={{width: '200px', height: '50px', zIndex: '5'}}>
+      <React.Fragment>
+        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name}>
           { renderLanguages() }
         </select>
-        <select onChange={this.handleChange} name='toLang' style={{width: '200px', height: '50px', zIndex: '5'}}>
+        <select onChange={this.handleChange} name='toLang'>
           { renderLanguages() }
         </select>
-      </div>
+      </React.Fragment>
     )
   }
 }

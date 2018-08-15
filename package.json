@@ -9,6 +9,7 @@
     "react-dropzone": "^4.3.0",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
+    "reactjs-popup": "^1.1.4",
     "redux": "^4.0.0",
     "spoken": "^1.1.16",
     "superagent": "^3.8.3"
