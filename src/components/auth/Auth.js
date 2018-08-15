@@ -1,6 +1,9 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import AccountForm from './AccountForm';
+import AboutForm from './AboutForm';
+import DetailsForm from './DetailsForm';
 // import { uploadPic } from '../../adapter'
 
 const CLOUDINARY_UPLOAD_PRESET = 'vsicareb';
@@ -99,16 +102,6 @@ class Auth extends React.Component {
     this.setState({[e.target.id]: !this.state[e.target.id]}, () => console.log(this.state))
   }
 
-  // handleAccountSubmit = (e) => {
-  //   e.preventDefault()
-  //   console.log(this.state);
-  //   this.props.handleAuth({
-  //     username: this.state.username,
-  //     password: this.state.password,
-  //     profile_picture: this.state.uploadedFileCloudinaryUrl
-  //   })
-  // }
-
   onImageDrop = (files) => {
     this.setState({
       uploadedFile: files[0]
@@ -152,54 +145,15 @@ class Auth extends React.Component {
     }
 
     const renderAccountForm = () => {
-      return (
-        <form onSubmit={(e) => this.handleSubmit(e)} id='accountForm' className='auth-children'>
-          <label htmlFor='username'>Username</label>
-          <input className='inputs' type='text' name='username' value={this.state.username} onChange={(e) => this.handleChange(e)}/>
-          <br />
-          <label htmlFor='password'>Password</label>
-          <input className='inputs' type='password' name='password'  value={this.state.password} onChange={(e) => this.handleChange(e)} />
-          <br />
-          <input type='submit' className='' />
-        </form>
-      )
+      return <AccountForm username={this.state.username} password={this.state.password} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
     }
 
     const renderAboutForm = () => {
-      return (
-        <form onSubmit={(e) => this.handleSubmit(e)} id='aboutForm' className='auth-children'>
-          <label htmlFor='location'>Where you at?</label>
-          <input type='text' name='location' className='inputs' onChange={this.handleChange} value={this.state.location} />
-          <br />
-          <label htmlFor='age'>How wise are you? (age)</label>
-          <input type='number' name='age' className='inputs' onChange={this.handleChange} value={this.state.age} />
-          <br />
-          <label htmlFor='nationality'>Where's your passport from?</label>
-          <input type='text' name='nationality' className='inputs' onChange={this.handleChange} value={this.state.nationality} />
-          <br />
-          <label htmlFor='languages'>Which languages do you speak?</label>
-          <input type='text' name='languages' className='inputs' onChange={this.handleChange} value={this.state.languages} />
-          <br />
-          <input type='submit' className='' />
-        </form>
-      )
+      return <AboutForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} location={this.state.location} age={this.state.age} nationality={this.state.nationality} languages={this.state.languages} />
     }
 
     const renderDetailsForm = () => {
-      return (
-        <form onSubmit={(e) => this.handleSubmit(e)} id='detailsForm' className='auth-children'>
-          <label htmlFor='introduction'>Tell us about yourself!</label>
-          <input type='text' name='introduction' className='inputs' onChange={this.handleChange} value={this.state.introduction} />
-          <br />
-          <label htmlFor='hobbies'>Let others know what your hobbies are and what you're passionate about.</label>
-          <input type='text' name='hobbies' className='inputs' onChange={this.handleChange} value={this.state.hobbies} />
-          <br />
-          <label htmlFor='goals'>What are your learning goals here?</label>
-          <input type='text' name='goals' className='inputs' onChange={this.handleChange} value={this.state.goals} />
-          <br />
-          <input type='submit' className='' />
-        </form>
-      )
+      return <DetailsForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} introduction={this.state.introduction} hobbies={this.state.hobbies} goals={this.state.goals} />
     }
 
     return (
