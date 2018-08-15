@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Shrikhand');
+
+body {
+  /* background-color: rgba(21, 134, 115, 0.7); */
+  margin: 0;
+  background-color: rgba(0, 16, 54, 1);
+  color: rgba(21, 134, 115, 0.7);
+}
+
+.App {
+  text-align: center;
+  display: grid;
+  grid-template-columns: 10vw auto;
+  grid-template-rows: 15vh 85vh;
+  grid-template-areas: 'nav banner' 'nav main';
+  /* padding: 0.5vw; */
+  margin: 0;
+  /* grid-gap: 1vw; */
+}
+
+.header {
+  font-family: 'Shrikhand', 'cursive';
+  font-size: 5em;
+  /* color: black; */
+  margin: 0;
+}
+
+.static {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media only screen and (min-width: 1000px) {
+  /* as is */
+}
+
+@media only screen and (min-width: 768px) {
+ /* banner header */
+}
+
+@media only screen and (min-width: 600px) {
+ /*
+    banner header
+    nav bar
+    notes list
+ */
+}
+
+@media only screen and (min-width: 400px) {
+  /*
+     everything
+  */
+}

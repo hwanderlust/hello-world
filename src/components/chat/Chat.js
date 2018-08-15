@@ -1,8 +1,10 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
+import { connect } from 'react-redux'
+import spoken from '../../../node_modules/spoken/build/spoken.js';
+
 import Message from './Message'
 import SelectLang from './SelectLang'
-import spoken from '../../../node_modules/spoken/build/spoken.js';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -63,7 +65,11 @@ class Chat extends React.Component {
 
   renderUsers = () => {
     const { users } = this.state
-    return users ? users.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
+    const { currentUser } = this.props
+
+    const filtered = users && currentUser ? users.filter(user => user.id !== currentUser.id) : null
+
+    return filtered ? filtered.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
   scrollToBottom = () => {
@@ -271,4 +277,10 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.appState.currentUser,
+  }
+}
+
+export default connect(mapStateToProps)(Chat);

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import './App.css'
+import './css/App.css'
+import './css/Nav.css'
+import './css/Banner.css'
+import './css/Profile.css'
+import './css/Chat.css'
+import './css/Auth.css'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'

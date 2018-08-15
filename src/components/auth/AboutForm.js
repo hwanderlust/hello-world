@@ -1,10 +1,23 @@
 import React from 'react';
 
-const AboutForm = ({ handleSubmit, handleChange, location, age, nationality, languages }) => {
+class AboutForm extends React.Component {
+
+  constructor() {
+    super()
+    const inputFocus = React.createRef();
+  }
+
+  componentDidMount() {
+    this.inputFocus.focus();
+  }
+
+  render() {
+    const { handleSubmit, handleChange, location, age, nationality, languages } = this.props
+
   return (
     <form onSubmit={(e) => handleSubmit(e)} id='aboutForm' className='auth-children'>
       <label htmlFor='location'>Where you at?</label>
-      <input type='text' name='location' className='inputs' onChange={handleChange} value={location} />
+      <input type='text' name='location' className='inputs' onChange={handleChange} value={location} autofocus="true" ref={c => (this.inputFocus = c)} />
       <br />
       <label htmlFor='age'>How wise are you? (age)</label>
       <input type='number' name='age' className='inputs' onChange={handleChange} value={age} />
@@ -17,7 +30,7 @@ const AboutForm = ({ handleSubmit, handleChange, location, age, nationality, lan
       <br />
       <input type='submit' className='' />
     </form>
-  )
+  )}
 };
 
 export default AboutForm;
