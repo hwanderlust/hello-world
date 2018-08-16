@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { updateLang } from '../../actions'
 import { translateText, detectLang } from '../../adapter'
 
-class SelectLang extends React.Component {
+class Translate extends React.Component {
   state = {
     detectedLang: {
       name: 'English',
@@ -144,4 +144,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectLang);
+export default connect(mapStateToProps, mapDispatchToProps)(Translate);

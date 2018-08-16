@@ -86,6 +86,36 @@ export function translateText(msg, fromLang, toLang) {
   return fetch(url, options).then(r => r.json())
 }
 
+export function getLists(id) {
+  const url = `${API_ROOT}/users/${id}/lists`
+  return fetch(url).then(r => r.json())
+}
+
+export function getListMsgs(id) {
+  const url = `${API_ROOT}/lists/${id}`
+  return fetch(url).then(r => r.json())
+}
+
+export function createList(list) {
+  const url = `${API_ROOT}/lists`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({list})
+  }
+  return fetch(url, options).then(r => r.json())
+}
+
+export function addMessage(msg) {
+  const url = `${API_ROOT}/save_message`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({message: msg})
+  }
+  return fetch(url, options).then(r => r.json())
+}
+
 export function uploadPic(imgUrl) {
   const url = `${API_ROOT}/upload-picture`
   const options = {

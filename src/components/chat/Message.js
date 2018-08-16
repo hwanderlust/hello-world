@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { setTranslateTerm } from '../../actions'
+import { createList, addMessage } from '../../adapter'
 import Popup from "reactjs-popup";
 
 class Message extends React.Component {
   state = {
     popup: false,
+    newList: '',
+    message: null,
   }
 
   handleSpeech = (message) => {
@@ -17,7 +20,7 @@ class Message extends React.Component {
     // show form
     // this.props.toggleTranslationForm()
     this.props.handleTranslationClick()
-    
+
     console.log(message.text);
 
     const term = encodeURI(message.text)
@@ -26,12 +29,61 @@ class Message extends React.Component {
     this.hidePopup()
   }
 
+  handleSavingMsg = (msg) => {
+
+    // switch (e.target.id) {
+    //   case 'speech':
+    //     break;
+    //   case 'translate':
+    //     break;
+    //   case 'save':
+    //     return this.setState({message: msg}, () => console.log(this.state))
+    //   default:
+    //
+    // }
+
+    // have msg
+    // have user
+    // need list
+
+    // show a list of available lists to choose from
+      // onChange => adds message to list (no submit btn)
+    // option to create a new list
+      // onSubmit => adds message to list (submit btn?)
+
+    // this.props.currentUser
+  }
+
   hidePopup = () => {
     this.setState({popup: false})
   }
 
-  showPopup = () => {
+  showPopup = (message) => {
     this.setState({popup: true})
+    this.setState({message}, () => console.log(this.state))
+    // must pass in event otherwise it's just a react event
+    // if event is on save msg btn
+    // set state for msg
+    //
+  }
+
+  handleNewList = (e) => {
+    e.preventDefault()
+    createList({name: this.state.newList, user_id: this.props.currentUser.id})
+      .then(newList => {
+        console.log(newList)
+
+        addMessage({msg_id: this.state.message.id, list_id: newList.id})
+          .then(messages => console.log(messages))
+          // store messages in store
+          // pass to list page view as props
+          // redirect to list page/view
+      })
+    this.hidePopup()
+  }
+
+  handleNewListChange = (e) => {
+    this.setState({newList: e.target.value}, () => console.log(this.state))
   }
 
   render() {
@@ -39,7 +91,7 @@ class Message extends React.Component {
 
     const renderSenderMessages = () => {
       return (
-          <li key={msg.id} className='message sender' onClick={this.showPopup} >
+          <li key={msg.id} className='message sender' onClick={() => this.showPopup(msg)} >
             {msg.text}
 
             { this.state.popup ? (
@@ -48,8 +100,31 @@ class Message extends React.Component {
                 trigger={
                   <React.Fragment>
                     <br/><br/>
-                    <div onDoubleClick={() => this.handleSpeech(msg)} className="popup speech"></div>
-                    <div onDoubleClick={() => this.handleTranslate(msg)} className="popup translate"></div>
+                    <div id='speech' onDoubleClick={() => this.handleSpeech(msg)} className="popup speech"></div>
+                    <div id='translate' onDoubleClick={() => this.handleTranslate(msg)} className="popup translate"></div>
+
+                    {/* use Popup to show card with lists and input to create a new list and submit form to add msg to list */}
+
+                    <div id='save' className="popup ">
+                      <Popup trigger={
+                        <button>
+                          Save Message
+                        </button>
+                      }>
+                        <React.Fragment>
+                          <select onChange={this.handleSavingMsg}>
+                            <option>test</option>
+                            <option>test2</option>
+                            <option>test3</option>
+                          </select>
+                          <Popup trigger={<button>New List</button>}>
+                            <form onSubmit={this.handleNewList}>
+                              <input type='text' value={this.state.newList} onChange={this.handleNewListChange} />
+                            </form>
+                          </Popup>
+                        </React.Fragment>
+                      </Popup>
+                    </div>
                   </React.Fragment>
                 }
                 position='bottom center'
@@ -64,7 +139,7 @@ class Message extends React.Component {
 
     const renderRecipientMessages = () => {
       return (
-          <li key={msg.id} className='message recipient' onClick={() => this.handleClick(msg)} onDoubleClick={() => this.handleDoubleClick(msg)} >{msg.text}</li>
+          <li key={msg.id} className='message recipient' >{msg.text}</li>
       )
     }
 
@@ -90,7 +165,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setTranslateTerm: (term) => dispatch(setTranslateTerm(term))
+    setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
 

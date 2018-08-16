@@ -55,8 +55,12 @@ class AuthContainer extends React.Component {
     } else {
       signup(user).then(userData => {
         if(userData.error) {
-          const firstErrorKey = Object.keys(userData.error)[0].replace(/^\w/, c => c.toUpperCase())
-          alert(`${firstErrorKey} ${userData.error[Object.keys(userData.error)[0]]}`)
+          if(typeof userData.error === 'string') {
+            alert(userData.error)
+          } else {
+            const firstErrorKey = Object.keys(userData.error)[0].replace(/^\w/, c => c.toUpperCase())
+            alert(`${firstErrorKey} ${userData.error[Object.keys(userData.error)[0]]}`)
+          }
           window.location.reload();
         } else {
           this.setupUser(userData)

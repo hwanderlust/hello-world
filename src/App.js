@@ -15,6 +15,7 @@ import Banner from './components/banner/Banner'
 import About from './components/About'
 import Contact from './components/Contact'
 import Profile from './components/user/Profile'
+import List from './components/user/List'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
@@ -70,6 +71,7 @@ class App extends Component {
             this.checkLogin()
             return <Profile />
           }}/>
+          <Route path='/list' component={List} />
           <Route path='/about' component={About} />
           <Route path='/contact' component={Contact} />
         </Switch>
