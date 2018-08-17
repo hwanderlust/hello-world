@@ -34,9 +34,21 @@ class Message extends React.Component {
     this.setState({popup: false})
   }
 
-  showPopup = (message) => {
-    this.setState({popup: true})
-    this.setState({message}, () => console.log(this.state))
+  togglePopup = (e, msg) => {
+    console.log(e.target);
+    switch(e.target.id) {
+      case 'speech':
+        return this.handleSpeech()
+      case 'translate':
+        return this.handleTranslate()
+      case 'save':
+        return this.handleSave()
+      default:
+        return this.setState({
+          popup: !this.state.popup,
+          message: msg
+        }, () => console.log(this.state))
+    }
   }
 
   render() {
@@ -44,8 +56,7 @@ class Message extends React.Component {
 
     const renderSenderMessages = () => {
       return (
-        // <div className=''>
-          <li key={msg.id} className='message sender' onClick={() => this.showPopup(msg)} >
+          <li id='msg' key={msg.id} className='message sender' onClick={(e) => this.togglePopup(e, msg)} >
             {msg.text}
 
             { this.state.popup ? (
@@ -55,11 +66,11 @@ class Message extends React.Component {
                   <React.Fragment>
                     <br/><br/>
 
-                    <div id='speech' onDoubleClick={() => this.handleSpeech()} className="popup speech"></div>
+                    <div id='speech' className="popup speech"></div>
 
-                    <div id='translate' onDoubleClick={() => this.handleTranslate()} className="popup translate"></div>
+                    <div id='translate' className="popup translate"></div>
 
-                    <div id='save' onDoubleClick={() => this.handleSave()} className="popup save"></div>
+                    <div id='save' className="popup save"></div>
                   </React.Fragment>
                 }
                 position='bottom center'
@@ -69,14 +80,12 @@ class Message extends React.Component {
             ) : null }
 
           </li>
-        // </div>
       )
     }
 
     const renderRecipientMessages = () => {
       return (
-          // <div className=''>
-            <li key={msg.id} className='message recipient' onClick={() => this.showPopup(msg)} >
+            <li id='msg' key={msg.id} className='message recipient' onClick={(e) => this.togglePopup(e, msg)} >
               {msg.text}
 
               { this.state.popup ? (
@@ -86,11 +95,11 @@ class Message extends React.Component {
                     <React.Fragment>
                       <br/><br/>
 
-                      <div id='speech' onDoubleClick={() => this.handleSpeech()} className="popup speech"></div>
+                      <div id='speech' className="popup speech"></div>
 
-                      <div id='translate' onDoubleClick={() => this.handleTranslate()} className="popup translate"></div>
+                      <div id='translate' className="popup translate"></div>
 
-                      <div id='save' onDoubleClick={() => this.handleSave()} className="popup save"></div>
+                      <div id='save' className="popup save"></div>
                     </React.Fragment>
                   }
                   position='bottom center'
@@ -100,7 +109,6 @@ class Message extends React.Component {
               ) : null }
 
             </li>
-          // </div>
       )
     }
 
