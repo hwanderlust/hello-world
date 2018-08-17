@@ -1,0 +1,62 @@
+.list-container {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 5% auto 5%;
+  grid-template-rows: 15vh 85vh;
+  grid-template-areas: 'l header r' 'l middle r'
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: flex-start;
+  align-self: center;
+}
+
+.list-messages {
+  grid-area: middle;
+  /* position: absolute; */
+  /* left: 20vw; */
+  /* bottom: 5vh; */
+  padding: 5rem 2rem;
+  padding-right: 2rem;
+  margin: 0;
+  height: 50%;
+  width: 60%;
+  display: flex;
+  flex-wrap: nowrap;
+  color: black;
+  overflow-x: scroll;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 100px;
+  background-color: #7b7e84;
+  box-sizing: border-box;
+  border: 1rem solid black;
+}
+
+.list-msg {
+  list-style: none;
+  /* flex: 1; */
+  /* align-self: flex-start; */
+  min-width: 10rem;
+  min-height: 2rem;
+  max-height: 4rem;
+  /* padding: 0.5rem; */
+  box-sizing: content-box;
+  padding-right: 2rem;
+}
+
+.list-msg::before {
+  content: open-quote;
+  display: inline-block;
+  font-size: 30px;
+  color: rgba(148, 16, 16, 1);
+}
+
+.list-msg::after {
+  content: close-quote;
+  display: inline-block;
+  font-size: 30px;
+  color: rgba(148, 16, 16, 1);
+}

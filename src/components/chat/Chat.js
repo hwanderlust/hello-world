@@ -2,6 +2,8 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
+import { createList, addMessage, getLists } from '../../adapter'
+import { updateLists } from '../../actions'
 
 import Message from './Message'
 import Translate from './Translate'
@@ -18,10 +20,17 @@ class Chat extends React.Component {
       text: '',
       langPrompt: false,
       speech: '',
+      saveMsg: false,
+      message: null,
+      newList: '',
+      saveMsgStatus: false,
+      existingList: null,
+      // lists: null,
     };
   };
 
   componentDidMount() {
+    console.log('COMPONENTDIDMOUNT', this.props);
     if(this.props.users) {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
@@ -31,9 +40,13 @@ class Chat extends React.Component {
     if(this.props.messages) {
       this.setState({messages: this.props.messages}, () => console.log(this.state))
     }
+    // if(this.props.lists) {
+    //   this.setState({lists: this.props.lists}, () => console.log(this.state))
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('COMPONENTDIDUPDATE', this.props);
     if(prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
     } else {
       this.renderUsers()
@@ -49,6 +62,10 @@ class Chat extends React.Component {
         this.scrollToBottom()
       })
     }
+
+    // if(this.state.lists !== this.props.lists) {
+    //   this.setState({lists: this.props.lists}, () => console.log(this.state))
+    // }
   }
 
   handleClick = (clickedUser) => {
@@ -78,7 +95,7 @@ class Chat extends React.Component {
   }
 
   handleChange = (e) => {
-    this.setState({[e.target.name]: e.target.value})
+    this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
   }
 
   handleSubmit = (e) => {
@@ -118,6 +135,32 @@ class Chat extends React.Component {
     this.hideForms('speech')
   }
 
+  handleSavingMsg = (listId) => {
+    addMessage({msg_id: this.state.message.id, list_id: listId})
+      .then(messages => {
+        console.log(messages)
+        this.setState({saveMsgStatus: true}, () => console.log(this.state))
+      })
+  }
+
+  handleNewList = (e) => {
+    e.preventDefault()
+    createList({name: this.state.newList, user_id: this.props.currentUser.id})
+      .then(newList => {
+        console.log(newList)
+        this.handleSavingMsg(newList.id)
+        this.props.updateLists({...this.props.lists, newList})
+      })
+    this.hideForms('save')
+    this.setState({newList: ''})
+  }
+
+  handleExistingList = (e) => {
+    e.persist()
+    this.setState({[e.target.name]: e.target.value}, () => this.handleSavingMsg(this.state.existingList))
+    this.hideForms('save')
+  }
+
   handleSpeechClick = (msg) => {
     this.checkRenderedForms('speech')
     this.handleSpeechChange(msg)
@@ -128,36 +171,47 @@ class Chat extends React.Component {
     this.setState({langPrompt: true})
   }
 
+  handleSaveMsgClick = (msg) => {
+    this.checkRenderedForms('save')
+    this.setState({message: msg})
+    this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+
+    this.setState({saveMsg: true})
+  }
+
   checkRenderedForms = (form) => {
     switch(form) {
       case 'speech':
-        return this.state.langPrompt ? this.hideForms('translation') : null
+        this.state.langPrompt ? this.hideForms('translation') : null
+        return this.state.saveMsg ? this.hideForms('save') : null
       case 'translation':
+        !!this.state.speech ? this.hideForms('speech') : null
+        return this.state.saveMsg ? this.hideForms('save') : null
+      case 'save':
+        this.state.langPrompt ? this.hideForms('translation') : null
         return !!this.state.speech ? this.hideForms('speech') : null
       default:
-        console.log('checkRenderedForms failed');
-        break
+        return console.log('checkRenderedForms failed');
     }
   }
 
   hideForms = (form) => {
     switch(form) {
       case 'speech':
-        this.setState({speech: ''}, () => console.log(this.state))
-        break
+        return this.setState({speech: ''}, () => console.log(this.state))
       case 'translation':
-        this.setState({langPrompt: false}, () => console.log(this.state))
-        break
+        return this.setState({langPrompt: false}, () => console.log(this.state))
+      case 'save':
+        return this.setState({saveMsg: false}, () => console.log(this.state))
       default:
-        console.log('hideForms failed');
-        break
+        return console.log('hideForms failed');
     }
   }
 
   render() {
     const renderMessages = () => {
       const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} key={msg.id} msg={msg} />)
+      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
     }
 
     const renderMsgActionCable = () => {
@@ -194,6 +248,25 @@ class Chat extends React.Component {
       )
     }
 
+    const renderSaveMsgForm = () => {
+      return (
+        <React.Fragment>
+          <label>List to Save to:</label>
+          <select name='existingList' onChange={this.handleExistingList}>
+            { this.props.lists ? this.props.lists.map(list => <option key={list.id} value={list.id}>{list.name}</option>) : <option disabled>No Lists</option> }
+          </select>
+          <form onSubmit={this.handleNewList}>
+            <input type='text' name='newList' value={this.state.newList} onChange={this.handleChange} placeholder='Create New List--Name Here' autoFocus={true}/>
+          </form>
+        </React.Fragment>
+      )
+    }
+
+    const renderCheckmark = () => {
+      setTimeout(() => this.setState({saveMsgStatus: false}), 600);
+      return <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/>
+    }
+
     return (
       <React.Fragment>
 
@@ -211,16 +284,16 @@ class Chat extends React.Component {
 
           <section className='chat-features'>
             { this.state.speech ? renderSpeechForm() : null}
-          </section>
-          <div className='chat-features'>
             { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
-          </div>
+            { this.state.saveMsg ? renderSaveMsgForm() : null }
+            { this.state.saveMsgStatus ? renderCheckmark() : null }
+          </section>
 
           <main id='messages' >
 
             { this.state.messages ? renderMessages() : null}
 
-            <div style={{marginTop: '30px'}} ref={el => this.messagesEnd = el }></div>
+            <div style={{marginTop: '0.3rem'}} ref={el => this.messagesEnd = el }></div>
           </main>
         </div>
 
@@ -234,7 +307,14 @@ class Chat extends React.Component {
 const mapStateToProps = (state) => {
   return {
     currentUser: state.appState.currentUser,
+    lists: state.appState.lists,
   }
 }
 
-export default connect(mapStateToProps)(Chat);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateLists: (lists) => dispatch(updateLists(lists)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

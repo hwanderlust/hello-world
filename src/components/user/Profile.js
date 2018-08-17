@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getLists, getListMsgs } from '../../adapter'
-import { updateList, updateMessages  } from '../../actions'
+import { updateList, updateLists, updateMessages  } from '../../actions'
 
 import ProfileInfo from './profile/ProfileInfo'
 import ProfileDetails from './profile/ProfileDetails'
@@ -24,7 +24,10 @@ class Profile extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.currentUser && !this.state.lists) {
-      getLists(this.props.currentUser.id).then(lists => this.setState({lists}, () => console.log(this.state)))
+      getLists(this.props.currentUser.id).then(lists => {
+        this.props.updateLists(lists)
+        this.setState({lists}, () => console.log(this.state))
+      })
     }
   }
 
@@ -42,13 +45,10 @@ class Profile extends React.Component {
 
   handleListClick = (list) => {
     this.props.updateList(list)
-    getListMsgs(list.id).then(messages => this.props.updateMessages(messages))
-    this.props.history.push('/list')
-    // save to store here!
 
-    // instead of console.log(),
-    // redirect / push path to list page
-    // render that component..
+    getListMsgs(list.id).then(messages => this.props.updateMessages(messages))
+
+    this.props.history.push('/list')
   }
 
   render() {
@@ -77,7 +77,6 @@ class Profile extends React.Component {
             <ProfileInfo currentUser={currentUser}/>
           </section>
 
-          {/* make into component   */}
           <aside>
             <span><h1>Lists</h1></span>
             <main>
@@ -100,7 +99,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateList: (list) => dispatch(updateList(list)),
     updateMessages: (messages) => dispatch(updateMessages(messages)),
-    // updateLists: (user) => dispatch(updateLists(user)),
+    updateLists: (lists) => dispatch(updateLists(lists)),
   }
 }
 

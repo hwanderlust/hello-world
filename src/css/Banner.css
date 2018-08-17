@@ -3,7 +3,7 @@
 .banner {
   grid-area: banner;
   margin: 0;
-  background-color: rgba(0, 58, 33, 1);
+  /* background-color: rgba(0, 58, 33, 1); */
   height: 15vh;
   width: 90vw;
   display: flex;
@@ -18,7 +18,7 @@
 
 .banner-header {
   font-size: 7em;
-  color: rgba(73, 146, 115, 1);
-  text-decoration: underline;
-  text-decoration-color: rgba(15, 87, 56, 1);
+  /* color: rgba(73, 146, 115, 1); */
+  /* text-decoration: underline; */
+  /* text-decoration-color: rgba(15, 87, 56, 1); */
 }
