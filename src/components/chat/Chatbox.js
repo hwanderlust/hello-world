@@ -32,6 +32,8 @@ class Chatbox extends React.Component {
     text: '',
   }
 
+  // now that chat is now a chatObj with messages nested inside, could prob get rid of messages and then each Chatbox would have its own chat state?? 
+
   componentDidMount() {
     if(this.props.chat) {
       this.setState({chat: this.props.chat}, () => console.log(this.state))
@@ -87,7 +89,7 @@ class Chatbox extends React.Component {
 
   handleUpdateMsgs = () => {
     getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
-    // save to store too ? 
+    // save to store too ?
   }
 
   handleSpeechClick = (msg) => {
