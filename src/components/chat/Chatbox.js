@@ -1,0 +1,169 @@
+import React from 'react';
+import { Rnd } from "react-rnd";
+import Message from './Message'
+import { getChatMessages, createMessage } from '../../adapter'
+import { updateMessages } from '../../actions'
+import { connect } from 'react-redux'
+import { ActionCable } from 'react-actioncable-provider';
+
+const style = {
+  border: '1px solid white',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  overflowY: 'scroll',
+  overflowX: 'hidden',
+  boxSizing: 'border-box'
+}
+
+class Chatbox extends React.Component {
+
+  state = {
+    chat: null,
+    messages: null,
+    langPrompt: false,
+    speech: '',
+    saveMsg: false,
+    message: null,
+    newList: '',
+    saveMsgStatus: false,
+    existingList: null,
+    text: '',
+  }
+
+  componentDidMount() {
+    if(this.props.chat) {
+      this.setState({chat: this.props.chat}, () => console.log(this.state))
+      this.handleUpdateMsgs()
+      // getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
+    }
+    // if(this.props.messages) {
+    //   this.setState({messages: this.props.messages}, () => console.log(this.state))
+    // }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.messages) {
+      if(this.state.messages.length() !== this.props.messages.length()) {
+        this.setState({messages: this.props.messages}, () => {
+          console.log(this.state)
+          this.scrollToBottom()
+        })
+      }
+    }
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  handleChange = (e) => {
+    console.log(e.target.value);
+    this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.newMessage({chat_id: this.props.chat.id, text: this.state.text})
+    this.setState({text: ''})
+  }
+
+  newMessage = (message) => {
+    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+    createMessage({...message, ...users})
+  }
+
+  handleReceiveMsgs = response => {
+    console.log(response);
+    this.handleUpdateMsgs()
+    this.scrollToBottom()
+  }
+
+  handleUpdateMsgs = () => {
+    getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
+  }
+
+  handleSpeechClick = (msg) => {
+    this.props.checkRenderedForms('speech')
+    this.props.handleSpeechChange(msg)
+  }
+
+  handleTranslationClick = () => {
+    this.props.checkRenderedForms('translation')
+    this.props.handleTranslation()
+    // this.setState({langPrompt: true})
+  }
+
+  handleSaveMsgClick = (msg) => {
+    this.props.checkRenderedForms('save')
+    this.props.handleSaveMsgChange(msg)
+    // this.setState({message: msg})
+    // this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+
+    // this.setState({saveMsg: true})
+  }
+
+  render() {
+
+    const renderMessages = () => {
+      const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
+      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
+    }
+
+    const renderMsgActionCable = () => {
+      if(this.state.chat) {
+        return (
+          <ActionCable channel={{ channel: 'MessagesChannel', chat: this.state.chat.id }} onReceived={this.handleReceiveMsgs} />
+        )
+      }
+    }
+
+    const renderChatInput = () => {
+      return (
+        <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
+          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
+          {/* <input type='submit' class='chat-submit' /> */}
+        </form>
+      )
+    }
+
+    return (
+      <React.Fragment>
+        { renderMsgActionCable() }
+
+        <Rnd
+          id='chatbox'
+          style={style}
+          default={{
+            x: 300,
+            y: 300,
+            width: 500,
+            height: 250,
+          }}
+        >
+          <div className='msg-top'>{this.props.recipientUser ? this.props.recipientUser.username.toUpperCase() : null}</div>
+          { this.state.messages ? renderMessages() : null }
+
+          <div style={{marginTop: '0.5rem'}} ref={el => this.messagesEnd = el }></div>
+        </Rnd>
+        { renderChatInput() }
+      </React.Fragment>
+    )
+  }
+};
+
+const mapStateToProps = (state) => {
+  return {
+    recipientUser: state.appState.recipientUser,
+    currentUser: state.appState.currentUser,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateMessages: (messages) => dispatch(updateMessages(messages)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chatbox);

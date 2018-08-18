@@ -1,5 +1,5 @@
 // a reducer is a PURE function that takes the previous state and an action as arguments and returns new state based on the action.type
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS } from '../actions/types'
+import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT } from '../actions/types'
 
 const initialState = {
   currentUser: null,
@@ -12,6 +12,7 @@ const initialState = {
   detectedLang: 'en',
   lists: null,
   list: null,
+  openChats: [],
 }
 
 const manageApp = (state = initialState, action) => {
@@ -59,6 +60,25 @@ const manageApp = (state = initialState, action) => {
     case UPDATE_MESSAGES:
       return {...state,
         messages: action.payload
+      }
+    
+    // case UPDATE_MESSAGES:
+      // let updatedChats = {...state.openChats}
+      // console.log(updatedChats);
+      // debugger
+      // let activeChat = updatedChats.find(chat => chat.id === action.payload.id)
+
+      // let updatedActiveChat = {...activeChat, messages: action.payload.messages}
+
+      // updatedChats.map(chat => chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
+
+      // return {...state,
+      //   openChats: updatedChats
+      // }
+
+    case OPEN_CHAT:
+      return {...state,
+        openChats: [...state.openChats, action.payload]
       }
 
     case REMOVE_USER:

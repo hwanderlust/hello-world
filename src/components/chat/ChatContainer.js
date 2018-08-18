@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import Home from '../Home';
 import Chat from './Chat'
 
-import { getAllUsers, getUser, createChat, getChatMessages, createMessage } from '../../adapter';
-import { updateUsers, updateRecipientUser } from '../../actions'
+import { getAllUsers, getUser, createChat } from '../../adapter';
+import { updateUsers, updateRecipientUser, openChat, updateMessages } from '../../actions'
 
 // renders available users to chat with
 
@@ -47,7 +47,12 @@ class ChatContainer extends React.Component {
 
   createNewChat = (user) => {
     createChat({...user, sender_id: this.props.currentUser.id})
-      .then(chat => this.setState({chat}, () => console.log(this.state)))
+      .then(chat => {
+        // want to save in store instead and gain access from chatbox
+        // or from chat and send to chatbox as props
+        this.props.openChat(chat)
+        this.setState({chat}, () => console.log(this.state))
+      })
   }
 
   handleNewChat = (user) => {
@@ -55,16 +60,22 @@ class ChatContainer extends React.Component {
     this.createNewChat(user)
   }
 
-  renderChat = () => {
-    this.setChatMessages()
-    this.props.history.push('/chat')
-  }
+  // renderChat = () => {
+    // this.setChatMessages()
+    // necessary? already on the same page...
+    // this.props.history.push('/chat')
+  // }
 
-  setChatMessages = () => {
-    getChatMessages(this.props.currentUser.id).then(messages => {
-      this.setState({messages: this.filterChatMessages(messages)})
-    })
-  }
+  // setChatMessages = () => {
+  //   // this fn still necessary tho for new messages in chatbox but could move this fn down to either chat or chatbox
+  //   getChatMessages(this.props.currentUser.id).then(messages => {
+  //     // filter messages and then save to store instead and gain access from chatbox
+  //     // or from chat and send to chatbox as props
+  //     const filteredMsgs = this.filterChatMessages(messages)
+  //     this.props.updateMessages(filteredMsgs)
+  //     this.setState({messages: filteredMsgs})
+  //   })
+  // }
 
   filterChatMessages = (messages) => {
       const { recipientUser } = this.state
@@ -93,19 +104,19 @@ class ChatContainer extends React.Component {
       }
   }
 
-  newMessage = (message) => {
-    const users = {sender_id: this.props.currentUser.id, recipient_id: this.state.recipientUser.id}
-    createMessage({...message, ...users})
-  }
+  // newMessage = (message) => {
+  //   const users = {sender_id: this.props.currentUser.id, recipient_id: this.state.recipientUser.id}
+  //   createMessage({...message, ...users})
+  // }
 
   render() {
     const renderChatComponents = () => {
       if(this.state.users) {
         switch(this.props.chatReq) {
           case 'home':
-            return <Home users={this.state.users} handleUsers={this.handleUsers} handleNewChat={this.handleNewChat} renderChat={this.renderChat} />
+            return <Home />
           case 'chat':
-            return <Chat users={this.state.users} chat={this.state.chat} messages={this.state.messages} handleNewChat={this.handleNewChat} renderChat={this.renderChat} newMessage={this.newMessage} setChatMessages={this.setChatMessages} />
+            return <Chat users={this.state.users} chat={this.state.chat} handleNewChat={this.handleNewChat} />
           default:
           console.log(`Chat request is wrong`);
           break
@@ -131,6 +142,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateUsers: (users) => dispatch(updateUsers(users)),
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
+    openChat: (chat) => dispatch(openChat(chat)),
+    updateMessages: (messages) => dispatch(updateMessages(messages)),
   }
 }
 

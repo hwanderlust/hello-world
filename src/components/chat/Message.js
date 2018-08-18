@@ -56,7 +56,7 @@ class Message extends React.Component {
 
     const renderSenderMessages = () => {
       return (
-          <li id='msg' key={msg.id} className='message sender' onClick={(e) => this.togglePopup(e, msg)} >
+          <li id='msg' key={msg.id} class='message sender' onClick={(e) => this.togglePopup(e, msg)} >
             {msg.text}
 
             { this.state.popup ? (

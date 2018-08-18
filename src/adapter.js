@@ -60,8 +60,13 @@ export function createMessage(message) {
   fetch(url, options)
 }
 
+// export function getChatMessages(id) {
+//   const url = `${API_ROOT}/users/${id}`
+//   return fetch(url).then(r => r.json())
+// }
+
 export function getChatMessages(id) {
-  const url = `${API_ROOT}/users/${id}`
+  const url = `${API_ROOT}/chats/${id}`
   return fetch(url).then(r => r.json())
 }
 
