@@ -8,18 +8,7 @@ import { updateLists, updateMessages } from '../../actions'
 import Chatbox from './Chatbox'
 import Translate from './Translate'
 import { voices, languages } from './Speech'
-import Message from './Message'
-
-import {Tabs, TabList, Tab, PanelList, Panel} from 'react-tabtab';
-// import {styled} from 'react-tabtab';
-// let {PanelStyle} = styled;
-//
-// PanelStyle = PanelStyle.extend`
-//   height: '50vh',
-//   overflowY: 'scroll'
-// `;
-//
-// module.exports = {Panel: PanelStyle}
+// import Message from './Message'
 
 class Chat extends React.Component {
   constructor(props) {
@@ -102,24 +91,24 @@ class Chat extends React.Component {
     return filtered ? filtered.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  }
+  // scrollToBottom = () => {
+  //   this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  // }
 
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.newMessage({chat_id: e.target.dataset.id, text: this.state.text})
-    this.setState({text: ''})
-  }
+  // handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   this.newMessage({chat_id: e.target.dataset.id, text: this.state.text})
+  //   this.setState({text: ''})
+  // }
 
-  newMessage = (message) => {
-    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
-    createMessage({...message, ...users})
-  }
+  // newMessage = (message) => {
+  //   const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+  //   createMessage({...message, ...users})
+  // }
 
   handleReceivedChat = response => {
     console.log(response);
@@ -128,16 +117,16 @@ class Chat extends React.Component {
     }
   }
 
-  handleReceiveMsgs = response => {
-    console.log(response);
-    // this.props.setChatMessages()
-    // {id: 39, text: "hello", chat_id: 2, sender_id: 3, recipient_id: 2, sender_id: 3, text: "hello", updated_at: "2018-08-18T19:41:28.730Z"}
-    getChatMessages(response.chat_id).then(messages => {
-      const chatObj = {id: response.chat_id, messages}
-      this.props.updateMessages(chatObj)
-      this.scrollToBottom()
-    })
-  }
+  // handleReceiveMsgs = response => {
+  //   console.log(response);
+  //   // this.props.setChatMessages()
+  //   // {id: 39, text: "hello", chat_id: 2, sender_id: 3, recipient_id: 2, sender_id: 3, text: "hello", updated_at: "2018-08-18T19:41:28.730Z"}
+  //   getChatMessages(response.chat_id).then(messages => {
+  //     const chatObj = {id: response.chat_id, messages}
+  //     this.props.updateMessages(chatObj)
+  //     this.scrollToBottom()
+  //   })
+  // }
 
   // handleClick = () => {
     // spoken.voices().then( voices => console.log(voices) );
@@ -283,6 +272,14 @@ class Chat extends React.Component {
     //   )
     // }
 
+    const renderChatInput = () => {
+      return (
+        <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
+          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+        </form>
+      )
+    }
+
     const renderSaveMsgForm = () => {
       return (
         <React.Fragment>
@@ -304,34 +301,11 @@ class Chat extends React.Component {
       return <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/>
     }
 
-    // const renderChatBoxes = () => {
-    //   // 1. need input to be a master input for all chats
-    //   // 2. save multiple recipients to store (need to connect with chats)
-    //   // 3. save multiple chat messages to store (need to connect w chats)
-    //   return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} />) : null
-    // }
-
-    const renderTabs = () => {
-      return this.props.openChats.map(chat => {
-        return <Tab key={chat.id}>{chat.id}</Tab>
-      })
-    }
-
-    const renderPanels = () => {
-      return this.props.openChats.map(chat => {
-        if(chat.messages) {
-          const msgs = chat.messages.map(msg => <Message msg={msg} currentUser={this.props.currentUser}>{msg.text}</Message>)
-          return (
-            <Panel key={chat.id} className='panel'>
-              { renderMsgActionCable(chat) }
-              {msgs}
-              <div style={{marginTop: '0.3rem'}} ref={el => this.messagesEnd = el }></div>
-              <form onSubmit={this.handleSubmit} data-id={chat.id}>
-                <input type='text' name='text' value={this.state.text} onChange={this.handleChange} />
-              </form>
-            </Panel>)
-        }
-      })
+    const renderChatBoxes = () => {
+      // 1. need input to be a master input for all chats
+      // 2. save multiple recipients to store (need to connect with chats)
+      // 3. save multiple chat messages to store (need to connect w chats)
+      return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} />) : null
     }
 
     return (
@@ -356,16 +330,16 @@ class Chat extends React.Component {
             { this.state.saveMsgStatus ? renderCheckmark() : null }
           </section>
 
-          <Tabs>
+          {/* <Tabs>
             <TabList>
               { this.props.openChats ? renderTabs() : null }
             </TabList>
             <PanelList>
               { this.props.openChats ? renderPanels() : null }
             </PanelList>
-          </Tabs>
+          </Tabs> */}
 
-          {/* { renderChatBoxes() } */}
+          { renderChatBoxes() }
 
           {/* <main id='messages' >
 
@@ -375,7 +349,7 @@ class Chat extends React.Component {
           </main> */}
         </div>
 
-        {/* { renderChatInput() } */}
+        { renderChatInput() }
 
       </React.Fragment>
     )

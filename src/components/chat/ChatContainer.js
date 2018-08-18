@@ -60,8 +60,26 @@ class ChatContainer extends React.Component {
   }
 
   handleNewChat = (user) => {
-    this.setRecipient(user)
-    this.createNewChat(user)
+    // this.setRecipient(user)
+    // this.createNewChat(user)
+    getUser(user.recipient_id).then(user => {
+      this.props.updateRecipientUser(user)
+      this.setState({recipientUser: user}, () => console.log(this.state))
+    }).then(data => {
+      createChat({...user, sender_id: this.props.currentUser.id})
+        .then(chat => {
+          // construct chat obj here with recipientUser
+          const chatObj = {...chat,
+            recipient_user: {id: this.props.recipientUser.id, username: this.props.recipientUser.username}
+          }
+          this.props.openChat(chatObj)
+          this.setState({chat}, () => console.log(this.state))
+          getChatMessages(chat.id).then(messages => {
+            const chatObjMsgs = {...chatObj, messages}
+            this.props.updateMessages(chatObjMsgs)
+          })
+        })
+    })
   }
 
   // renderChat = () => {
@@ -120,7 +138,7 @@ class ChatContainer extends React.Component {
           case 'home':
             return <Home />
           case 'chat':
-            return <Chat users={this.state.users} chat={this.state.chat} handleNewChat={this.handleNewChat} />
+            return <Chat users={this.state.users} handleNewChat={this.handleNewChat} />
           default:
           console.log(`Chat request is wrong`);
           break
@@ -138,7 +156,8 @@ class ChatContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.appState.currentUser
+    currentUser: state.appState.currentUser,
+    recipientUser: state.appState.recipientUser,
   }
 }
 

@@ -32,7 +32,7 @@ class Chatbox extends React.Component {
     text: '',
   }
 
-  // now that chat is now a chatObj with messages nested inside, could prob get rid of messages and then each Chatbox would have its own chat state?? 
+  // now that chat is now a chatObj with messages nested inside, could prob get rid of messages and then each Chatbox would have its own chat state??
 
   componentDidMount() {
     if(this.props.chat) {
@@ -124,21 +124,21 @@ class Chatbox extends React.Component {
     }
 
     const renderMsgActionCable = () => {
-      if(this.state.chat) {
+      // if(this.state.chat) {
         return (
-          <ActionCable channel={{ channel: 'MessagesChannel', chat: this.state.chat.id }} onReceived={this.handleReceiveMsgs} />
+          <ActionCable channel={{ channel: 'MessagesChannel', chat: this.props.chat.id }} onReceived={this.handleReceiveMsgs} />
         )
-      }
+      // }
     }
 
-    const renderChatInput = () => {
-      return (
-        <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
-          {/* <input type='submit' class='chat-submit' /> */}
-        </form>
-      )
-    }
+    // const renderChatInput = () => {
+    //   return (
+    //     <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
+    //       <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+    //       {/* <input type='submit' class='chat-submit' /> */}
+    //     </form>
+    //   )
+    // }
 
     return (
       <React.Fragment>
@@ -154,12 +154,12 @@ class Chatbox extends React.Component {
             height: 250,
           }}
         >
-          <div className='msg-top'>{this.props.recipientUser ? this.props.recipientUser.username.toUpperCase() : null}</div>
+          <div className='msg-top'>{this.props.chat ? this.props.chat.recipient_user.username.toUpperCase() : null}</div>
           { this.state.messages ? renderMessages() : null }
 
           <div style={{marginTop: '0.5rem'}} ref={el => this.messagesEnd = el }></div>
         </Rnd>
-        { renderChatInput() }
+        {/* { renderChatInput() } */}
       </React.Fragment>
     )
   }
