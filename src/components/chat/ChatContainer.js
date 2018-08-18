@@ -5,7 +5,7 @@ import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages } from '../../adapter';
-import { updateUsers, updateRecipientUser, openChat, updateMessages } from '../../actions'
+import { updateUsers, updateRecipientUser, openChat, updateMessages, updateChat } from '../../actions'
 
 // renders available users to chat with
 
@@ -20,7 +20,7 @@ import { updateUsers, updateRecipientUser, openChat, updateMessages } from '../.
 class ChatContainer extends React.Component {
   state = {
     users: null,
-    chat: null,
+    // chat: null,
     messages: null,
     recipientUser: null,
   }
@@ -45,19 +45,19 @@ class ChatContainer extends React.Component {
     })
   }
 
-  createNewChat = (user) => {
-    createChat({...user, sender_id: this.props.currentUser.id})
-      .then(chat => {
-        // want to save in store instead and gain access from chatbox
-        // or from chat and send to chatbox as props
-        this.props.openChat(chat)
-        this.setState({chat}, () => console.log(this.state))
-        getChatMessages(chat.id).then(messages => {
-          const chatObj = {...chat, messages}
-          this.props.updateMessages(chatObj)
-        })
-      })
-  }
+  // createNewChat = (user) => {
+  //   createChat({...user, sender_id: this.props.currentUser.id})
+  //     .then(chat => {
+  //       // want to save in store instead and gain access from chatbox
+  //       // or from chat and send to chatbox as props
+  //       this.props.openChat(chat)
+  //       this.setState({chat}, () => console.log(this.state))
+  //       getChatMessages(chat.id).then(messages => {
+  //         const chatObj = {...chat, messages}
+  //         this.props.updateMessages(chatObj)
+  //       })
+  //     })
+  // }
 
   handleNewChat = (user) => {
     // this.setRecipient(user)
@@ -68,12 +68,13 @@ class ChatContainer extends React.Component {
     }).then(data => {
       createChat({...user, sender_id: this.props.currentUser.id})
         .then(chat => {
+          this.props.updateChat(chat.id)
           // construct chat obj here with recipientUser
           const chatObj = {...chat,
             recipient_user: {id: this.props.recipientUser.id, username: this.props.recipientUser.username}
           }
           this.props.openChat(chatObj)
-          this.setState({chat}, () => console.log(this.state))
+          // this.setState({chat}, () => console.log(this.state))
           getChatMessages(chat.id).then(messages => {
             const chatObjMsgs = {...chatObj, messages}
             this.props.updateMessages(chatObjMsgs)
@@ -167,6 +168,7 @@ const mapDispatchToProps = (dispatch) => {
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     openChat: (chat) => dispatch(openChat(chat)),
     updateMessages: (messages) => dispatch(updateMessages(messages)),
+    updateChat: (chat) => dispatch(updateChat(chat)),
   }
 }
 

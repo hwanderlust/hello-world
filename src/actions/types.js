@@ -8,7 +8,6 @@ export const UPDATE_LIST = 'UPDATE_LIST'
 export const UPDATE_LISTS = 'UPDATE_LISTS'
 export const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
 export const OPEN_CHAT = 'OPEN_CHAT'
-
-
 export const UPDATE_CHAT = 'UPDATE_CHAT'
+
 export const REMOVE_USER = 'REMOVE_USER'

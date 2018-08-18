@@ -2,7 +2,7 @@ import React from 'react';
 import { Rnd } from "react-rnd";
 import Message from './Message'
 import { getChatMessages, createMessage } from '../../adapter'
-import { updateMessages } from '../../actions'
+import { updateMessages, updateRecipientUser, updateChat } from '../../actions'
 import { connect } from 'react-redux'
 import { ActionCable } from 'react-actioncable-provider';
 
@@ -40,7 +40,7 @@ class Chatbox extends React.Component {
       this.handleUpdateMsgs()
       // getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
     }
-    window.addEventListener('keypress', this.handleKeyPress)
+    // window.addEventListener('keypress', this.handleKeyPress)
     // if(this.props.messages) {
     //   this.setState({messages: this.props.messages}, () => console.log(this.state))
     // }
@@ -61,25 +61,25 @@ class Chatbox extends React.Component {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
-  handleKeyPress = () => {
-    this.inputFocus.focus()
-  }
+  // handleKeyPress = () => {
+  //   this.inputFocus.focus()
+  // }
 
-  handleChange = (e) => {
-    console.log(e.target.value);
-    this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.newMessage({chat_id: this.props.chat.id, text: this.state.text})
-    this.setState({text: ''})
-  }
-
-  newMessage = (message) => {
-    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
-    createMessage({...message, ...users})
-  }
+  // handleChange = (e) => {
+  //   console.log(e.target.value);
+  //   this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
+  // }
+  //
+  // handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   this.newMessage({chat_id: this.props.chat.id, text: this.state.text})
+  //   this.setState({text: ''})
+  // }
+  //
+  // newMessage = (message) => {
+  //   const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+  //   createMessage({...message, ...users})
+  // }
 
   handleReceiveMsgs = response => {
     console.log(response);
@@ -112,8 +112,13 @@ class Chatbox extends React.Component {
     // this.setState({saveMsg: true})
   }
 
-  test = () => {
-    debugger
+  handleBoxClick = (e) => {
+    if(e.target.dataset.username) {
+      console.log(e.target.dataset);
+      this.props.updateChat(e.target.dataset.chat)
+      const recUser = {id: e.target.dataset.userid, username: e.target.dataset.username}
+      this.props.updateRecipientUser(recUser)
+    }
   }
 
   render() {
@@ -139,7 +144,7 @@ class Chatbox extends React.Component {
     //     </form>
     //   )
     // }
-
+    console.log(this.props.chat);
     return (
       <React.Fragment>
         { renderMsgActionCable() }
@@ -147,6 +152,11 @@ class Chatbox extends React.Component {
         <Rnd
           id='chatbox'
           style={style}
+          key={this.props.chat.id}
+          data-chat={this.props.chat.id}
+          data-userId={this.props.chat.recipient_user.id}
+          data-username={this.props.chat.recipient_user.username}
+          onClick={this.handleBoxClick}
           default={{
             x: 300,
             y: 300,
@@ -154,7 +164,14 @@ class Chatbox extends React.Component {
             height: 250,
           }}
         >
-          <div className='msg-top'>{this.props.chat ? this.props.chat.recipient_user.username.toUpperCase() : null}</div>
+          <div className='msg-top'
+            data-chat={this.props.chat.id}
+            data-userId={this.props.chat.recipient_user.id}
+            data-username={this.props.chat.recipient_user.username}
+            onClick={this.handleBoxClick}>
+            {this.props.chat ? this.props.chat.recipient_user.username.toUpperCase() : null}
+          </div>
+
           { this.state.messages ? renderMessages() : null }
 
           <div style={{marginTop: '0.5rem'}} ref={el => this.messagesEnd = el }></div>
@@ -175,6 +192,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateMessages: (messages) => dispatch(updateMessages(messages)),
+    updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
+    updateChat: (chat) => dispatch(updateChat(chat)),
   }
 }
 

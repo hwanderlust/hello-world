@@ -35,9 +35,10 @@ class Chat extends React.Component {
     if(this.props.users) {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
-    if(this.props.chat) {
-      this.setState({chat: this.props.chat}, () => console.log(this.state))
-    }
+    window.addEventListener('keypress', this.handleKeyPress)
+    // if(this.props.chat) {
+    //   this.setState({chat: this.props.chat}, () => console.log(this.state))
+    // }
     // if(this.props.messages) {
     //   this.setState({messages: this.props.messages}, () => console.log(this.state))
     // }
@@ -53,9 +54,9 @@ class Chat extends React.Component {
       this.renderUsers()
     }
 
-    if(this.state.chat !== this.props.chat) {
-      this.setState({chat: this.props.chat})
-    }
+    // if(this.state.chat !== this.props.chat) {
+    //   this.setState({chat: this.props.chat})
+    // }
 
     // if(this.state.messages !== this.props.messages) {
     //   this.setState({messages: this.props.messages}, () => {
@@ -67,6 +68,10 @@ class Chat extends React.Component {
     // if(this.state.lists !== this.props.lists) {
     //   this.setState({lists: this.props.lists}, () => console.log(this.state))
     // }
+  }
+
+  handleKeyPress = () => {
+    this.inputFocus.focus()
   }
 
   handleClick = (clickedUser) => {
@@ -99,16 +104,16 @@ class Chat extends React.Component {
     this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
   }
 
-  // handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   this.newMessage({chat_id: e.target.dataset.id, text: this.state.text})
-  //   this.setState({text: ''})
-  // }
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.newMessage({chat_id: this.props.chat, text: this.state.text})
+    this.setState({text: ''})
+  }
 
-  // newMessage = (message) => {
-  //   const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
-  //   createMessage({...message, ...users})
-  // }
+  newMessage = (message) => {
+    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+    createMessage({...message, ...users})
+  }
 
   handleReceivedChat = response => {
     console.log(response);
@@ -362,6 +367,7 @@ const mapStateToProps = (state) => {
     lists: state.appState.lists,
     openChats: state.appState.openChats,
     recipientUser: state.appState.recipientUser,
+    chat: state.appState.chat,
   }
 }
 
