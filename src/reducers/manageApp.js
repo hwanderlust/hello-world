@@ -57,24 +57,25 @@ const manageApp = (state = initialState, action) => {
         lists: action.payload
       }
 
-    case UPDATE_MESSAGES:
-      return {...state,
-        messages: action.payload
-      }
-    
     // case UPDATE_MESSAGES:
-      // let updatedChats = {...state.openChats}
-      // console.log(updatedChats);
-      // debugger
-      // let activeChat = updatedChats.find(chat => chat.id === action.payload.id)
+    //   return {...state,
+    //     messages: action.payload
+    //   }
 
-      // let updatedActiveChat = {...activeChat, messages: action.payload.messages}
+    case UPDATE_MESSAGES:
+      let oldChats = [...state.openChats]
+      console.log(oldChats);
+      // let activeChat = updatedChats.filter(chat => chat.id === action.payload.id)
 
-      // updatedChats.map(chat => chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
-
-      // return {...state,
-      //   openChats: updatedChats
-      // }
+      let activeChat = oldChats.find(chat => chat.id === action.payload.id)
+      console.log(activeChat);
+      let updatedActiveChat = {...activeChat, messages: action.payload.messages}
+      console.log(updatedActiveChat);
+      const updatedChats = oldChats.map(chat => chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
+      console.log(updatedChats);
+      return {...state,
+        openChats: updatedChats
+      }
 
     case OPEN_CHAT:
       return {...state,

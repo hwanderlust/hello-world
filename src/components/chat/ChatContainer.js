@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Home from '../Home';
 import Chat from './Chat'
 
-import { getAllUsers, getUser, createChat } from '../../adapter';
+import { getAllUsers, getUser, createChat, getChatMessages } from '../../adapter';
 import { updateUsers, updateRecipientUser, openChat, updateMessages } from '../../actions'
 
 // renders available users to chat with
@@ -52,6 +52,10 @@ class ChatContainer extends React.Component {
         // or from chat and send to chatbox as props
         this.props.openChat(chat)
         this.setState({chat}, () => console.log(this.state))
+        getChatMessages(chat.id).then(messages => {
+          const chatObj = {...chat, messages}
+          this.props.updateMessages(chatObj)
+        })
       })
   }
 

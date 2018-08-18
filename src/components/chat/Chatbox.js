@@ -38,6 +38,7 @@ class Chatbox extends React.Component {
       this.handleUpdateMsgs()
       // getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
     }
+    window.addEventListener('keypress', this.handleKeyPress)
     // if(this.props.messages) {
     //   this.setState({messages: this.props.messages}, () => console.log(this.state))
     // }
@@ -56,6 +57,10 @@ class Chatbox extends React.Component {
 
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  handleKeyPress = () => {
+    this.inputFocus.focus()
   }
 
   handleChange = (e) => {
@@ -82,6 +87,7 @@ class Chatbox extends React.Component {
 
   handleUpdateMsgs = () => {
     getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
+    // save to store too ? 
   }
 
   handleSpeechClick = (msg) => {
@@ -104,6 +110,10 @@ class Chatbox extends React.Component {
     // this.setState({saveMsg: true})
   }
 
+  test = () => {
+    debugger
+  }
+
   render() {
 
     const renderMessages = () => {
@@ -122,7 +132,7 @@ class Chatbox extends React.Component {
     const renderChatInput = () => {
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
+          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
           {/* <input type='submit' class='chat-submit' /> */}
         </form>
       )

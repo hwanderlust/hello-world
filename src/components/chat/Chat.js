@@ -283,6 +283,9 @@ class Chat extends React.Component {
     }
 
     const renderChatBoxes = () => {
+      // 1. need input to be a master input for all chats
+      // 2. save multiple recipients to store (need to connect with chats)
+      // 3. save multiple chat messages to store (need to connect w chats)
       return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} />) : null
     }
 
