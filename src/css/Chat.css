@@ -209,6 +209,48 @@
   /* margin-bottom: 1em; */
 }
 
+.translate-modal {
+  min-width: 10vw;
+  min-height: 5vh;
+  padding: 1rem;
+  position: relative;
+  left: 0;
+  top: 0;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 999;
+}
+
+.speech-modal {
+  min-width: 5vw;
+  min-height: 5vh;
+  padding: 1rem;
+  position: relative;
+  left: 0;
+  top: 0;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 999;
+}
+
+.save-modal {
+  min-width: 5vw;
+  min-height: 5vh;
+  padding: 1rem;
+  position: relative;
+  left: 0;
+  top: 0;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 999;
+}
+
 .speech {
   background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-volume-high-128.png');
   background-size: contain;

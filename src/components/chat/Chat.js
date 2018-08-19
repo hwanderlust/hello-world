@@ -198,7 +198,7 @@ class Chat extends React.Component {
 
     const renderSpeechForm = () => {
       return (
-        <form >
+        <form className='speech-modal'>
           <input type='text' value={this.state.speech} onChange={this.handleSpeechChange} />
           <select id='selected-lang' onChange={this.handleSpeechSubmit}>{ renderLanguages() }</select>
         </form>
@@ -219,17 +219,17 @@ class Chat extends React.Component {
 
     const renderSaveMsgForm = () => {
       return (
-        <React.Fragment>
+        <div className='save-modal'>
           <label>List to Save to:</label>
           <select name='existingList' ref={el => this.existingList = el }>
             { this.props.lists ? this.props.lists.map(list => <option key={list.id} value={list.id}>{list.name}</option>) : <option disabled>No Lists</option> }
           </select>
-          <button onClick={this.handleExistingList}></button>
-
+          <button onClick={this.handleExistingList}>Save</button>
+          <br />
           <form onSubmit={this.handleNewList}>
             <input type='text' name='newList' value={this.state.newList} onChange={this.handleChange} placeholder='Create New List--Name Here' autoFocus={true}/>
           </form>
-        </React.Fragment>
+        </div>
       )
     }
 
@@ -255,11 +255,13 @@ class Chat extends React.Component {
 
         <div className='messaging-area'>
 
+          { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
+          { this.state.speech ? renderSpeechForm() : null}
+
+          { this.state.saveMsg ? renderSaveMsgForm() : null }
+          { this.state.saveMsgStatus ? renderCheckmark() : null }
+
           <section className='chat-features'>
-            { this.state.speech ? renderSpeechForm() : null}
-            { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
-            { this.state.saveMsg ? renderSaveMsgForm() : null }
-            { this.state.saveMsgStatus ? renderCheckmark() : null }
           </section>
 
           { renderChatBoxes() }

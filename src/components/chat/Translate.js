@@ -9,6 +9,7 @@ class Translate extends React.Component {
       name: 'English',
       code: 'en'
     },
+    translation: null,
   }
 
   componentDidMount() {
@@ -106,9 +107,14 @@ class Translate extends React.Component {
 
       const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
       console.log(translation);
+      this.setState({translation}, () => console.log(this.state))
     })
 
     // unmounts component
+    // this.props.hideForms('translation')
+  }
+
+  finished = () => {
     this.props.hideForms('translation')
   }
 
@@ -119,14 +125,20 @@ class Translate extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <div className='translate-modal'>
         <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name}>
           { renderLanguages() }
         </select>
         <select onChange={this.handleChange} name='toLang'>
           { renderLanguages() }
         </select>
-      </React.Fragment>
+        { this.state.translation ? (
+          <React.Fragment>
+            <h1>{this.state.translation}</h1>
+            <button onClick={this.finished}>Done</button>
+          </React.Fragment>
+        ) : null }
+      </div>
     )
   }
 }

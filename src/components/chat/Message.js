@@ -22,7 +22,11 @@ class Message extends React.Component {
     const term = encodeURI(this.state.message.text)
     console.log(term);
     this.props.setTranslateTerm(term)
-    this.hidePopup()
+
+    // show modal on screen with selection
+    return <h1>HELLO!</h1>
+
+    // this.hidePopup()
   }
 
   handleSave = () => {
