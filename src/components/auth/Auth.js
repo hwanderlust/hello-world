@@ -162,8 +162,9 @@ class Auth extends React.Component {
           { renderHeader() }
 
           { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/> : renderPicUpload() }
-
+          
           { this.state.accountForm || this.state.login ? renderAccountForm() : null }
+          { this.state.login? <a href='/signup'><li>Sign up</li></a> : <a href='/login'><li>Login</li></a>}
           { this.state.aboutForm ? renderAboutForm() : null }
           { this.state.detailsForm ? renderDetailsForm() : null }
 

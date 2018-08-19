@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Home from '../Home';
 import Chat from './Chat'
 
 import { getAllUsers, getUser, createChat, getChatMessages } from '../../adapter';
@@ -53,17 +52,9 @@ class ChatContainer extends React.Component {
   render() {
     const renderChatComponents = () => {
       if(this.state.users) {
-        switch(this.props.chatReq) {
-          case 'home':
-            return <Home />
-          case 'chat':
-            return <Chat users={this.state.users} handleNewChat={this.handleNewChat} />
-          default:
-          console.log(`Chat request is wrong`);
-          break
+        return <Chat users={this.state.users} handleNewChat={this.handleNewChat} />
         }
       }
-    }
 
     return (
       <div className='chat-container'>

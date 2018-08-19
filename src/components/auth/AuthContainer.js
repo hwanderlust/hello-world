@@ -7,14 +7,6 @@ import Auth from './Auth'
 import { login, signup } from '../../adapter'
 import { updateUser, removeUser } from '../../actions/index'
 
-// App renders AuthContainer
-// App passes down the type of request -- login or signup
-// based on the props => render login or signup component
-// updates currentUser in store
-// login and signup will have state for username and password
-// AuthContainer will make login and signup requests via adapter
-// setChatMessages() => do this in ChatController instead
-
 class AuthContainer extends React.Component {
   state ={
     login: false,

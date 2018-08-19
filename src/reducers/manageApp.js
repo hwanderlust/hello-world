@@ -4,7 +4,6 @@ import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTE
 const initialState = {
   currentUser: null,
   chat: null,
-  messages: null,
   recipientUser: null,
   users: null,
   language: null,
@@ -56,11 +55,6 @@ const manageApp = (state = initialState, action) => {
       return {...state,
         lists: action.payload
       }
-
-    // case UPDATE_MESSAGES:
-    //   return {...state,
-    //     messages: action.payload
-    //   }
 
     case UPDATE_MESSAGES:
       let oldChats = [...state.openChats]

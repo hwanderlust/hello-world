@@ -48,7 +48,6 @@ class Nav extends React.Component {
     const NotLoggedInItems = () => {
       return (
         <React.Fragment>
-          <a href='/signup' className='nav-item'><li>Signup</li></a>
           <a href='/login' className='nav-item'><li>Login</li></a>
         </React.Fragment>
       )

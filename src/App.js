@@ -18,6 +18,7 @@ import About from './components/About'
 import Contact from './components/Contact'
 import Profile from './components/user/Profile'
 import ListContainer from './components/user/list/ListContainer'
+import Home from './components/Home';
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
@@ -60,15 +61,12 @@ class App extends Component {
           }} />
           <Route path='/chat' render={props => {
             this.checkLogin()
-            return <ChatContainer chatReq='chat' />
+            return <ChatContainer />
           }} />
           <Route path='/logout' render={props => {
             return <AuthContainer />
           }} />
-          <Route path='/home' render={props => {
-            this.checkLogin()
-            return <ChatContainer chatReq='home' />
-          }}/>
+          <Route path='/home' component={Home}/>
           <Route path='/profile' render={props => {
             this.checkLogin()
             return <Profile />
