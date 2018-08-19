@@ -6,27 +6,20 @@ import { updateMessages, updateRecipientUser, updateChat } from '../../actions'
 import { connect } from 'react-redux'
 import { ActionCable } from 'react-actioncable-provider';
 
-const style = {
-  border: '1px solid white',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  overflowY: 'scroll',
-  overflowX: 'hidden',
-  boxSizing: 'border-box'
-}
-
 class Chatbox extends React.Component {
   state = {
     messages: null,
+    bgColor: null,
+    z: 0,
   }
 
   // now that chat is now a chatObj with messages nested inside, could prob get rid of messages and then each Chatbox would have its own chat state??
 
   componentDidMount() {
+    console.log('CHATBOX MOUNTED', this.props);
     if(this.props.chat) {
       this.handleUpdateMsgs()
+      this.setState({bgColor: this.props.bgColor}, () => console.log(this.state))
     }
   }
 
@@ -43,6 +36,7 @@ class Chatbox extends React.Component {
 
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    this.messagesEnd.focus()
   }
 
   handleReceiveMsgs = response => {
@@ -76,6 +70,7 @@ class Chatbox extends React.Component {
       this.props.updateChat(e.target.dataset.chat)
       const recUser = {id: e.target.dataset.userid, username: e.target.dataset.username}
       this.props.updateRecipientUser(recUser)
+      this.setState({z: this.state.z + 1}, () => console.log(this.state))
     }
   }
 
@@ -92,6 +87,19 @@ class Chatbox extends React.Component {
       )
     }
 
+    const style = {
+      border: '1px solid white',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      boxSizing: 'border-box',
+      backgroundColor: this.state.bgColor,
+      zIndex: this.state.z,
+    }
+
     return (
       <React.Fragment>
         { renderMsgActionCable() }
@@ -105,8 +113,8 @@ class Chatbox extends React.Component {
           data-username={this.props.chat.recipient_user.username}
           onClick={this.handleBoxClick}
           default={{
-            x: 300,
-            y: 300,
+            x: this.props.x,
+            y: this.props.y,
             width: 500,
             height: 250,
           }}

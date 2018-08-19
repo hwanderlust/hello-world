@@ -3,11 +3,19 @@ import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages } from '../../actions'
+import { updateLists, updateMessages, updateChat } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
 import { voices, languages } from './Speech'
+
+const bgColor = () => {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const rgbColor = "rgb(" + r + "," + g + "," + b + ")";
+  return rgbColor
+}
 
 class Chat extends React.Component {
   constructor(props) {
@@ -23,6 +31,10 @@ class Chat extends React.Component {
       newList: '',
       saveMsgStatus: false,
       existingList: null,
+      x: -100,
+      y: -100,
+      chatBoxBgColor: null,
+      textInputFocus: false,
     };
   };
 
@@ -42,12 +54,31 @@ class Chat extends React.Component {
     }
   }
 
-  handleKeyPress = () => {
-    this.inputFocus.focus()
+  handleKeyPress = (e) => {
+    if(!this.state.textInputFocus) {
+      let i;
+      if(e.key > 0 && e.key <= 9) {
+        i = e.key - 1
+        this.props.updateChat(this.props.openChats[i].id)
+      } else if(e.key === 0) {
+        i = 8
+        this.props.updateChat(this.props.openChats[i].id)
+      } // else {
+      //   i = this.props.openChats.length - 1
+      //   this.props.updateChat(this.props.openChats[i].id)
+      // }
+      this.setState({textInputFocus: true}, () => console.log(this.state))
+      this.inputFocus.focus()
+    }
   }
 
   handleClick = (clickedUser) => {
     this.props.handleNewChat({recipient_id: clickedUser.id})
+    this.setState({
+      x: this.state.x + 100,
+      y: this.state.y + 100,
+      chatBoxBgColor: bgColor()
+    }, () => console.log(this.state))
   }
 
   handleReceivedUser = (response) => {
@@ -74,7 +105,7 @@ class Chat extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     this.newMessage({chat_id: this.props.chat, text: this.state.text})
-    this.setState({text: ''})
+    this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
   }
 
   newMessage = (message) => {
@@ -208,7 +239,7 @@ class Chat extends React.Component {
     }
 
     const renderChatBoxes = () => {
-      return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} />) : null
+      return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} x={this.state.x} y={this.state.y} bgColor={this.state.chatBoxBgColor}/>) : null
     }
 
     return (
@@ -256,6 +287,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLists: (lists) => dispatch(updateLists(lists)),
     updateMessages: (messages) => dispatch(updateMessages(messages)),
+    updateChat: (chat) => dispatch(updateChat(chat)),
   }
 }
 
