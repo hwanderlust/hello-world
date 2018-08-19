@@ -7,6 +7,58 @@ class Message extends React.Component {
   state = {
     popup: false,
     message: null,
+    timeSent: null,
+    // timeNow: null,
+    timeDiff: null,
+  }
+
+  componentDidMount() {
+    const { msg } = this.props
+    const sent = new Date(msg.created_at)
+    const timeSent = sent.getTime()
+    // const now = new Date(Date.now())
+    // const timeNow = now.getTime()
+    this.setState({ timeSent }, () => this.calcMsgTime())
+  }
+
+  componentWillUnmount() {
+    // clearInterval(this.interval)
+  }
+
+  calcMsgTime = () => {
+    console.log(`calcMsgTime`);
+    // this.interval ? clearInterval(this.interval) : null
+    // const sent = new Date(msg.created_at)
+    // const timeSent = sent.getTime()
+    const now = new Date(Date.now())
+    const timeNow = now.getTime()
+    const timeDiff = timeNow - this.state.timeSent
+
+    let msec = timeDiff;
+    const hh = Math.floor(msec / 1000 / 60 / 60);
+    msec -= hh * 1000 * 60 * 60;
+    const mm = Math.floor(msec / 1000 / 60);
+    msec -= mm * 1000 * 60;
+    const ss = Math.floor(msec / 1000);
+    msec -= ss * 1000;
+
+    if(hh >= 24) {
+      this.setState({timeDiff: `  days ago`}, () => console.log(this.state))
+
+    } else if(hh < 24 && hh > 0) {
+      this.setState({timeDiff: `  hours ago`}, () => console.log(this.state))
+      // this.interval = setInterval(this.calcMsgTime(), 60000*60)
+
+
+    } else if(mm <= 60 && mm > 0) {
+      this.setState({timeDiff: `  minutes ago`}, () => console.log(this.state))
+      // this.interval = setInterval(this.calcMsgTime(), 60000)
+
+    } else if(ss <= 60 && ss > 0) {
+      this.setState({timeDiff: `  just now`}, () => console.log(this.state))
+      // this.interval = setInterval(this.calcMsgTime(), 1000)
+
+    }
   }
 
   handleSpeech = () => {
@@ -54,6 +106,10 @@ class Message extends React.Component {
   render() {
     const { msg, currentUser } = this.props
 
+    const renderTime = () => {
+
+    }
+
     const renderSenderMessages = () => {
       return (
           <li id='msg' key={msg.id} class='message sender' onClick={(e) => this.togglePopup(e, msg)} >
@@ -87,6 +143,8 @@ class Message extends React.Component {
       return (
             <li id='msg' key={msg.id} className='message recipient' onClick={(e) => this.togglePopup(e, msg)} >
               {msg.text}
+
+              <span className='timestamp'>{this.state.timeDiff ? this.state.timeDiff : null}</span>
 
               { this.state.popup ? (
 
