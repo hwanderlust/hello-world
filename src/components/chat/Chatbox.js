@@ -1,7 +1,7 @@
 import React from 'react';
 import { Rnd } from "react-rnd";
 import Message from './Message'
-import { getChatMessages, createMessage } from '../../adapter'
+import { getChatMessages } from '../../adapter'
 import { updateMessages, updateRecipientUser, updateChat } from '../../actions'
 import { connect } from 'react-redux'
 import { ActionCable } from 'react-actioncable-provider';
@@ -18,32 +18,16 @@ const style = {
 }
 
 class Chatbox extends React.Component {
-
   state = {
-    chat: null,
     messages: null,
-    langPrompt: false,
-    speech: '',
-    saveMsg: false,
-    message: null,
-    newList: '',
-    saveMsgStatus: false,
-    existingList: null,
-    text: '',
   }
 
   // now that chat is now a chatObj with messages nested inside, could prob get rid of messages and then each Chatbox would have its own chat state??
 
   componentDidMount() {
     if(this.props.chat) {
-      this.setState({chat: this.props.chat}, () => console.log(this.state))
       this.handleUpdateMsgs()
-      // getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
     }
-    // window.addEventListener('keypress', this.handleKeyPress)
-    // if(this.props.messages) {
-    //   this.setState({messages: this.props.messages}, () => console.log(this.state))
-    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,26 +45,6 @@ class Chatbox extends React.Component {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
-  // handleKeyPress = () => {
-  //   this.inputFocus.focus()
-  // }
-
-  // handleChange = (e) => {
-  //   console.log(e.target.value);
-  //   this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
-  // }
-  //
-  // handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   this.newMessage({chat_id: this.props.chat.id, text: this.state.text})
-  //   this.setState({text: ''})
-  // }
-  //
-  // newMessage = (message) => {
-  //   const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
-  //   createMessage({...message, ...users})
-  // }
-
   handleReceiveMsgs = response => {
     console.log(response);
     this.handleUpdateMsgs()
@@ -89,7 +53,6 @@ class Chatbox extends React.Component {
 
   handleUpdateMsgs = () => {
     getChatMessages(this.props.chat.id).then(messages => this.setState({messages}, () => this.scrollToBottom()))
-    // save to store too ?
   }
 
   handleSpeechClick = (msg) => {
@@ -100,16 +63,11 @@ class Chatbox extends React.Component {
   handleTranslationClick = () => {
     this.props.checkRenderedForms('translation')
     this.props.handleTranslation()
-    // this.setState({langPrompt: true})
   }
 
   handleSaveMsgClick = (msg) => {
     this.props.checkRenderedForms('save')
     this.props.handleSaveMsgChange(msg)
-    // this.setState({message: msg})
-    // this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
-
-    // this.setState({saveMsg: true})
   }
 
   handleBoxClick = (e) => {
@@ -129,22 +87,11 @@ class Chatbox extends React.Component {
     }
 
     const renderMsgActionCable = () => {
-      // if(this.state.chat) {
-        return (
-          <ActionCable channel={{ channel: 'MessagesChannel', chat: this.props.chat.id }} onReceived={this.handleReceiveMsgs} />
-        )
-      // }
+      return (
+        <ActionCable channel={{ channel: 'MessagesChannel', chat: this.props.chat.id }} onReceived={this.handleReceiveMsgs} />
+      )
     }
 
-    // const renderChatInput = () => {
-    //   return (
-    //     <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-    //       <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
-    //       {/* <input type='submit' class='chat-submit' /> */}
-    //     </form>
-    //   )
-    // }
-    console.log(this.props.chat);
     return (
       <React.Fragment>
         { renderMsgActionCable() }
@@ -176,7 +123,7 @@ class Chatbox extends React.Component {
 
           <div style={{marginTop: '0.5rem'}} ref={el => this.messagesEnd = el }></div>
         </Rnd>
-        {/* { renderChatInput() } */}
+
       </React.Fragment>
     )
   }

@@ -2,13 +2,12 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
-import { createList, addMessage, getLists, createMessage, getChatMessages } from '../../adapter'
+import { createList, addMessage, getLists, createMessage } from '../../adapter'
 import { updateLists, updateMessages } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
 import { voices, languages } from './Speech'
-// import Message from './Message'
 
 class Chat extends React.Component {
   constructor(props) {
@@ -16,8 +15,6 @@ class Chat extends React.Component {
 
     this.state = {
       users: null,
-      chat: '',
-      messages: '',
       text: '',
       langPrompt: false,
       speech: '',
@@ -26,7 +23,6 @@ class Chat extends React.Component {
       newList: '',
       saveMsgStatus: false,
       existingList: null,
-      // lists: null,
     };
   };
 
@@ -36,15 +32,6 @@ class Chat extends React.Component {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
     window.addEventListener('keypress', this.handleKeyPress)
-    // if(this.props.chat) {
-    //   this.setState({chat: this.props.chat}, () => console.log(this.state))
-    // }
-    // if(this.props.messages) {
-    //   this.setState({messages: this.props.messages}, () => console.log(this.state))
-    // }
-    // if(this.props.lists) {
-    //   this.setState({lists: this.props.lists}, () => console.log(this.state))
-    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -53,21 +40,6 @@ class Chat extends React.Component {
     } else {
       this.renderUsers()
     }
-
-    // if(this.state.chat !== this.props.chat) {
-    //   this.setState({chat: this.props.chat})
-    // }
-
-    // if(this.state.messages !== this.props.messages) {
-    //   this.setState({messages: this.props.messages}, () => {
-    //     console.log(this.state)
-    //     // this.scrollToBottom()
-    //   })
-    // }
-
-    // if(this.state.lists !== this.props.lists) {
-    //   this.setState({lists: this.props.lists}, () => console.log(this.state))
-    // }
   }
 
   handleKeyPress = () => {
@@ -76,7 +48,6 @@ class Chat extends React.Component {
 
   handleClick = (clickedUser) => {
     this.props.handleNewChat({recipient_id: clickedUser.id})
-    // this.props.renderChat()
   }
 
   handleReceivedUser = (response) => {
@@ -96,10 +67,6 @@ class Chat extends React.Component {
     return filtered ? filtered.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
   }
 
-  // scrollToBottom = () => {
-  //   this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  // }
-
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
   }
@@ -117,28 +84,7 @@ class Chat extends React.Component {
 
   handleReceivedChat = response => {
     console.log(response);
-    if(this.state.chat) {
-      this.setState({chat: response})
-    }
   }
-
-  // handleReceiveMsgs = response => {
-  //   console.log(response);
-  //   // this.props.setChatMessages()
-  //   // {id: 39, text: "hello", chat_id: 2, sender_id: 3, recipient_id: 2, sender_id: 3, text: "hello", updated_at: "2018-08-18T19:41:28.730Z"}
-  //   getChatMessages(response.chat_id).then(messages => {
-  //     const chatObj = {id: response.chat_id, messages}
-  //     this.props.updateMessages(chatObj)
-  //     this.scrollToBottom()
-  //   })
-  // }
-
-  // handleClick = () => {
-    // spoken.voices().then( voices => console.log(voices) );
-    // spoken.recognition.language = 'en-AU';
-    // spoken.recognition.language = 'ja-JP';
-    // spoken.say('hello!', 'Karen')
-  // }
 
   handleSpeechChange = (msg) => {
     this.setState({speech: msg}, () => console.log(this.state))
@@ -173,30 +119,10 @@ class Chat extends React.Component {
   }
 
   handleExistingList = () => {
-    // e.persist()
-    // debugger
     console.log(this.existingList.value);
     this.setState({existingList: this.existingList.value}, () => this.handleSavingMsg(this.state.existingList))
     this.hideForms('save')
   }
-
-  // handleSpeechClick = (msg) => {
-  //   this.checkRenderedForms('speech')
-  //   this.handleSpeechChange(msg)
-  // }
-  //
-  // handleTranslationClick = () => {
-  //   this.checkRenderedForms('translation')
-  //   this.setState({langPrompt: true})
-  // }
-  //
-  // handleSaveMsgClick = (msg) => {
-  //   this.checkRenderedForms('save')
-  //   this.setState({message: msg})
-  //   this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
-  //
-  //   this.setState({saveMsg: true})
-  // }
 
   checkRenderedForms = (form) => {
     switch(form) {
@@ -238,18 +164,6 @@ class Chat extends React.Component {
   }
 
   render() {
-    // const renderMessages = () => {
-    //   const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-    //   return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
-    // }
-
-    const renderMsgActionCable = (chat) => {
-      // if(this.state.chat) {
-        return (
-          <ActionCable channel={{ channel: 'MessagesChannel', chat: chat.id }} onReceived={this.handleReceiveMsgs} />
-        )
-      // }
-    }
 
     const renderSpeechForm = () => {
       return (
@@ -263,19 +177,6 @@ class Chat extends React.Component {
     const renderLanguages = () => {
       return languages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
-
-    // const renderChatInput = () => {
-    //   return (
-    //     <form className='chat-input-container'onSubmit={(e) => this.handleSubmit(e)}>
-    //       <div className='chat-input-wrapper'>
-    //         <input className='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} />
-    //         <input type='submit' className='chat-submit' />
-    //       </div>
-    //       <div className='chat-submit-wrapper'>
-    //       </div>
-    //     </form>
-    //   )
-    // }
 
     const renderChatInput = () => {
       return (
@@ -307,9 +208,6 @@ class Chat extends React.Component {
     }
 
     const renderChatBoxes = () => {
-      // 1. need input to be a master input for all chats
-      // 2. save multiple recipients to store (need to connect with chats)
-      // 3. save multiple chat messages to store (need to connect w chats)
       return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} />) : null
     }
 
@@ -323,10 +221,8 @@ class Chat extends React.Component {
         </aside>
 
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
-        {/* { renderMsgActionCable() } */}
 
         <div className='messaging-area'>
-          {/* <h1 className='header'>Chat Window</h1> */}
 
           <section className='chat-features'>
             { this.state.speech ? renderSpeechForm() : null}
@@ -335,23 +231,8 @@ class Chat extends React.Component {
             { this.state.saveMsgStatus ? renderCheckmark() : null }
           </section>
 
-          {/* <Tabs>
-            <TabList>
-              { this.props.openChats ? renderTabs() : null }
-            </TabList>
-            <PanelList>
-              { this.props.openChats ? renderPanels() : null }
-            </PanelList>
-          </Tabs> */}
-
           { renderChatBoxes() }
 
-          {/* <main id='messages' >
-
-            { this.state.messages ? renderMessages() : null}
-
-            <div style={{marginTop: '0.3rem'}} ref={el => this.messagesEnd = el }></div>
-          </main> */}
         </div>
 
         { renderChatInput() }
