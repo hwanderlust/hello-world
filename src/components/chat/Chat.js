@@ -35,6 +35,7 @@ class Chat extends React.Component {
       y: -100,
       chatBoxBgColor: null,
       textInputFocus: false,
+      placeholder: '',
     };
   };
 
@@ -104,8 +105,13 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.newMessage({chat_id: this.props.chat, text: this.state.text})
-    this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+    switch(this.state.text) {
+      case '//translate':
+        return this.setState({langPrompt: true, text: ''})
+      default:
+        this.newMessage({chat_id: this.props.chat, text: this.state.text})
+        this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+    }
   }
 
   newMessage = (message) => {
@@ -212,7 +218,7 @@ class Chat extends React.Component {
     const renderChatInput = () => {
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
         </form>
       )
     }

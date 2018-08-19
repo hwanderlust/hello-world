@@ -9,19 +9,24 @@ class Translate extends React.Component {
       name: 'English',
       code: 'en'
     },
+    input: '',
   }
 
   componentDidMount() {
     console.log(this.state);
-    detectLang(this.props.translateTerm)
-    .then(data => {
-      // returns en but need name to set state
-      // map through languages find code and return name
-      const lang = data["data"]["detections"][0][0]["language"]
-      const langOption = this.languages().find(item => item.code === lang)
-      console.log(langOption);
-      this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
-    })
+    if(this.props.translateTerm) {
+      detectLang(this.props.translateTerm)
+      .then(data => {
+        // returns en but need name to set state
+        // map through languages find code and return name
+        const lang = data["data"]["detections"][0][0]["language"]
+        const langOption = this.languages().find(item => item.code === lang)
+        console.log(langOption);
+        this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
+      })
+    } else {
+      this.inputFocus.focus()
+    }
   }
 
   languages = () => {
@@ -94,19 +99,36 @@ class Translate extends React.Component {
     }
   }
 
+  handleInput = (e) => {
+    this.setState({input: e.target.value}, () => console.log(this.state))
+  }
+
   handleTranslation = (e) => {
+    e.persist()
     this.props.updateLang(e.target.selectedOptions[0].id)
 
-    // calls on adapter fn to fetch for translation
-    translateText(this.props.translateTerm, this.state.detectedLang.code, e.target.selectedOptions[0].id).then(r => {
-      console.log(r);
-      console.log(r.data.translations);
-      const data = r.data.translations[0].translatedText
-      const check = data.match(/=>(.*)\S/) ? true : false
+      if(this.state.input) {
+        const term = encodeURI(this.state.input)
+        translateText(term, this.state.detectedLang.code, e.target.selectedOptions[0].id)
+        .then(r => {
+          const data = r.data.translations[0].translatedText
+          const check = data.match(/=>(.*)\S/) ? true : false
+          const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
+          console.log(translation);
+        })
 
-      const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
-      console.log(translation);
-    })
+      } else if(this.props.translateTerm) {
+        // calls on adapter fn to fetch for translation
+        translateText(this.props.translateTerm, this.state.detectedLang.code, e.target.selectedOptions[0].id)
+        .then(r => {
+          // console.log(r);
+          // console.log(r.data.translations);
+          const data = r.data.translations[0].translatedText
+          const check = data.match(/=>(.*)\S/) ? true : false
+          const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
+          console.log(translation);
+        })
+      }
 
     // unmounts component
     this.props.hideForms('translation')
@@ -120,12 +142,16 @@ class Translate extends React.Component {
 
     return (
       <React.Fragment>
+        { this.props.translateTerm ? null : <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autofocus='true' ref={c => this.inputFocus = c} /> }
+
         <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name}>
           { renderLanguages() }
         </select>
+
         <select onChange={this.handleChange} name='toLang'>
           { renderLanguages() }
         </select>
+
       </React.Fragment>
     )
   }
