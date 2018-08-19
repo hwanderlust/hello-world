@@ -19,6 +19,7 @@ import Contact from './components/Contact'
 import Profile from './components/user/Profile'
 import ListContainer from './components/user/list/ListContainer'
 import Home from './components/Home';
+import TestModal from './components/auth/TestModal'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
@@ -81,6 +82,7 @@ class App extends Component {
           }} />
           <Route path='/about' component={About} />
           <Route path='/contact' component={Contact} />
+          <Route path='/modal' component={TestModal} />
         </Switch>
       </div>
     );

@@ -5,6 +5,7 @@ import AccountForm from './AccountForm';
 import AboutForm from './AboutForm';
 import DetailsForm from './DetailsForm';
 // import { uploadPic } from '../../adapter'
+import TestModal from './TestModal'
 
 const CLOUDINARY_UPLOAD_PRESET = 'vsicareb';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/pablopawpaw/upload';
@@ -162,12 +163,12 @@ class Auth extends React.Component {
           { renderHeader() }
 
           { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/> : renderPicUpload() }
-          
+
           { this.state.accountForm || this.state.login ? renderAccountForm() : null }
-          { this.state.login? <a href='/signup'><li>Sign up</li></a> : <a href='/login'><li>Login</li></a>}
+          {/* { this.state.login? <a href='/signup'><li>Sign up</li></a> : <a href='/login'><li>Login</li></a>} */}
           { this.state.aboutForm ? renderAboutForm() : null }
           { this.state.detailsForm ? renderDetailsForm() : null }
-
+          <TestModal auth='signup' />
         </main>
       </div>
     )
