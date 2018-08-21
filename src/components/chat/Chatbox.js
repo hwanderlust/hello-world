@@ -77,14 +77,23 @@ class Chatbox extends React.Component {
   render() {
 
     const renderMessages = () => {
-      const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-      return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
+      if(this.state.messages) {
+        const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
+        return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
+      }
     }
 
     const renderMsgActionCable = () => {
       return (
         <ActionCable channel={{ channel: 'MessagesChannel', chat: this.props.chat.id }} onReceived={this.handleReceiveMsgs} />
       )
+    }
+
+    const renderMsgHeader = () => {
+      if(this.props.chat.recipient_user) {
+        const username = this.props.chat.recipient_user.username.toUpperCase()
+        return `${username} ${this.props.chat.id}`
+      }
     }
 
     const style = {
@@ -109,8 +118,8 @@ class Chatbox extends React.Component {
           style={style}
           key={this.props.chat.id}
           data-chat={this.props.chat.id}
-          data-userId={this.props.chat.recipient_user.id}
-          data-username={this.props.chat.recipient_user.username}
+          data-userId={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
+          data-username={this.props.chat.recipient_user ? this.props.chat.recipient_user.username : null}
           onClick={this.handleBoxClick}
           default={{
             x: this.props.x,
@@ -121,10 +130,10 @@ class Chatbox extends React.Component {
         >
           <div className='msg-top'
             data-chat={this.props.chat.id}
-            data-userId={this.props.chat.recipient_user.id}
-            data-username={this.props.chat.recipient_user.username}
+            data-userId={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
+            data-username={this.props.chat.recipient_user ? this.props.chat.recipient_user.username : null}
             onClick={this.handleBoxClick}>
-            {this.props.chat ? this.props.chat.recipient_user.username.toUpperCase() : null}
+            { this.props.chat ? renderMsgHeader()  : null }
           </div>
 
           { this.state.messages ? renderMessages() : null }

@@ -3,7 +3,7 @@ import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
@@ -62,6 +62,7 @@ class Chat extends React.Component {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
     window.addEventListener('keypress', this.handleKeyPress)
+    window.addEventListener('keydown', this.handleKeyDown)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -81,12 +82,15 @@ class Chat extends React.Component {
       } else if(e.key === 0) {
         i = 8
         this.props.updateChat(this.props.openChats[i].id)
-      } // else {
-      //   i = this.props.openChats.length - 1
-      //   this.props.updateChat(this.props.openChats[i].id)
-      // }
+      }
       this.setState({textInputFocus: true}, () => console.log(this.state))
       this.inputFocus.focus()
+    }
+  }
+
+  handleKeyDown = (e) => {
+    if(e.key === 'Escape') {
+      this.setState({text: ''}, () => console.log(this.state))
     }
   }
 
@@ -127,9 +131,24 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    switch(this.state.text) {
+    const splitted = this.state.text.split(' ')
+    const [firstWord, secondWord] = splitted
+
+    switch(firstWord) {
       case '//translate':
         return this.setState({langPrompt: true, text: ''})
+      case '//close':
+        if(secondWord) {
+          if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
+            const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
+            this.props.closeChat(updatedOpenChats)
+            return this.setState({text: ''}, () => console.log(this.state))
+          } else {
+            return alert(`Sorry but that chat isn't even open...`)
+          }
+        } else {
+          return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
+        }
       default:
         this.newMessage({chat_id: this.props.chat, text: this.state.text})
         this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
@@ -157,7 +176,6 @@ class Chat extends React.Component {
   }
 
   handleSavingMsg = (listId) => {
-    debugger
     addMessage({msg_id: this.state.message.id, list_id: listId})
       .then(messages => {
         console.log(messages)
@@ -296,7 +314,13 @@ class Chat extends React.Component {
     }
 
     const renderChatBoxes = () => {
-      return this.props.openChats ? this.props.openChats.map(chat => <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={chat} x={this.state.x} y={this.state.y} bgColor={this.state.chatBoxBgColor}/>) : null
+      return this.props.openChats ? this.props.openChats.map((chat, i) => {
+        const obj = {...chat, index: i}
+        console.log(obj);
+        return (
+          <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={obj} x={this.state.x} y={this.state.y} bgColor={this.state.chatBoxBgColor}/>
+        )
+      }) : null
     }
 
     return (
@@ -342,6 +366,7 @@ const mapDispatchToProps = (dispatch) => {
     updateLists: (lists) => dispatch(updateLists(lists)),
     updateMessages: (messages) => dispatch(updateMessages(messages)),
     updateChat: (chat) => dispatch(updateChat(chat)),
+    closeChat: (chats) => dispatch(closeChat(chats)),
   }
 }
 
