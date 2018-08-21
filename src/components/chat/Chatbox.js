@@ -1,8 +1,8 @@
 import React from 'react';
 import { Rnd } from "react-rnd";
-import Message from './Message'
+import MessageContainer from './MessageContainer'
 import { getChatMessages } from '../../adapter'
-import { updateMessages, updateRecipientUser, updateChat } from '../../actions'
+import { updateMessages, updateRecipientUser, updateChat, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave } from '../../actions'
 import { connect } from 'react-redux'
 import { ActionCable } from 'react-actioncable-provider';
 
@@ -50,17 +50,24 @@ class Chatbox extends React.Component {
   }
 
   handleSpeechClick = (msg) => {
-    this.props.checkRenderedForms('speech')
-    this.props.handleSpeechChange(msg)
+    this.props.toggleSpeech()
+    this.props.updateSelectedMsg(msg)
+    // this.props.checkRenderedForms('speech')
+    // this.props.handleSpeechChange(msg)
   }
 
-  handleTranslationClick = () => {
-    this.props.checkRenderedForms('translation')
-    this.props.handleTranslation()
+  handleTranslateClick = (msg) => {
+    this.props.toggleTranslate()
+    console.log(msg.text);
+    const term = encodeURI(msg.text)
+    this.props.updateSelectedMsg(term)
+    // this.props.checkRenderedForms('translation')
+    // this.props.handleTranslation()
   }
 
   handleSaveMsgClick = (msg) => {
-    this.props.checkRenderedForms('save')
+    this.props.toggleSave()
+    // this.props.checkRenderedForms('save')
     this.props.handleSaveMsgChange(msg)
   }
 
@@ -79,7 +86,7 @@ class Chatbox extends React.Component {
     const renderMessages = () => {
       if(this.state.messages) {
         const sortedMessages = this.state.messages.slice().sort((a,b) => new Date(a.created_at) - new Date(b.created_at))
-        return sortedMessages.map(msg => <Message handleSpeechClick={this.handleSpeechClick} handleTranslationClick={this.handleTranslationClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
+        return sortedMessages.map(msg => <MessageContainer handleSpeechClick={this.handleSpeechClick} handleTranslateClick={this.handleTranslateClick} handleSaveMsgClick={this.handleSaveMsgClick} key={msg.id} msg={msg} />)
       }
     }
 
@@ -158,6 +165,11 @@ const mapDispatchToProps = (dispatch) => {
     updateMessages: (messages) => dispatch(updateMessages(messages)),
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     updateChat: (chat) => dispatch(updateChat(chat)),
+    toggleSpeech: () => dispatch(toggleSpeech()),
+    updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
+    toggleTranslate: () => dispatch(toggleTranslate()),
+    toggleSave: () => dispatch(toggleSave()),
+    // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
 

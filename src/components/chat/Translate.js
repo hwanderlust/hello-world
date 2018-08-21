@@ -14,8 +14,10 @@ class Translate extends React.Component {
 
   componentDidMount() {
     console.log(this.state);
-    if(this.props.translateTerm) {
-      detectLang(this.props.translateTerm)
+    // if(this.props.translateTerm) {
+    //   detectLang(this.props.translateTerm)
+    if(this.props.selectedMessage) {
+      detectLang(this.props.selectedMessage)
       .then(data => {
         // returns en but need name to set state
         // map through languages find code and return name
@@ -118,9 +120,9 @@ class Translate extends React.Component {
           this.props.setTranslation(translation)
         })
 
-      } else if(this.props.translateTerm) {
+      } else if(this.props.selectedMessage) {
         // calls on adapter fn to fetch for translation
-        translateText(this.props.translateTerm, this.state.detectedLang.code, e.target.selectedOptions[0].id)
+        translateText(this.props.selectedMessage, this.state.detectedLang.code, e.target.selectedOptions[0].id)
         .then(r => {
           // console.log(r);
           // console.log(r.data.translations);
@@ -133,7 +135,8 @@ class Translate extends React.Component {
       }
 
     // unmounts component
-    this.props.hideForms('translation')
+    // this.props.hideForms('translation')
+    this.props.toggleTranslate()
   }
 
   render() {
@@ -145,7 +148,7 @@ class Translate extends React.Component {
     return (
       <React.Fragment>
 
-        { this.props.translateTerm ? null : (
+        { this.props.selectedMessage ? null : (
           <div className='translate-form'>
             <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autofocus='true' ref={c => this.inputFocus = c} />
           </div>
@@ -174,6 +177,7 @@ const mapStateToProps = (state) => {
   return {
     language: state.appState.language,
     translateTerm: state.appState.translateTerm,
+    selectedMessage: state.appState.selectedMessage,
   }
 }
 

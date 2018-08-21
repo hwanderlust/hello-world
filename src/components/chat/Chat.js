@@ -3,7 +3,7 @@ import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
@@ -172,15 +172,21 @@ class Chat extends React.Component {
     console.log(response);
   }
 
-  handleSpeechChange = (msg) => {
-    this.setState({speech: msg}, () => console.log(this.state))
+  handleSpeechChange = (e) => {
+    this.props.updateSelectedMsg(e.target.value)
+    // this.setState({speech: msg}, () => console.log(this.state))
   }
 
   handleSpeechSubmit = (e) => {
     const voice = voices.find(v => v.lang === e.target.value)
     console.log(voice);
-    spoken.say(this.state.speech, voice.name)
-    this.hideForms('speech')
+    spoken.say(this.props.selectedMessage.text, voice.name)
+    this.props.updateSelectedMsg('')
+    this.props.toggleSpeech()
+    // const voice = voices.find(v => v.lang === e.target.value)
+    // console.log(voice);
+    // spoken.say(this.state.speech, voice.name)
+    // this.hideForms('speech')
   }
 
   handleSavingMsg = (listId) => {
@@ -188,6 +194,7 @@ class Chat extends React.Component {
       .then(messages => {
         console.log(messages)
         this.setState({saveMsgStatus: true}, () => console.log(this.state))
+        this.props.toggleSave()
       })
   }
 
@@ -251,16 +258,20 @@ class Chat extends React.Component {
   render() {
 
     const renderHeader = () => {
-      const className = this.state.speech || this.state.langPrompt || this.state.saveMsg || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
+      const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
       return (
         <React.Fragment>
 
-          { this.state.speech || this.state.langPrompt || this.state.saveMsg || this.state.saveMsgStatus ?
+          { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ?
             <div className={className}>
-              { this.state.speech ? renderSpeechForm() : null}
-              { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
-              { this.state.saveMsg ? renderSaveMsgForm() : null }
+              { this.props.speechPrompt ? renderSpeechForm() : null }
+              { this.props.translatePrompt ? <Translate toggleTranslate={this.props.toggleTranslate} /> : null }
+              { this.props.savePrompt ? renderSaveMsgForm() : null }
               { this.state.saveMsgStatus ? renderCheckmark() : null }
+
+              {/*{ this.state.speech ? renderSpeechForm() : null}
+                { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
+              { this.state.saveMsg ? renderSaveMsgForm() : null } */}
             </div>
           : null}
 
@@ -273,7 +284,7 @@ class Chat extends React.Component {
         <form className='speech-form'>
           <div>
             <label>Listen to:</label>
-            <input type='text' value={this.state.speech} onChange={this.handleSpeechChange} />
+            <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
           </div>
 
           <div>
@@ -368,6 +379,11 @@ const mapStateToProps = (state) => {
     recipientUser: state.appState.recipientUser,
     chat: state.appState.chat,
     translation: state.appState.translation,
+    speechPrompt: state.appState.prompts.speechPrompt,
+    selectedMessage: state.appState.selectedMessage,
+    translation: state.appState.translation,
+    translatePrompt: state.appState.prompts.translatePrompt,
+    savePrompt: state.appState.prompts.savePrompt,
   }
 }
 
@@ -378,6 +394,11 @@ const mapDispatchToProps = (dispatch) => {
     updateChat: (chat) => dispatch(updateChat(chat)),
     closeChat: (chats) => dispatch(closeChat(chats)),
     clearTranslation: () => dispatch(clearTranslation()),
+    toggleSpeech: () => dispatch(toggleSpeech()),
+    updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
+    toggleTranslate: () => dispatch(toggleTranslate()),
+    toggleSave: () => dispatch(toggleSave()),
+    // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
 

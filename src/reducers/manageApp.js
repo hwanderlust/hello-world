@@ -1,5 +1,5 @@
 // a reducer is a PURE function that takes the previous state and an action as arguments and returns new state based on the action.type
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION } from '../actions/types'
+import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION, TOGGLE_SPEECH, UPDATE_SELECTED_MSG, TOGGLE_TRANSLATE, TOGGLE_SAVE } from '../actions/types'
 
 const initialState = {
   currentUser: null,
@@ -14,6 +14,12 @@ const initialState = {
   list: null,
   messages: null,
   openChats: [],
+  prompts: {
+    translatePrompt: false,
+    speechPrompt: false,
+    savePrompt: false,
+  },
+  selectedMessage: null,
 }
 
 const manageApp = (state = initialState, action) => {
@@ -104,6 +110,32 @@ const manageApp = (state = initialState, action) => {
     case LIST_MESSAGES:
       return {...state,
         messages: action.payload
+      }
+
+    case TOGGLE_SPEECH:
+      return {...state,
+        prompts: {
+          speechPrompt: !state.prompts.speechPrompt
+        }
+      }
+
+    case TOGGLE_TRANSLATE:
+      return {...state,
+        prompts: {
+          translatePrompt: !state.prompts.translatePrompt
+        }
+      }
+
+    case TOGGLE_SAVE:
+      return {...state,
+        prompts: {
+          savePrompt: !state.prompts.savePrompt
+        }
+      }
+
+    case UPDATE_SELECTED_MSG:
+      return {...state,
+        selectedMessage: action.payload
       }
 
     case REMOVE_USER:

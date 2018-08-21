@@ -1,4 +1,4 @@
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_MESSAGES, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION } from './types'
+import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_MESSAGES, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION, TOGGLE_SPEECH, UPDATE_SELECTED_MSG, TOGGLE_TRANSLATE, TOGGLE_SAVE } from './types'
 
 export const updateUser = (user) => {
   return {
@@ -107,6 +107,31 @@ export const updateListMsgs = (messages) => {
   return {
     type: LIST_MESSAGES,
     payload: messages
+  }
+}
+
+export const toggleSpeech = () => {
+  return {
+    type: TOGGLE_SPEECH
+  }
+}
+
+export const toggleTranslate = () => {
+  return {
+    type: TOGGLE_TRANSLATE
+  }
+}
+
+export const toggleSave = () => {
+  return {
+    type: TOGGLE_SAVE
+  }
+}
+
+export const updateSelectedMsg = (msg) => {
+  return {
+    type: UPDATE_SELECTED_MSG,
+    payload: msg
   }
 }
 

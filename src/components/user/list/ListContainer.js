@@ -52,8 +52,8 @@ class ListContainer extends React.Component {
           case 'list':
             return <List list={this.props.list} messages={this.props.messages} />
           default:
-          console.log(`List request is wrong`);
-          break
+            console.log(`List request is wrong`);
+            break
         }
       }
     }
