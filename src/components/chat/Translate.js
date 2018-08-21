@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { updateLang } from '../../actions'
+import { updateLang, setTranslation } from '../../actions'
 import { translateText, detectLang } from '../../adapter'
 
 class Translate extends React.Component {
@@ -115,6 +115,7 @@ class Translate extends React.Component {
           const check = data.match(/=>(.*)\S/) ? true : false
           const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
           console.log(translation);
+          this.props.setTranslation(translation)
         })
 
       } else if(this.props.translateTerm) {
@@ -127,6 +128,7 @@ class Translate extends React.Component {
           const check = data.match(/=>(.*)\S/) ? true : false
           const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
           console.log(translation);
+          this.props.setTranslation(translation)
         })
       }
 
@@ -178,6 +180,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateLang: (lang) => dispatch(updateLang(lang)),
+    setTranslation: (translation) => dispatch(setTranslation(translation)),
   }
 }
 

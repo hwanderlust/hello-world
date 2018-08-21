@@ -3,7 +3,7 @@ import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
@@ -66,11 +66,14 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('COMPONENTDIDUPDATE', this.props);
+    console.log('COMPONENTDIDUPDATE', this.props, prevProps);
     if(prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
     } else {
       this.renderUsers()
     }
+    // if(this.state.translation !== this.props.translation && this.props.translation !== null) {
+    //   this.setState({translation: this.props.translation}, () => console.log(this.state))
+    // }
   }
 
   handleKeyPress = (e) => {
@@ -90,7 +93,12 @@ class Chat extends React.Component {
 
   handleKeyDown = (e) => {
     if(e.key === 'Escape') {
-      this.setState({text: ''}, () => console.log(this.state))
+      if(this.state.text) {
+        this.setState({text: ''}, () => console.log(this.state))
+      }
+      if(this.props.translation) {
+        this.setState({text: ''}, () => this.props.clearTranslation())
+      }
     }
   }
 
@@ -281,9 +289,10 @@ class Chat extends React.Component {
     }
 
     const renderChatInput = () => {
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', this.state);
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+          <input id='testtest' class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
         </form>
       )
     }
@@ -358,6 +367,7 @@ const mapStateToProps = (state) => {
     openChats: state.appState.openChats,
     recipientUser: state.appState.recipientUser,
     chat: state.appState.chat,
+    translation: state.appState.translation,
   }
 }
 
@@ -367,6 +377,7 @@ const mapDispatchToProps = (dispatch) => {
     updateMessages: (messages) => dispatch(updateMessages(messages)),
     updateChat: (chat) => dispatch(updateChat(chat)),
     closeChat: (chats) => dispatch(closeChat(chats)),
+    clearTranslation: () => dispatch(clearTranslation()),
   }
 }
 
