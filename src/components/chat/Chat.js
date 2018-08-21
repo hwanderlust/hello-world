@@ -8,6 +8,7 @@ import { updateLists, updateMessages, updateChat } from '../../actions'
 import Chatbox from './Chatbox'
 import Translate from './Translate'
 import { voices, languages } from './Speech'
+import UserIcon from '../user/UserIcon'
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -15,6 +16,22 @@ const bgColor = () => {
   const b = Math.floor(Math.random() * 256);
   const rgbColor = "rgb(" + r + "," + g + "," + b + ")";
   return rgbColor
+}
+
+const containerStyle = {
+  width: '1rem',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'contain',
+  alignSelf: 'center',
+  margin: '0',
+  position: 'relative',
+  top: '0.3rem'
+}
+
+const imgStyle = {
+  borderRadius: '50%',
+  width: '2rem',
+  height: '2rem'
 }
 
 class Chat extends React.Component {
@@ -96,7 +113,12 @@ class Chat extends React.Component {
 
     const filtered = users && currentUser ? users.filter(user => user.id !== currentUser.id) : null
 
-    return filtered ? filtered.map(user => <li key={user.id} className='user' onClick={() => this.handleClick(user)}>{user.username}</li>) : null
+    return filtered ? filtered.map(user => (
+      <div key={user.id} className='user' onClick={() => this.handleClick(user)}>
+        <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={user.profile_picture} />
+        <p>{user.username}</p>
+      </div>
+    )) : null
   }
 
   handleChange = (e) => {
@@ -202,11 +224,36 @@ class Chat extends React.Component {
 
   render() {
 
+    const renderHeader = () => {
+      const className = this.state.speech || this.state.langPrompt || this.state.saveMsg || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
+      return (
+        <React.Fragment>
+
+          { this.state.speech || this.state.langPrompt || this.state.saveMsg || this.state.saveMsgStatus ?
+            <div className={className}>
+              { this.state.speech ? renderSpeechForm() : null}
+              { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
+              { this.state.saveMsg ? renderSaveMsgForm() : null }
+              { this.state.saveMsgStatus ? renderCheckmark() : null }
+            </div>
+          : null}
+
+        </React.Fragment>
+          )
+    }
+
     const renderSpeechForm = () => {
       return (
-        <form >
-          <input type='text' value={this.state.speech} onChange={this.handleSpeechChange} />
-          <select id='selected-lang' onChange={this.handleSpeechSubmit}>{ renderLanguages() }</select>
+        <form className='speech-form'>
+          <div>
+            <label>Listen to:</label>
+            <input type='text' value={this.state.speech} onChange={this.handleSpeechChange} />
+          </div>
+
+          <div>
+            <label>Choose an appropriate voice:</label>
+            <select id='selected-lang' onChange={this.handleSpeechSubmit}>{ renderLanguages() }</select>
+          </div>
         </form>
       )
     }
@@ -225,17 +272,21 @@ class Chat extends React.Component {
 
     const renderSaveMsgForm = () => {
       return (
-        <React.Fragment>
-          <label>List to Save to:</label>
-          <select name='existingList' ref={el => this.existingList = el }>
-            { this.props.lists ? this.props.lists.map(list => <option key={list.id} value={list.id}>{list.name}</option>) : <option disabled>No Lists</option> }
-          </select>
-          <button onClick={this.handleExistingList}></button>
+        <div className='save-msg'>
+          <div className='existing-container'>
+            <label>List to Save to:</label>
+            <select name='existingList' ref={el => this.existingList = el }>
+              { this.props.lists ? this.props.lists.map(list => <option key={list.id} value={list.id}>{list.name}</option>) : <option disabled>No Lists</option> }
+            </select>
+            <button onClick={this.handleExistingList}>Add to this List</button>
+          </div>
+
+          <h1 className='save-msg-title'>Save a Message to Review!</h1>
 
           <form onSubmit={this.handleNewList}>
             <input type='text' name='newList' value={this.state.newList} onChange={this.handleChange} placeholder='Create New List--Name Here' autoFocus={true}/>
           </form>
-        </React.Fragment>
+        </div>
       )
     }
 
@@ -250,22 +301,19 @@ class Chat extends React.Component {
 
     return (
       <React.Fragment>
-
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
+        <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
+
+        { renderHeader() }
 
         <aside className='users-list'>
           { this.renderUsers() }
         </aside>
 
-        <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
-
         <div className='messaging-area'>
 
           <section className='chat-features'>
-            { this.state.speech ? renderSpeechForm() : null}
-            { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
-            { this.state.saveMsg ? renderSaveMsgForm() : null }
-            { this.state.saveMsgStatus ? renderCheckmark() : null }
+
           </section>
 
           { renderChatBoxes() }

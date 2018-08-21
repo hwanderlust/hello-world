@@ -1,11 +1,57 @@
 .lists-container {
-  grid-area: main;
+  position: absolute;
+  left: 10vw;
+  top: 5vh;
+  width: 90vw;
+  height: 95vh;
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* grid-area: main;
   display: grid;
   grid-template-columns: 10vw auto 10vw;
   grid-template-rows: 15vh 85vh;
-  grid-template-areas: 'll header rr' 'll middle rr'
+  grid-template-areas: 'll header rr' 'll middle rr' */
 }
 
+.lists-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1rem;
+  width: calc(90vw / 3 * 2);
+  height: 50%;
+}
+
+.list-box {
+  height: 20vh;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.list-box h1 {
+  z-index: 1;
+  position: relative;
+  left: 1rem;
+  top: -5rem;
+  margin: 0;
+}
+
+.list-box img {
+  position: relative;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
 .hex {
   grid-area: middle;
   background-color: rgba(148, 16, 16, 1);;
@@ -18,7 +64,6 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  /* overflow-wrap: break-word; */
 }
 
 .hex:before,
@@ -110,7 +155,7 @@
 .hex-name {
   text-align: center;
   transform: rotate(-90deg);
-}
+} */
 
 /*
 .hex-9 {

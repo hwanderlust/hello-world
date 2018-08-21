@@ -4,16 +4,26 @@ class Contact extends React.Component {
 
   render() {
     return(
-      <div className='static'>
-        <h1>Contact</h1>
-        <h3>Email</h3>
-        <p>pablo@test.com</p>
-        <h3>Github</h3>
-        <p>pablo</p>
-        <h3>Instagram</h3>
-        <p>pablo</p>
-        <h3>LinkedIn</h3>
-        <p>pablo</p>
+      <div className='contact-container'>
+        <main className='contact-wrapper'>
+          <h1>Contact</h1>
+          <div className='email'>
+            <i class="far fa-envelope"></i>
+            <p>lpault29@gmail.com</p>
+          </div>
+          <div className='github'>
+            <i class="fab fa-github"></i>
+            <p>@pablopawpaw</p>
+          </div>
+          <div className='ig'>
+            <i class="fab fa-instagram"></i>
+            <p>@pawpawpoopoo</p>
+          </div>
+          <div className='in'>
+            <i class="fab fa-linkedin"></i>
+            <p>lpault29</p>
+          </div>
+        </main>
       </div>
     )
   }

@@ -1,0 +1,58 @@
+.contact-container {
+  position: absolute;
+  top: 5vh;
+  left: 10vw;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-wrapper h1,
+.email, .github, .ig, .in {
+  /* border: 1px solid black; */
+  padding: 1rem;
+  color: black;
+}
+
+.contact-container .contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas: 'tall email github github' 'tall in in ig';
+  grid-gap: 1rem;
+}
+
+.contact-wrapper h1 {
+  grid-area: tall;
+  transform: rotate(-90deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #351E29;
+  color: white;
+  width: 100%;
+  height: 100;
+  box-sizing: border-box;
+}
+
+.email {
+  grid-area: email;
+  background-color: #A13D63;
+}
+
+.github {
+  grid-area: github;
+  background-color: #6DD3CE;
+}
+
+.ig {
+  grid-area: ig;
+  background-color: #F7A278;
+}
+
+.in {
+  grid-area: in;
+  background-color: #5EF27E;
+}

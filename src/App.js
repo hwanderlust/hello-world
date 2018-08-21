@@ -3,17 +3,18 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import './css/App.css'
 import './css/Nav.css'
-import './css/Banner.css'
+import './css/TopBorder.css'
 import './css/Profile.css'
 import './css/Chat.css'
 import './css/Auth.css'
 import './css/List.css'
 import './css/Lists.css'
+import './css/Contact.css'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
 import Nav from './components/nav/Nav'
-import Banner from './components/banner/Banner'
+import TopBorder from './components/topborder/TopBorder'
 import About from './components/About'
 import Contact from './components/Contact'
 import Profile from './components/user/Profile'
@@ -47,7 +48,7 @@ class App extends Component {
     return (
       <div className="App">
         <Nav />
-        <Banner />
+        <TopBorder />
         <Switch>
           <Route exact path='/' render={props => {
             this.checkLogin()

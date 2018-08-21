@@ -142,15 +142,26 @@ class Translate extends React.Component {
 
     return (
       <React.Fragment>
-        { this.props.translateTerm ? null : <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autofocus='true' ref={c => this.inputFocus = c} /> }
 
-        <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name}>
-          { renderLanguages() }
-        </select>
+        { this.props.translateTerm ? null : (
+          <div className='translate-form'>
+            <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autofocus='true' ref={c => this.inputFocus = c} />
+          </div>
+        ) }
 
-        <select onChange={this.handleChange} name='toLang'>
-          { renderLanguages() }
-        </select>
+        <div className='translate-form'>
+          <label>Translate from:</label>
+          <select onChange={this.handleChange} name='fromLang' value={this.state.detectedLang.name}>
+            { renderLanguages() }
+          </select>
+        </div>
+
+        <div className='translate-form'>
+          <label>Translate to:</label>
+          <select onChange={this.handleChange} name='toLang'>
+            { renderLanguages() }
+          </select>
+        </div>
 
       </React.Fragment>
     )

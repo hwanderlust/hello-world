@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { getLists, getListMsgs } from '../../../adapter'
-import { updateLists, updateList, updateMessages } from '../../../actions'
+import { updateLists, updateList, updateMessages, updateListMsgs } from '../../../actions'
 
 import Lists from './Lists'
 import List from './List'
@@ -36,7 +36,7 @@ class ListContainer extends React.Component {
 
     getListMsgs(list.id).then(messages => {
       console.log(messages);
-      this.props.updateMessages(messages)
+      this.props.updateListMsgs(messages)
       console.log(this.props);
       this.props.history.push('/list')
     })
@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLists: (lists) => dispatch(updateLists(lists)),
     updateList: (list) => dispatch(updateList(list)),
-    updateMessages: (msgs) => dispatch(updateMessages(msgs)),
+    updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
   }
 }
 

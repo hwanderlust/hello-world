@@ -4,16 +4,33 @@ import { withRouter } from 'react-router-dom'
 import { getLists, getListMsgs } from '../../adapter'
 import { updateList, updateLists, updateMessages  } from '../../actions'
 
-import ProfileInfo from './profile/ProfileInfo'
+// import ProfileInfo from './profile/ProfileInfo'
 import ProfileDetails from './profile/ProfileDetails'
 import ProfileHead from './profile/ProfileHead'
 import ProfileLangs from './profile/ProfileLangs'
+import UserIcon from './UserIcon'
 
 // people you've spoken with
 // profile picture
 // saved notes
 // auto save terms translated
 //
+
+const containerStyle = {
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'contain',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#F7A278',
+}
+
+const imgStyle = {
+  borderRadius: '50%',
+  height: '30vh',
+  maxWidth: '30vw',
+  marginLeft: '0.25rem',
+}
 
 class Profile extends React.Component {
   state = {
@@ -63,25 +80,30 @@ class Profile extends React.Component {
     return (
 
         <div className='profile'>
-          <ProfileHead currentUser={currentUser} pic={this.state.pic} handleMouseOver={this.handleMouseOver} handleMouseLeave={this.handleMouseLeave} />
 
-          <section id='user-languages'>
-            <ProfileLangs currentUser={currentUser}/>
-          </section>
+          <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={currentUser ? currentUser.profile_picture : null} />
 
-          <section id='user-details'>
-            <ProfileDetails currentUser={currentUser}/>
-          </section>
+          <ProfileHead currentUser={currentUser} />
 
-          <section id='user-info'>
+          <ProfileLangs currentUser={currentUser}/>
+
+          <ProfileDetails currentUser={currentUser}/>
+
+          {/* <section id='user-languages'>
+          </section> */}
+
+          {/* <section id='user-details'>
+          </section> */}
+
+          {/* <section id='user-info'>
             <ProfileInfo currentUser={currentUser}/>
-          </section>
+          </section> */}
 
           <aside>
-            <span><h1>Lists</h1></span>
-            <main>
+            {/* <span><h1>Lists</h1></span>
+              <main>
               { renderLists() }
-            </main>
+            </main> */}
           </aside>
 
         </div>

@@ -1,4 +1,4 @@
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_MESSAGES, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT } from './types'
+import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_MESSAGES, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES } from './types'
 
 export const updateUser = (user) => {
   return {
@@ -82,6 +82,14 @@ export const updateChat = (chat) => {
     payload: chat
   }
 }
+
+export const updateListMsgs = (messages) => {
+  return {
+    type: LIST_MESSAGES,
+    payload: messages
+  }
+}
+
 //
 //
 // export const updateLists = () => {
