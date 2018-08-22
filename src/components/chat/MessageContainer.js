@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { setTranslateTerm } from '../../actions'
+import { setTranslateTerm, updateListMsgs } from '../../actions'
+import { removeMsgFromList } from '../../adapter'
 import Message from './Message'
 
 class MessageContainer extends React.Component {
@@ -83,6 +84,25 @@ class MessageContainer extends React.Component {
     this.setState({popup: false})
   }
 
+  handleDragDelete = (e, msg) => {
+    switch(e.type) {
+
+      case 'dragstart':
+        removeMsgFromList({msg_id: msg.id, list_id: msg.list_id})
+        .then(msgs => {
+          console.log(msgs);
+          this.props.updateListMsgs(msgs)
+        })
+        return console.log('dragstart', msg);
+
+      case 'dragend':
+        return console.log('dragend', msg);
+
+      default:
+        return console.log('drag drag');
+    }
+  }
+
   togglePopup = (e, msg) => {
     console.log(e.target);
     switch(e.target.id) {
@@ -113,14 +133,14 @@ class MessageContainer extends React.Component {
 
     const renderRecipientMessages = () => {
       return (
-          <Message type='chat' classes='message recipient' togglePopup={this.togglePopup} msg={msg} popup={this.state.popup} />
+          <Message type='chat' classes='message recipient' timestamp={this.state.timeDiff} togglePopup={this.togglePopup} msg={msg} popup={this.state.popup} />
       )
     }
 
     const renderMessages = () => {
       if(listReq) {
         return (
-          <Message type='list' classes='list-msg' togglePopup={this.togglePopup} styles={styles} msg={msg} popup={this.state.popup} />
+          <Message handleDragDelete={this.handleDragDelete} type='list' classes='list-msg' togglePopup={this.togglePopup} styles={styles} msg={msg} popup={this.state.popup} />
         )
 
       } else if(currentUser) {
@@ -144,6 +164,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
+    updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
   }
 }
 

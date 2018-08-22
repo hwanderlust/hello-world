@@ -18,12 +18,6 @@
   transform: translateX(-10%);
 }
 
-.list-messages {
-}
-
-.list-msg {
-}
-
 .list-msg::before {
   content: open-quote;
   display: inline-block;

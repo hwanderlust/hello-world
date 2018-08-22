@@ -4,8 +4,11 @@ const ListBox = ({ hoverId, list, i, imgUrl, handleClick, handleHover, handleMou
 
   return(
     <div key={list.id} className='list-box' onClick={(e) => handleClick(e, list)} onMouseOver={() => handleHover(list.id)} onMouseLeave={handleMouseLeave}>
-      <h4 id='delete-list' className='list-delete'>{ hoverId === list.id ? 'Delete List?' : null }</h4>
 
+      { hoverId === list.id ? (
+        <h4 id='delete-list' className='list-delete'>Delete List?</h4>
+      ) : null }
+      
       <img src={`${imgUrl}${i}x${i}`} alt={`random splash for list box`} />
 
       <h1>{ list.name }</h1>

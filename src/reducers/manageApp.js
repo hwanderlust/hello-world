@@ -147,12 +147,12 @@ const manageApp = (state = initialState, action) => {
         selectedMessage: action.payload
       }
 
-      case TOGGLE_PF_VIEW:
+    case TOGGLE_PF_VIEW:
       return {...state,
         userPfView: action.payload
       }
 
-      case CLEAR_SELECTED_MSG:
+    case CLEAR_SELECTED_MSG:
       return {...state,
         selectedMessage: null
       }

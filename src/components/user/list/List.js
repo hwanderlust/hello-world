@@ -38,6 +38,12 @@ class List extends React.Component {
     this.setState({messages: this.props.messages}, () => console.log(this.state))
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.messages !== this.props.messages) {
+      this.setState({messages: this.props.messages}, () => console.log(this.state))
+    }
+  }
+
   handleSpeechClick = (msg) => {
     this.props.toggleSpeech()
     this.props.updateSelectedMsg(msg)
@@ -219,6 +225,7 @@ const mapStateToProps = (state) => {
     translatePrompt: state.appState.prompts.translatePrompt,
     currentUser: state.appState.currentUser,
     movePrompt: state.appState.prompts.movePrompt,
+    messages: state.appState.messages,
   }
 }
 
