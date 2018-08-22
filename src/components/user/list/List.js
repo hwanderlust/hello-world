@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import spoken from '../../../../node_modules/spoken/build/spoken';
 
 import MessageContainer from '../../chat/MessageContainer'
-import { voices, languages } from '../../../components/chat/Speech'
+import { spokenVoices, spokenLanguages } from '../../../constants'
 import Translate from '../../chat/Translate'
 
-import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs } from '../../../actions'
+import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation } from '../../../actions'
 import { createList, getLists, addMessage, getListMsgs, removeMsgFromList } from '../../../adapter'
 
 const bgColor = () => {
@@ -48,7 +48,7 @@ class List extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    const voice = voices.find(v => v.lang === e.target.value)
+    const voice = spokenVoices.find(v => v.lang === e.target.value)
     console.log(voice);
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
@@ -68,7 +68,7 @@ class List extends React.Component {
     if(!this.props.lists) {
       getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
     }
-    
+
     this.setState({saveMsg: true})
     this.props.toggleMove()
   }
@@ -117,6 +117,10 @@ class List extends React.Component {
       })
   }
 
+  clearTranslation = () => {
+    this.props.clearTranslation()
+  }
+
   render() {
     const { list } = this.props
     const { messages } = this.state
@@ -152,7 +156,7 @@ class List extends React.Component {
     }
 
     const renderLanguages = () => {
-      return languages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
+      return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
     const renderTranslateForm = () => {
@@ -181,6 +185,10 @@ class List extends React.Component {
       )
     }
 
+    const renderTranslation = () => {
+      return this.props.translation ? <span onClick={this.clearTranslation}>{this.props.translation}</span> : null
+    }
+
     return(
       <div className='list-container'>
         <header className='header'>
@@ -190,6 +198,7 @@ class List extends React.Component {
         <section>
           { this.props.speechPrompt ? renderSpeechForm() : null }
           { this.props.translatePrompt ? renderTranslateForm() : null }
+          { renderTranslation() }
           { this.props.movePrompt ? renderMoveForm() : null }
         </section>
 
@@ -220,6 +229,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleTranslate: () => dispatch(toggleTranslate()),
     toggleMove: () => dispatch(toggleMove()),
     updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
+    clearTranslation: () => dispatch(clearTranslation()),
     // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }

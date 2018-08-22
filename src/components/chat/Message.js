@@ -37,13 +37,13 @@ const Message = ({ type, classes, timestamp, togglePopup, msg, styles, popup }) 
 
   ) : (
 
-    <Emoji text={msg.text} id='msg' key={msg.id} className={classes} style={styles ? styles : null} onClick={(e) => togglePopup(e, msg)} >
-      {/* {msg.text} */}
+    <li id='msg' key={msg.id} className={classes} style={styles ? styles : null} onClick={(e) => togglePopup(e, msg)} >
+      <Emoji text={msg.text}></Emoji>
 
       { type === 'chat' && senderRecipient === 'recipient' ? <span className='timestamp'>{timestamp}</span> : null }
 
       { popup ? (
-
+        
         <Popup
           trigger={
             <React.Fragment>
@@ -63,7 +63,7 @@ const Message = ({ type, classes, timestamp, togglePopup, msg, styles, popup }) 
 
       ) : null }
 
-    </Emoji>
+    </li>
   )
 }
 

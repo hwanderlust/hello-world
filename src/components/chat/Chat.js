@@ -5,11 +5,11 @@ import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
-import { voices, languages } from './Speech'
+import { spokenVoices, spokenLanguages } from '../../constants'
 import UserIcon from '../user/UserIcon'
 
 const bgColor = () => {
@@ -68,16 +68,16 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('COMPONENTDIDUPDATE', this.props, prevProps);
+    console.log('COMPONENTDIDUPDATE', this.props);
+
+    if(!this.props.speechPrompt && !this.props.savePrompt && !this.props.translatePrompt) {
+      this.inputFocus.focus()
+    }
+
     if(prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
     } else {
       this.renderUsers()
     }
-  }
-
-  componentWillUnmount() {
-    console.log(`componentWillUnmount!!!!!!!!!!!!!!!!!`);
-    // this.props.updateRecipientUser(null)
   }
 
   handleKeyPress = (e) => {
@@ -102,6 +102,12 @@ class Chat extends React.Component {
       }
       if(this.props.translation) {
         this.setState({text: ''}, () => this.props.clearTranslation())
+        this.props.clearSelectedMsg()
+      }
+    } else if(e.key === 'Backspace') {
+      if(this.state.text.length === 1) {
+        this.setState({text: ''}, () => console.log(this.state))
+        this.props.clearTranslation()
       }
     }
   }
@@ -213,7 +219,7 @@ class Chat extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    const voice = voices.find(v => v.lang === e.target.value)
+    const voice = spokenVoices.find(v => v.lang === e.target.value)
     console.log(voice);
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
@@ -315,7 +321,7 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      return languages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
+      return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
     const renderChatInput = () => {
@@ -418,6 +424,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleSave: () => dispatch(toggleSave()),
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     toggleUserPf: (user) => dispatch(toggleUserPf(user)),
+    clearSelectedMsg: () => dispatch(clearSelectedMsg()),
   }
 }
 
