@@ -50,3 +50,12 @@
 .list-box:hover {
   transform: scale(1.1);
 }
+
+.list-delete {
+  margin: 0;
+  font-size: 1.5rem;
+  position: absolute;
+  background-color: white;
+  padding: 0.25rem;
+  box-shadow: 1px 0 1px black;
+}

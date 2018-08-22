@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import { getLists, getListMsgs } from '../../adapter'
-import { updateList, updateLists, updateMessages  } from '../../actions'
 
 import ProfileDetails from './profile/ProfileDetails'
 import ProfileHead from './profile/ProfileHead'
@@ -25,74 +22,30 @@ const imgStyle = {
   marginLeft: '0.25rem',
 }
 
-class Profile extends React.Component {
-  state = {
-    pic: '',
-    lists: null,
-    listMessages: null,
-  }
+const Profile = ({ currentUser, userPfView }) => {
 
-  componentDidUpdate(prevProps, prevState) {
-    if(this.props.currentUser && !this.state.lists) {
-      getLists(this.props.currentUser.id).then(lists => {
-        this.props.updateLists(lists)
-        this.setState({lists}, () => console.log(this.state))
-      })
-    }
-  }
+  return userPfView || currentUser ? (
 
-  handleMouseOver = () => {
-    if(this.state.pic === '') {
-      this.setState({pic: 'rotate'}, () => console.log(this.state))
-    }
-  }
+    <div className='profile'>
 
-  handleMouseLeave = () => {
-    if(this.state.pic === 'rotate') {
-      this.setState({pic: ''}, () => console.log(this.state))
-    }
-  }
+      <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={userPfView ? userPfView.profile_picture : currentUser.profile_picture } />
 
-  handleListClick = (list) => {
-    this.props.updateList(list)
+      <ProfileHead user={ userPfView ? userPfView : currentUser } />
 
-    getListMsgs(list.id).then(messages => this.props.updateMessages(messages))
+      <ProfileLangs user={ userPfView ? userPfView : currentUser } />
 
-    this.props.history.push('/list')
-  }
+      <ProfileDetails user={ userPfView ? userPfView : currentUser } />
+    </div>
 
-  render() {
-    const { currentUser } = this.props
-
-    return (
-
-        <div className='profile'>
-
-          <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={currentUser ? currentUser.profile_picture : null} />
-
-          <ProfileHead currentUser={currentUser} />
-
-          <ProfileLangs currentUser={currentUser}/>
-
-          <ProfileDetails currentUser={currentUser}/>
-
-        </div>
-    )
-  }
+  ) : null
+  
 }
 
 const mapStateToProps = (state) => {
   return {
     currentUser: state.appState.currentUser,
+    userPfView: state.appState.userPfView,
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateList: (list) => dispatch(updateList(list)),
-    updateMessages: (messages) => dispatch(updateMessages(messages)),
-    updateLists: (lists) => dispatch(updateLists(lists)),
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile))
+export default connect(mapStateToProps)(Profile)

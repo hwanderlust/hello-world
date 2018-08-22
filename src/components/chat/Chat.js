@@ -2,8 +2,10 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
+import { withRouter } from 'react-router-dom'
+
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
@@ -41,7 +43,7 @@ class Chat extends React.Component {
     this.state = {
       users: null,
       text: '',
-      langPrompt: false,
+      // langPrompt: false,
       speech: '',
       saveMsg: false,
       message: null,
@@ -73,6 +75,11 @@ class Chat extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    console.log(`componentWillUnmount!!!!!!!!!!!!!!!!!`);
+    // this.props.updateRecipientUser(null)
+  }
+
   handleKeyPress = (e) => {
     if(!this.state.textInputFocus) {
       let i;
@@ -99,13 +106,19 @@ class Chat extends React.Component {
     }
   }
 
-  handleClick = (clickedUser) => {
-    this.props.handleNewChat({recipient_id: clickedUser.id})
-    this.setState({
-      x: this.state.x + 100,
-      y: this.state.y + 100,
-      chatBoxBgColor: bgColor()
-    }, () => console.log(this.state))
+  handleClick = (e, clickedUser) => {
+    if(e.target.tagName !== 'IMG') {
+      this.props.handleNewChat({recipient_id: clickedUser.id})
+      this.setState({
+        x: this.state.x + 100,
+        y: this.state.y + 100,
+        chatBoxBgColor: bgColor()
+      }, () => console.log(this.state))
+
+    } else {
+      console.log(`clicked IMG`, clickedUser);
+      this.props.toggleUserPf(clickedUser)
+    }
   }
 
   handleReceivedUser = (response) => {
@@ -121,13 +134,35 @@ class Chat extends React.Component {
     const { currentUser } = this.props
 
     const filtered = users && currentUser ? users.filter(user => user.id !== currentUser.id) : null
+    const chattingUsers = this.props.openChats.map(chat => chat.recipient_user.id)
+    console.log(chattingUsers);
+    let openChatClass = null
 
-    return filtered ? filtered.map(user => (
-      <div key={user.id} className='user' onClick={() => this.handleClick(user)}>
-        <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={user.profile_picture} />
+    return filtered ? filtered.map(user => {
+
+      if(chattingUsers.includes(user.id)) {
+        openChatClass = 'user active-chat'
+      } else {
+        openChatClass = 'user'
+      }
+
+      return (
+      <div key={user.id} className={openChatClass} onClick={(e) => this.handleClick(e, user)}>
+        <UserIcon onClick={this.handleUserPicClick} containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={user.profile_picture} />
         <p>{user.username}</p>
       </div>
-    )) : null
+    )}) : null
+  }
+
+  handleUserPicClick = () => {
+    console.log(`yayyy`);
+    this.props.history.push('/profile')
+    // import withRouter
+    // push to profile
+    // change profile to take into consideration this click event
+    // update recipientUser to use for profile
+    // if click event use recipientUser, else use currentUser
+
   }
 
   handleChange = (e) => {
@@ -140,9 +175,11 @@ class Chat extends React.Component {
     const [firstWord, secondWord] = splitted
 
     switch(firstWord) {
+
       case '//translate':
         this.setState({text: ''}, () => console.log(this.state))
         return this.props.toggleTranslate()
+
       case '//close':
         if(secondWord) {
           if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
@@ -155,6 +192,7 @@ class Chat extends React.Component {
         } else {
           return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
         }
+
       default:
         this.newMessage({chat_id: this.props.chat, text: this.state.text})
         this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
@@ -233,30 +271,12 @@ class Chat extends React.Component {
   }
 
   render() {
-    // const available = spoken.listen.available();
-    // if (available) console.log('Hurray voice transcription is available!');
 
     // const testTranscription = () => {
-    //   spoken.listen.on.end(continueCapture);
-    //   spoken.listen.on.error(continueCapture);
-    //
-    //   startCapture();
-    //
-    //   function startCapture() {
-    //       spoken.listen({ continuous : true }).then( transcript =>
-    //           console.log("Captured transcript: " + transcript)
-    //       ).catch( e => true );
-    //   }
-    //
-    //   async function continueCapture() {
-    //       await spoken.delay(300);
-    //       if (spoken.recognition.continuous) startCapture();
-    //   }
-    //
-    //   function stopCapture() {
-    //       spoken.recognition.continuous = false;
-    //       spoken.listen.stop();
-    //   }
+      // spoken.listen.on.start( voice => { console.log('Started Listening') } );
+      // spoken.listen.on.end(   voice => { console.log('Ended Listening')   } );
+      // spoken.listen.on.error( voice => { console.log('Error Listening')   } );
+      // spoken.listen.stop();
     // }
 
     const renderHeader = () => {
@@ -302,7 +322,7 @@ class Chat extends React.Component {
       console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', this.state);
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autoFocus="true" ref={c => this.inputFocus = c} />
         </form>
       )
     }
@@ -396,7 +416,9 @@ const mapDispatchToProps = (dispatch) => {
     updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
     toggleTranslate: () => dispatch(toggleTranslate()),
     toggleSave: () => dispatch(toggleSave()),
+    updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
+    toggleUserPf: (user) => dispatch(toggleUserPf(user)),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chat));

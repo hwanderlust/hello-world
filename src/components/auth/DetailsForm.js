@@ -11,7 +11,7 @@ class DetailsForm extends React.Component {
     return (
       <form onSubmit={(e) => handleSubmit(e)} id='detailsForm' className='auth-children'>
         <label htmlFor='introduction'>Tell us about yourself!</label>
-        <input type='text' name='introduction' className='inputs' onChange={handleChange} value={introduction} autofocus="true" ref={c => (this.inputFocus = c)}/>
+        <input type='text' name='introduction' className='inputs' onChange={handleChange} value={introduction} autoFocus="true" ref={c => (this.inputFocus = c)}/>
         <br />
         <label htmlFor='hobbies'>Let others know what your hobbies are and what you're passionate about.</label>
         <input type='text' name='hobbies' className='inputs' onChange={handleChange} value={hobbies} />

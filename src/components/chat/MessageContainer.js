@@ -26,7 +26,6 @@ class MessageContainer extends React.Component {
   }
 
   calcMsgTime = () => {
-    console.log(`calcMsgTime`);
     // this.interval ? clearInterval(this.interval) : null
     // const sent = new Date(msg.created_at)
     // const timeSent = sent.getTime()
@@ -43,10 +42,10 @@ class MessageContainer extends React.Component {
     msec -= ss * 1000;
 
     if(hh >= 24) {
-      this.setState({timeDiff: `  days ago`}, () => console.log(this.state))
+      this.setState({timeDiff: `  days ago`})
 
     } else if(hh < 24 && hh > 0) {
-      this.setState({timeDiff: `  hours ago`}, () => console.log(this.state))
+      this.setState({timeDiff: `  hours ago`})
       // this.interval = setInterval(this.calcMsgTime(), 60000*60)
 
 
@@ -55,7 +54,7 @@ class MessageContainer extends React.Component {
       // this.interval = setInterval(this.calcMsgTime(), 60000)
 
     } else if(ss <= 60 && ss > 0) {
-      this.setState({timeDiff: `  just now`}, () => console.log(this.state))
+      this.setState({timeDiff: `  just now`})
       // this.interval = setInterval(this.calcMsgTime(), 1000)
 
     }

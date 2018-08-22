@@ -14,6 +14,13 @@
 .email, .github, .ig, .in {
   padding: 1rem;
   color: black;
+  transition: all ease-out 250ms;
+}
+
+.email:hover, .github:hover, .ig:hover, .in:hover {
+  transform: scale(1.1);
+  transform: rotate(5deg);
+  box-shadow: 1px 1px black;
 }
 
 .contact-container .contact-wrapper {

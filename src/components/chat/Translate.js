@@ -136,7 +136,7 @@ class Translate extends React.Component {
 
         { this.props.selectedMessage ? null : (
           <div className='translate-form'>
-            <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autofocus='true' ref={c => this.inputFocus = c} />
+            <input type='text' placeholder='What would you like to translate?' value={this.state.input} onChange={this.handleInput} autoFocus='true' ref={c => this.inputFocus = c} />
           </div>
         ) }
 

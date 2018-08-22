@@ -11,19 +11,11 @@
   position: relative;
   transition: ease-in-out 500ms;
   transform: scale(0.8);
-  /* animation: mymove 15s infinite; */
 }
-
-/* @keyframes mymove {
-    25% {top: 0%; left: 0%;}
-    50%  {top: 50%; left: 50%;}
-    100% {top: 75%; left: 100%;}
-} */
 
 .list-msg:hover {
   transform: scale(5);
   transform: translateX(-10%);
-
 }
 
 .list-messages {

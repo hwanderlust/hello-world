@@ -106,7 +106,11 @@
   align-items: center;
   justify-content: center;
   transform: scale(0.8);
-  transition: ease-in-out 50ms;
+  transition: ease-in-out 250ms;
+}
+
+.active-chat {
+  background-color: #2CC6B4;
 }
 
 .user p {
@@ -117,6 +121,11 @@
 
 .user:hover {
 transform: scale(1);
+}
+
+.user:active {
+  opacity: 0.5;
+  transform: scale(0.9);
 }
 
 .chat-input-container {

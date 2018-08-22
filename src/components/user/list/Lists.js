@@ -8,10 +8,11 @@ class Lists extends React.Component {
     hoverId: null,
   }
 
-  handleClick = list => {
+  handleClick = (e, list) => {
     console.log(list);
 
-    if(this.state.hover) {
+    if(e.target.id === 'delete-list') {
+      //delete
       deleteList(this.state.hoverId)
         .then(r => {
           getLists(this.props.currentUser.id)
@@ -19,8 +20,20 @@ class Lists extends React.Component {
         })
 
     } else {
+      // go to list 
       this.props.handleListClick(list)
     }
+
+    // if(this.state.hover) {
+    //   deleteList(this.state.hoverId)
+    //     .then(r => {
+    //       getLists(this.props.currentUser.id)
+    //         .then(lists => this.props.updateLists(lists))
+    //     })
+    //
+    // } else {
+    //   this.props.handleListClick(list)
+    // }
   }
 
   handleHover = (listId) => {

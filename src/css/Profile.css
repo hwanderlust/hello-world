@@ -95,6 +95,13 @@
   align-items: center;
 }
 
+.usericon-img {
+  transition: ease-in-out 250ms;
+}
+
+.usericon-img:hover {
+  transform: rotateY(120deg);
+}
 
 .profile h1 {
 }
@@ -142,7 +149,4 @@
 }
 
 .img-wrapper img {
-}
-
-.rotate {
 }

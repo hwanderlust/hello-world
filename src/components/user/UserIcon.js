@@ -1,9 +1,9 @@
 import React from 'react';
 
-const UserIcon = ({ imgSrc, containerStyle, imgStyle }) => {
+const UserIcon = ({ onClick, imgSrc, containerStyle, imgStyle }) => {
   return (
-    imgSrc ? <div style={containerStyle} className='usericon-container'>
-      <img style={imgStyle} src={imgSrc} alt={`current user's profile`}/>
+    imgSrc ? <div onClick={onClick} style={containerStyle} className='usericon-container'>
+      <img style={imgStyle} className='usericon-img' src={imgSrc} alt={`current user's profile`}/>
     </div> : null
   )
 }

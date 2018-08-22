@@ -118,7 +118,7 @@ class Chatbox extends React.Component {
           style={style}
           key={this.props.chat.id}
           data-chat={this.props.chat.id}
-          data-userId={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
+          data-userid={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
           data-username={this.props.chat.recipient_user ? this.props.chat.recipient_user.username : null}
           onClick={this.handleBoxClick}
           default={{
@@ -130,7 +130,7 @@ class Chatbox extends React.Component {
         >
           <div className='msg-top'
             data-chat={this.props.chat.id}
-            data-userId={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
+            data-userid={this.props.chat.recipient_user ? this.props.chat.recipient_user.id : null}
             data-username={this.props.chat.recipient_user ? this.props.chat.recipient_user.username : null}
             onClick={this.handleBoxClick}>
             { this.props.chat ? renderMsgHeader()  : null }
