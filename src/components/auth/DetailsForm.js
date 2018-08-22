@@ -1,10 +1,7 @@
 import React from 'react';
 
 class DetailsForm extends React.Component {
-  constructor() {
-    super()
-    const inputFocus = React.createRef()
-  }
+
   componentDidMount() {
     this.inputFocus.focus()
   }

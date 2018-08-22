@@ -64,7 +64,11 @@ class List extends React.Component {
 
   handleMoveClick = (msg) => {
     this.setState({message: msg}, () => console.log(this.state))
-    this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+
+    if(!this.props.lists) {
+      getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+    }
+    
     this.setState({saveMsg: true})
     this.props.toggleMove()
   }

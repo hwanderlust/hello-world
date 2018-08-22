@@ -224,7 +224,11 @@ class Chat extends React.Component {
 
   handleSaveMsgChange = (msg) => {
     this.setState({message: msg}, () => console.log(this.state))
-    this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+
+    if(!this.props.lists) {
+      getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+    }
+
     this.setState({saveMsg: true})
   }
 
@@ -348,7 +352,6 @@ const mapStateToProps = (state) => {
     openChats: state.appState.openChats,
     recipientUser: state.appState.recipientUser,
     chat: state.appState.chat,
-    translation: state.appState.translation,
     speechPrompt: state.appState.prompts.speechPrompt,
     selectedMessage: state.appState.selectedMessage,
     translation: state.appState.translation,

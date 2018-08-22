@@ -64,12 +64,6 @@ class Profile extends React.Component {
   render() {
     const { currentUser } = this.props
 
-    const renderLists = () => {
-      if(this.state.lists) {
-        return this.state.lists.map(list => <h3 key={list.id} onClick={() => this.handleListClick(list)}>{list.name}</h3>)
-      }
-    }
-
     return (
 
         <div className='profile'>

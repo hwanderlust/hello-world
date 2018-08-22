@@ -2,11 +2,6 @@ import React from 'react';
 
 class AboutForm extends React.Component {
 
-  constructor() {
-    super()
-    const inputFocus = React.createRef();
-  }
-
   componentDidMount() {
     this.inputFocus.focus();
   }
