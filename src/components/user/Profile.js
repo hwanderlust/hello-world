@@ -4,17 +4,10 @@ import { withRouter } from 'react-router-dom'
 import { getLists, getListMsgs } from '../../adapter'
 import { updateList, updateLists, updateMessages  } from '../../actions'
 
-// import ProfileInfo from './profile/ProfileInfo'
 import ProfileDetails from './profile/ProfileDetails'
 import ProfileHead from './profile/ProfileHead'
 import ProfileLangs from './profile/ProfileLangs'
 import UserIcon from './UserIcon'
-
-// people you've spoken with
-// profile picture
-// saved notes
-// auto save terms translated
-//
 
 const containerStyle = {
   backgroundRepeat: 'no-repeat',
@@ -88,23 +81,6 @@ class Profile extends React.Component {
           <ProfileLangs currentUser={currentUser}/>
 
           <ProfileDetails currentUser={currentUser}/>
-
-          {/* <section id='user-languages'>
-          </section> */}
-
-          {/* <section id='user-details'>
-          </section> */}
-
-          {/* <section id='user-info'>
-            <ProfileInfo currentUser={currentUser}/>
-          </section> */}
-
-          <aside>
-            {/* <span><h1>Lists</h1></span>
-              <main>
-              { renderLists() }
-            </main> */}
-          </aside>
 
         </div>
     )

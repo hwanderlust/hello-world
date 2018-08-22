@@ -23,7 +23,6 @@ class TopBorder extends React.Component {
       <div className='top-border' >
         <h1>Hello World</h1>
         <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={this.props.currentUser ? this.props.currentUser.profile_picture : null}/>
-        {/* <h1 className='header banner-header'>Hello World</h1> */}
       </div>
     )
   }

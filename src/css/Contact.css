@@ -12,7 +12,6 @@
 
 .contact-wrapper h1,
 .email, .github, .ig, .in {
-  /* border: 1px solid black; */
   padding: 1rem;
   color: black;
 }

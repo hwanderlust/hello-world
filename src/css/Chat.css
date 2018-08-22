@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
 
 .chat-container {
-  /* grid-area: main; */
   position: absolute;
   width: 100vw;
   height: 100vh;
@@ -11,7 +10,6 @@
   grid-template-columns: 75vw 15vw;
   grid-template-rows: 10vh 75vh 10vh;
   grid-template-areas: 'toptop user' 'chats user' 'input user';
-  /* grid-row-gap: 1rem; */
   /* background-color: rgba(7, 18, 58, 1) */
 }
 
@@ -75,7 +73,6 @@
 .messaging-area {
   grid-area: chats;
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: flex-end;
 }
@@ -91,13 +88,11 @@
   background-color: #0067B2;
   /* background-color: rgba(148, 16, 16, 1); */
   border-left: 1px solid rgba(255, 216, 170, 1);
-  /* border-left: 2px solid rgba(255, 103, 0, 1); */
   padding-top: 1rem;
 }
 
 .user {
   align-self: center;
-  /* list-style: none; */
   border: 1px solid rgba(7, 18, 58, 1);
   margin: 0.1rem;
   flex: 0;
@@ -118,7 +113,6 @@
   align-self: center;
   margin-left: 2rem;
   position: relative;
-  /* bottom: 0.3rem; */
 }
 
 .user:hover {
@@ -126,76 +120,34 @@ transform: scale(1);
 }
 
 .chat-input-container {
-  /* grid-area: b; */
-  /* display: flex;
-  justify-content: center;
-  align-items: flex-start; */
-  /* display: grid; */
-  /* grid-template-columns: auto 10%; */
-  /* grid-template-areas: 'input submit'; */
-  /* grid-column-gap: 0.5rem; */
 }
 
 .chat-input-wrapper {
   grid-area: input;
   position: relative;
   top: 0;
-  /* background-color: black; */
-  /* width: 80%; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: center; */
-  /* align-items: flex-start; */
-  /* align-self: flex-start; */
   width: 100%;
-  /* grid-area: mm; */
 }
 
 .chatbox-container {
-  /* display: block; */
-  /* position: ; */
-  /* flex-direction: column; */
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 
 .chat-input {
   position: absolute;
   top: -5rem;
-  left: -1rem;
-  /* display: flex; */
-  /* justify-content: center; */
+  left: 1rem;
   z-index: 5;
-  /* grid-area: input; */
   background-color: transparent;
   outline: none;
-  width: 75vw;
+  width: 73vw;
   height: 5vh;
   font-size: 7vh;
   border: none;
   border-bottom: 0.9px solid black;
-  box-shadow: 1px 3px 1px black;
+  box-shadow: 1px 3px 1px #931621;
   color: red;
   text-align: center;
 }
-
-/* .chat-submit { */
-  /* grid-area: submit; */
-  /* width: 100%; */
-/* } */
-
-/* #messages {
-  border: 1px solid black;
-  width: 70%;
-  height: 40vh;
-  background-color: rgba(122, 134, 173, 1);
-  /* opacity: 0.6; */
-  /* padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  border-radius: 5px;
-} */
 
 #chatbox::before {
   content: '';
@@ -219,23 +171,9 @@ transform: scale(1);
   max-height: 2rem;
   font-size: 2em;
   color: white;
-  /* position: absolute; */
-  /* top: 2rem; */
   z-index: 5;
   margin-bottom: 1rem;
 }
-
-/* .message {
-  list-style: none;
-  margin: 0.5rem;
-  border: 1px solid black; */
-  /* max-width: 50%; */
-  /* min-height: 1.5rem; */
-  /* border-radius: 10px;
-  align-self: flex-start;
-  color: white;
-  padding: 0.5rem;
-} */
 
 .sender {
   list-style: none;
@@ -252,8 +190,6 @@ transform: scale(1);
 .recipient {
   list-style: none;
   align-self: flex-end;
-  /* justify-content: flex-end; */
-  /* padding-right: 0.5rem; */
   text-align: right;
   background-color: rgba(255, 103, 0, 0.8);
   margin: 0.5rem;
@@ -268,18 +204,10 @@ transform: scale(1);
   color: rgba(200, 200, 200, 0.5);
 }
 
-/* .text-to-speech {
-  grid-area: b;
-} */
-
 .popup {
   position: relative;
-  /* display: inline-block; */
   display: inline-flex;
-  /* top: 1.5rem;
-  right: 4rem; */
   bottom: 1rem;
-  /* right: 2rem; */
   width: 2em;
   height: 2em;
   border: 1px solid black;
@@ -288,20 +216,11 @@ transform: scale(1);
   margin: 0 0.25em;
   border-radius: 5px;
   transition: ease-in 100ms;
-  /* opacity: 0.5; */
 }
 
 .popup:hover {
   transform: scale(1.2);
-  /* opacity: 1; */
 }
-
-/* .chat-features { */
-  /* position: absolute; */
-  /* bottom: 0.5rem; */
-  /* grid-area: b; */
-  /* margin-bottom: 1em; */
-/* } */
 
 .speech {
   background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-volume-high-128.png');

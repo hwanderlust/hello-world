@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+
 import './css/App.css'
-import './css/Nav.css'
 import './css/TopBorder.css'
-import './css/Profile.css'
-import './css/Chat.css'
+import './css/Nav.css'
 import './css/Auth.css'
-import './css/List.css'
+import './css/Chat.css'
+import './css/Profile.css'
 import './css/Lists.css'
+import './css/List.css'
 import './css/Contact.css'
+
+import TopBorder from './components/topborder/TopBorder'
+import Nav from './components/nav/Nav'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
-import Nav from './components/nav/Nav'
-import TopBorder from './components/topborder/TopBorder'
-import About from './components/About'
-import Contact from './components/Contact'
 import Profile from './components/user/Profile'
 import ListContainer from './components/user/list/ListContainer'
+
 import Home from './components/Home';
+import About from './components/About'
+import Contact from './components/Contact'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'

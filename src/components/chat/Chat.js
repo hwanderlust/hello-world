@@ -71,9 +71,6 @@ class Chat extends React.Component {
     } else {
       this.renderUsers()
     }
-    // if(this.state.translation !== this.props.translation && this.props.translation !== null) {
-    //   this.setState({translation: this.props.translation}, () => console.log(this.state))
-    // }
   }
 
   handleKeyPress = (e) => {
@@ -146,7 +143,6 @@ class Chat extends React.Component {
       case '//translate':
         this.setState({text: ''}, () => console.log(this.state))
         return this.props.toggleTranslate()
-        // return this.setState({langPrompt: true, text: ''})
       case '//close':
         if(secondWord) {
           if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
@@ -176,7 +172,6 @@ class Chat extends React.Component {
 
   handleSpeechChange = (e) => {
     this.props.updateSelectedMsg(e.target.value)
-    // this.setState({speech: msg}, () => console.log(this.state))
   }
 
   handleSpeechSubmit = (e) => {
@@ -185,10 +180,6 @@ class Chat extends React.Component {
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
     this.props.toggleSpeech()
-    // const voice = voices.find(v => v.lang === e.target.value)
-    // console.log(voice);
-    // spoken.say(this.state.speech, voice.name)
-    // this.hideForms('speech')
   }
 
   handleSavingMsg = (listId) => {
@@ -218,22 +209,6 @@ class Chat extends React.Component {
     this.hideForms('save')
   }
 
-  // checkRenderedForms = (form) => {
-  //   switch(form) {
-  //     case 'speech':
-  //       this.state.langPrompt ? this.hideForms('translation') : null
-  //       return this.state.saveMsg ? this.hideForms('save') : null
-  //     case 'translation':
-  //       !!this.state.speech ? this.hideForms('speech') : null
-  //       return this.state.saveMsg ? this.hideForms('save') : null
-  //     case 'save':
-  //       this.state.langPrompt ? this.hideForms('translation') : null
-  //       return !!this.state.speech ? this.hideForms('speech') : null
-  //     default:
-  //       return console.log('checkRenderedForms failed');
-  //   }
-  // }
-
   hideForms = (form) => {
     switch(form) {
       case 'speech':
@@ -246,10 +221,6 @@ class Chat extends React.Component {
         return console.log('hideForms failed');
     }
   }
-
-  // handleTranslation = () => {
-  //   this.setState({langPrompt: true})
-  // }
 
   handleSaveMsgChange = (msg) => {
     this.setState({message: msg}, () => console.log(this.state))
@@ -271,9 +242,6 @@ class Chat extends React.Component {
               { this.props.savePrompt ? renderSaveMsgForm() : null }
               { this.state.saveMsgStatus ? renderCheckmark() : null }
 
-              {/*{ this.state.speech ? renderSpeechForm() : null}
-                { this.state.langPrompt ? <Translate hideForms={this.hideForms} /> : null }
-              { this.state.saveMsg ? renderSaveMsgForm() : null } */}
             </div>
           : null}
 
@@ -400,7 +368,6 @@ const mapDispatchToProps = (dispatch) => {
     updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
     toggleTranslate: () => dispatch(toggleTranslate()),
     toggleSave: () => dispatch(toggleSave()),
-    // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
 

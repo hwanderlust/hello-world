@@ -25,7 +25,6 @@ class ListContainer extends React.Component {
     if(this.props.currentUser && !this.props.lists) {
       getLists(this.props.currentUser.id).then(lists => {
         this.props.updateLists(lists)
-        // this.setState({lists}, () => console.log(this.state))
       })
     }
   }

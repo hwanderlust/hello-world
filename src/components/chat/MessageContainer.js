@@ -63,20 +63,10 @@ class MessageContainer extends React.Component {
 
   handleSpeech = (msg) => {
     this.hidePopup()
-    // this.props.handleSpeechClick(this.state.message.text)
     this.props.handleSpeechClick(msg)
   }
 
   handleTranslate = (msg) => {
-    // this.props.handleTranslationClick()
-    //
-    // console.log(this.state.message.text);
-    //
-    // const term = encodeURI(this.state.message.text)
-    // console.log(term);
-    // this.props.setTranslateTerm(term)
-    // this.hidePopup()
-
     this.props.handleTranslateClick(msg)
     this.hidePopup()
   }

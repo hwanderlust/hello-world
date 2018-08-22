@@ -14,18 +14,16 @@ class Translate extends React.Component {
 
   componentDidMount() {
     console.log(this.state);
-    // if(this.props.translateTerm) {
-    //   detectLang(this.props.translateTerm)
     if(this.props.selectedMessage) {
       detectLang(this.props.selectedMessage)
+
       .then(data => {
-        // returns en but need name to set state
-        // map through languages find code and return name
         const lang = data["data"]["detections"][0][0]["language"]
         const langOption = this.languages().find(item => item.code === lang)
         console.log(langOption);
         this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
       })
+
     } else {
       this.inputFocus.focus()
     }
@@ -77,27 +75,19 @@ class Translate extends React.Component {
     ]
   }
 
-  // move detect language feature to Message and do it after setting the term to store
-  // then on Mount of SelectLang set state based on store props
-  // doesn't rerender even tho mapStateToProps is here... render fn runs but the select and its options doesnt rerender
-
   handleChange = (e) => {
     e.persist()
-    // this.setState({[e.target.name]: e.target.selectedOptions[0].id}, () => console.log(this.state))
 
     switch(e.target.name) {
       case 'fromLang':
-        this.setState({detectedLang: {
+        return this.setState({detectedLang: {
           name: e.target.selectedOptions[0].value,
           code: e.target.selectedOptions[0].id
         }}, () => console.log(this.state))
-        break
       case 'toLang':
-        this.handleTranslation(e)
-        break
+        return this.handleTranslation(e)
       default:
-        console.log('fked up');
-        break
+        return console.log('fked up');
     }
   }
 
@@ -121,11 +111,9 @@ class Translate extends React.Component {
         })
 
       } else if(this.props.selectedMessage) {
-        // calls on adapter fn to fetch for translation
         translateText(this.props.selectedMessage, this.state.detectedLang.code, e.target.selectedOptions[0].id)
+
         .then(r => {
-          // console.log(r);
-          // console.log(r.data.translations);
           const data = r.data.translations[0].translatedText
           const check = data.match(/=>(.*)\S/) ? true : false
           const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
@@ -134,8 +122,6 @@ class Translate extends React.Component {
         })
       }
 
-    // unmounts component
-    // this.props.hideForms('translation')
     this.props.toggleTranslate()
   }
 

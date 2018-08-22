@@ -32,15 +32,18 @@ class ChatContainer extends React.Component {
   handleNewChat = (user) => {
     getUser(user.recipient_id).then(user => {
       this.props.updateRecipientUser(user)
+
     }).then(data => {
       createChat({...user, sender_id: this.props.currentUser.id})
+
         .then(chat => {
           this.props.updateChat(chat.id)
-          // construct chat obj here with recipientUser
           const chatObj = {...chat,
             recipient_user: {id: this.props.recipientUser.id, username: this.props.recipientUser.username}
           }
+
           this.props.openChat(chatObj)
+          
           getChatMessages(chat.id).then(messages => {
             const chatObjMsgs = {...chatObj, messages}
             this.props.updateMessages(chatObjMsgs)

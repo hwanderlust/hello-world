@@ -7,14 +7,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* grid-area: main;
-  height: 40vh;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
-  /* display: grid;
-  grid-template-columns: 15% auto 15%;
-  grid-template-areas: 'l m r' */
 }
 
 .auth-wrapper {
@@ -28,22 +20,12 @@
   align-items: stretch;
   box-shadow: 2px 3px 5px #C4C4C4, 2px 3px 5px #FF8A00;
   border-radius: 3px;
-  /* grid-area: m; */
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  padding: 2rem;
-  background-color: rgba(122, 134, 173, 1); */
 }
 
 .auth-header {
-  /* margin: 0; */
 }
 
 .auth-children {
-  /* align-self: center; */
 }
 
 .form-label {
@@ -60,8 +42,6 @@
   border: 1px solid rgba(0, 16, 54, 1);
   color: white;
   font-size: 2rem;
-  /* width: 10vw;
-  margin: 0.5rem; */
 }
 
 .form-button {
@@ -70,7 +50,6 @@
 }
 
 .standout {
-  /* background-color: pink; */
   margin-top: 1rem;
   width: 20vw;
   height: 3vh;

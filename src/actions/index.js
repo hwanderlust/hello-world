@@ -140,13 +140,3 @@ export const updateSelectedMsg = (msg) => {
     payload: msg
   }
 }
-
-//
-//
-// export const updateLists = () => {
-//   return {
-//     type: UPDATE_MESSAGES,
-//     payload: 'something'
-//   }
-// }
-//

@@ -5,7 +5,7 @@ class Nav extends React.Component {
 
   state = {
     loggedIn: false,
-    nav: 'nav is-closed',
+    // nav: 'nav is-closed',
   }
 
   componentDidMount() {
@@ -20,17 +20,17 @@ class Nav extends React.Component {
     }
   }
 
-  handleMouseOver = () => {
-    if(this.state.nav === 'nav is-closed') {
-      this.setState({nav: 'nav is-open'}, () => console.log(this.state))
-    }
-  }
-
-  handleMouseLeave = () => {
-    if(this.state.nav === 'nav is-open') {
-      this.setState({nav: 'nav is-closed'}, () => console.log(this.state))
-    }
-  }
+  // handleMouseOver = () => {
+  //   if(this.state.nav === 'nav is-closed') {
+  //     this.setState({nav: 'nav is-open'}, () => console.log(this.state))
+  //   }
+  // }
+  //
+  // handleMouseLeave = () => {
+  //   if(this.state.nav === 'nav is-open') {
+  //     this.setState({nav: 'nav is-closed'}, () => console.log(this.state))
+  //   }
+  // }
 
   render() {
 
@@ -63,15 +63,15 @@ class Nav extends React.Component {
       )
     }
 
-    const renderHamburger = () => {
-      return (
-        <button className='hamburger' onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
-          <span className='hamb hamb-top'></span>
-          <span className='hamb hamb-mid'></span>
-          <span className='hamb hamb-bot'></span>
-        </button>
-      )
-    }
+    // const renderHamburger = () => {
+    //   return (
+    //     <button className='hamburger'>
+    //       <span className='hamb hamb-top'></span>
+    //       <span className='hamb hamb-mid'></span>
+    //       <span className='hamb hamb-bot'></span>
+    //     </button>
+    //   )
+    // }
 
     const renderNav = () => {
       return (
@@ -93,9 +93,9 @@ class Nav extends React.Component {
     return (
       <React.Fragment>
 
-        { renderHamburger() }
+        {/* { renderHamburger() } */}
 
-        <div className={this.state.nav} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
+        <div className='nav' onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
 
           { renderNav() }
 

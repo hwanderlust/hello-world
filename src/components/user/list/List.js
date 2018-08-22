@@ -8,7 +8,6 @@ import Translate from '../../chat/Translate'
 
 import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs } from '../../../actions'
 import { createList, getLists, addMessage, getListMsgs, removeMsgFromList } from '../../../adapter'
-// what if a user navigates to /list without clicking?
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -20,7 +19,6 @@ const bgColor = () => {
 
 const positionX = (i) => {
   const x = (i + 5) + Math.random() * 5
-  // const x = Math.floor(Math.random() * 50);
   return `${x}vw`
 }
 
@@ -61,40 +59,24 @@ class List extends React.Component {
     this.props.toggleTranslate()
     console.log(msg.text);
     const term = encodeURI(msg.text)
-    // this.props.setTranslateTerm(term)
     this.props.updateSelectedMsg(term)
   }
 
   handleMoveClick = (msg) => {
-    // msg and this.props.list
-    // msg.id this.props.list.id
     this.setState({message: msg}, () => console.log(this.state))
     this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
     this.setState({saveMsg: true})
     this.props.toggleMove()
-    // NEED
-      // message id to identify
-        // msg.id
-      // old list id and new list id
-    // STEPS
-      // 1. show form
-      // 2. delete from current list
-      // 3. add to new list
-
   }
 
   handleNewList = (e) => {
     e.preventDefault()
-    // this.handleRemovingMsg()
 
     createList({name: this.state.newList, user_id: this.props.currentUser.id})
       .then(newList => {
         console.log(newList)
         this.handleSavingMsg(newList.id)
-
-        // getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
       })
-    // this.hideForms('save')
     this.setState({newList: ''})
   }
 
@@ -107,9 +89,6 @@ class List extends React.Component {
 
     const listId = this.existingList.value
     this.handleSavingMsg(listId)
-    // console.log(this.existingList.value);
-    // this.setState({existingList: this.existingList.value}, () => this.handleSavingMsg(this.state.existingList))
-    // this.hideForms('save')
   }
 
   handleRemovingMsg = () => {
@@ -134,12 +113,6 @@ class List extends React.Component {
       })
   }
 
-  // handleSaveMsgChange = (msg) => {
-  //   this.setState({message: msg}, () => console.log(this.state))
-  //   this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
-  //   this.setState({saveMsg: true})
-  // }
-
   render() {
     const { list } = this.props
     const { messages } = this.state
@@ -154,9 +127,6 @@ class List extends React.Component {
         }
         return (
           <MessageContainer listReq handleSpeechClick={this.handleSpeechClick} handleTranslateClick={this.handleTranslateClick} handleMoveClick={this.handleMoveClick} msg={msg} styles={msgStyle} />
-          // <li style={msgStyle} className='list-msg' key={msg.id}>
-          //   {msg.text}
-          // </li>
         )
       })
     }
