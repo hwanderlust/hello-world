@@ -28,6 +28,7 @@
   width: 100%;
   position: relative;
   z-index: 1;
+  transition: ease-in-out 100ms;
 }
 
 .list-box h1 {
@@ -49,6 +50,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.list-box:hover {
+  transform: scale(1.1);
 }
 
 /*

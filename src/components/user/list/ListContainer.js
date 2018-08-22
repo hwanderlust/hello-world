@@ -25,7 +25,7 @@ class ListContainer extends React.Component {
     if(this.props.currentUser && !this.props.lists) {
       getLists(this.props.currentUser.id).then(lists => {
         this.props.updateLists(lists)
-        this.setState({lists}, () => console.log(this.state))
+        // this.setState({lists}, () => console.log(this.state))
       })
     }
   }
@@ -48,7 +48,7 @@ class ListContainer extends React.Component {
       if(this.props.currentUser) {
         switch(this.props.listReq) {
           case 'lists':
-            return <Lists lists={this.props.lists} handleListClick={this.handleListClick} />
+            return <Lists lists={this.props.lists} handleListClick={this.handleListClick} currentUser={this.props.currentUser} updateLists={this.props.updateLists} />
           case 'list':
             return <List list={this.props.list} messages={this.props.messages} lists={this.props.lists} />
           default:

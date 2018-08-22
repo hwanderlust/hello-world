@@ -140,3 +140,12 @@ export function removeMsgFromList(msgObj) {
   }
   return fetch(url, options).then(r => r.json())
 }
+
+export function deleteList(listId) {
+  const url = `${API_ROOT}/lists/${listId}`
+  const options = {
+    method: 'DELETE',
+    headers: HEADERS
+  }
+  return fetch(url, options).then(r => r.json())
+}

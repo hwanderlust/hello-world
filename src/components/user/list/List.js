@@ -85,7 +85,7 @@ class List extends React.Component {
 
   handleNewList = (e) => {
     e.preventDefault()
-    this.handleRemovingMsg()
+    // this.handleRemovingMsg()
 
     createList({name: this.state.newList, user_id: this.props.currentUser.id})
       .then(newList => {
