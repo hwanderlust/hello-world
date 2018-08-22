@@ -11,6 +11,7 @@
   position: relative;
   transition: ease-in-out 500ms;
   transform: scale(0.8);
+  cursor: pointer;
 }
 
 .list-msg:hover {

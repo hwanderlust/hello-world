@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 
-const PopupPopup= (type) => {
+const PopupPopup= ({type}) => {
   return (
     <Popup
       trigger={

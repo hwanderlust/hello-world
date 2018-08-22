@@ -6,7 +6,7 @@ const Message = ({ handleDragDelete, type, classes, timestamp, togglePopup, msg,
 
   const [classType, senderRecipient] = classes.split(' ')
 
-  return classes === 'list-msg' ? (
+  return type === 'list' ? (
     <li draggable="true" onDragStart={(e) => handleDragDelete(e, msg)} onDragEnd={(e) => handleDragDelete(e, msg)} id='msg' key={msg.id} className={classes} style={styles ? styles : null} onClick={(e) => togglePopup(e, msg)} >
 
       {msg.text}

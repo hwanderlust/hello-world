@@ -107,6 +107,7 @@
   justify-content: center;
   transform: scale(0.8);
   transition: ease-in-out 250ms;
+  cursor: pointer;
 }
 
 .active-chat {
@@ -184,28 +185,26 @@ transform: scale(1);
   margin-bottom: 1rem;
 }
 
-.sender {
+.message {
   list-style: none;
+  margin: 0.5rem;
+  border: 1px solid black;
+  border-radius: 10px;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.sender {
   background-color: rgba(0, 98, 94, 1);
   text-align: left;
   align-self: flex-start;
-  margin: 0.5rem;
-  border: 1px solid black;
-  border-radius: 10px;
-  color: white;
-  padding: 0.5rem;
 }
 
 .recipient {
-  list-style: none;
   align-self: flex-end;
   text-align: right;
   background-color: rgba(255, 103, 0, 0.8);
-  margin: 0.5rem;
-  border: 1px solid black;
-  border-radius: 10px;
-  color: white;
-  padding: 0.5rem;
 }
 
 .timestamp {

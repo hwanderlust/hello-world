@@ -16,6 +16,7 @@
   grid-gap: 1rem;
   width: calc(90vw / 3 * 2);
   height: 50%;
+  cursor: pointer;
 }
 
 .list-box {
