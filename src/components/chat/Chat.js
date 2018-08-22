@@ -144,7 +144,9 @@ class Chat extends React.Component {
 
     switch(firstWord) {
       case '//translate':
-        return this.setState({langPrompt: true, text: ''})
+        this.setState({text: ''}, () => console.log(this.state))
+        return this.props.toggleTranslate()
+        // return this.setState({langPrompt: true, text: ''})
       case '//close':
         if(secondWord) {
           if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
@@ -216,21 +218,21 @@ class Chat extends React.Component {
     this.hideForms('save')
   }
 
-  checkRenderedForms = (form) => {
-    switch(form) {
-      case 'speech':
-        this.state.langPrompt ? this.hideForms('translation') : null
-        return this.state.saveMsg ? this.hideForms('save') : null
-      case 'translation':
-        !!this.state.speech ? this.hideForms('speech') : null
-        return this.state.saveMsg ? this.hideForms('save') : null
-      case 'save':
-        this.state.langPrompt ? this.hideForms('translation') : null
-        return !!this.state.speech ? this.hideForms('speech') : null
-      default:
-        return console.log('checkRenderedForms failed');
-    }
-  }
+  // checkRenderedForms = (form) => {
+  //   switch(form) {
+  //     case 'speech':
+  //       this.state.langPrompt ? this.hideForms('translation') : null
+  //       return this.state.saveMsg ? this.hideForms('save') : null
+  //     case 'translation':
+  //       !!this.state.speech ? this.hideForms('speech') : null
+  //       return this.state.saveMsg ? this.hideForms('save') : null
+  //     case 'save':
+  //       this.state.langPrompt ? this.hideForms('translation') : null
+  //       return !!this.state.speech ? this.hideForms('speech') : null
+  //     default:
+  //       return console.log('checkRenderedForms failed');
+  //   }
+  // }
 
   hideForms = (form) => {
     switch(form) {
@@ -245,9 +247,9 @@ class Chat extends React.Component {
     }
   }
 
-  handleTranslation = () => {
-    this.setState({langPrompt: true})
-  }
+  // handleTranslation = () => {
+  //   this.setState({langPrompt: true})
+  // }
 
   handleSaveMsgChange = (msg) => {
     this.setState({message: msg}, () => console.log(this.state))
@@ -303,7 +305,7 @@ class Chat extends React.Component {
       console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', this.state);
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input id='testtest' class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
+          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autofocus="true" ref={c => this.inputFocus = c} />
         </form>
       )
     }
@@ -338,7 +340,7 @@ class Chat extends React.Component {
         const obj = {...chat, index: i}
         console.log(obj);
         return (
-          <Chatbox checkRenderedForms={this.checkRenderedForms} handleSpeechChange={this.handleSpeechChange} handleTranslation={this.handleTranslation} handleSaveMsgChange={this.handleSaveMsgChange} chat={obj} x={this.state.x} y={this.state.y} bgColor={this.state.chatBoxBgColor}/>
+          <Chatbox handleSaveMsgChange={this.handleSaveMsgChange} chat={obj} x={this.state.x} y={this.state.y} bgColor={this.state.chatBoxBgColor}/>
         )
       }) : null
     }

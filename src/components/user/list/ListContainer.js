@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { getLists, getListMsgs } from '../../../adapter'
-import { updateLists, updateList, updateMessages, updateListMsgs } from '../../../actions'
+import { updateLists, updateList, updateListMsgs } from '../../../actions'
 
 import Lists from './Lists'
 import List from './List'
@@ -50,7 +50,7 @@ class ListContainer extends React.Component {
           case 'lists':
             return <Lists lists={this.props.lists} handleListClick={this.handleListClick} />
           case 'list':
-            return <List list={this.props.list} messages={this.props.messages} />
+            return <List list={this.props.list} messages={this.props.messages} lists={this.props.lists} />
           default:
             console.log(`List request is wrong`);
             break

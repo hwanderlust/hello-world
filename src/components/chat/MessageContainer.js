@@ -86,6 +86,10 @@ class MessageContainer extends React.Component {
     this.props.handleSaveMsgClick(this.state.message)
   }
 
+  handleMove = (msg) => {
+    this.props.handleMoveClick(msg)
+  }
+
   hidePopup = () => {
     this.setState({popup: false})
   }
@@ -99,6 +103,8 @@ class MessageContainer extends React.Component {
         return this.handleTranslate(msg)
       case 'save':
         return this.handleSave()
+      case 'move':
+        return this.handleMove(msg)
       default:
         return this.setState({
           popup: !this.state.popup,

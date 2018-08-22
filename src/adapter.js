@@ -111,12 +111,12 @@ export function createList(list) {
   return fetch(url, options).then(r => r.json())
 }
 
-export function addMessage(msg) {
+export function addMessage(msgObj) {
   const url = `${API_ROOT}/save_message`
   const options = {
     method: 'POST',
     headers: HEADERS,
-    body: JSON.stringify({message: msg})
+    body: JSON.stringify({message: msgObj})
   }
   return fetch(url, options).then(r => r.json())
 }
@@ -127,6 +127,16 @@ export function uploadPic(imgUrl) {
     method: 'POST',
     headers: HEADERS,
     body: JSON.stringify({imgUrl})
+  }
+  return fetch(url, options).then(r => r.json())
+}
+
+export function removeMsgFromList(msgObj) {
+  const url = `${API_ROOT}/remove_message`
+  const options = {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({message: msgObj})
   }
   return fetch(url, options).then(r => r.json())
 }

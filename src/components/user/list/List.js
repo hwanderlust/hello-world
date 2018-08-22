@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 import spoken from '../../../../node_modules/spoken/build/spoken';
 
 import MessageContainer from '../../chat/MessageContainer'
-import { toggleSpeech, updateSelectedMsg, toggleTranslate } from '../../../actions'
 import { voices, languages } from '../../../components/chat/Speech'
 import Translate from '../../chat/Translate'
+
+import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs } from '../../../actions'
+import { createList, getLists, addMessage, getListMsgs, removeMsgFromList } from '../../../adapter'
 // what if a user navigates to /list without clicking?
 
 const bgColor = () => {
@@ -27,6 +29,16 @@ const positionY = (i) => {
 }
 
 class List extends React.Component {
+  state = {
+    messages: null,
+    message: null,
+    saveMsgStatus: false,
+    newList: '',
+    saveMsg: false,
+  }
+  componentDidMount() {
+    this.setState({messages: this.props.messages}, () => console.log(this.state))
+  }
 
   handleSpeechClick = (msg) => {
     this.props.toggleSpeech()
@@ -53,9 +65,84 @@ class List extends React.Component {
     this.props.updateSelectedMsg(term)
   }
 
+  handleMoveClick = (msg) => {
+    // msg and this.props.list
+    // msg.id this.props.list.id
+    this.setState({message: msg}, () => console.log(this.state))
+    this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+    this.setState({saveMsg: true})
+    this.props.toggleMove()
+    // NEED
+      // message id to identify
+        // msg.id
+      // old list id and new list id
+    // STEPS
+      // 1. show form
+      // 2. delete from current list
+      // 3. add to new list
+
+  }
+
+  handleNewList = (e) => {
+    e.preventDefault()
+    this.handleRemovingMsg()
+
+    createList({name: this.state.newList, user_id: this.props.currentUser.id})
+      .then(newList => {
+        console.log(newList)
+        this.handleSavingMsg(newList.id)
+
+        // getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+      })
+    // this.hideForms('save')
+    this.setState({newList: ''})
+  }
+
+  handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
+  }
+
+  handleExistingList = () => {
+    this.handleRemovingMsg()
+
+    const listId = this.existingList.value
+    this.handleSavingMsg(listId)
+    // console.log(this.existingList.value);
+    // this.setState({existingList: this.existingList.value}, () => this.handleSavingMsg(this.state.existingList))
+    // this.hideForms('save')
+  }
+
+  handleRemovingMsg = () => {
+    removeMsgFromList({msg_id: this.state.message.id, list_id: this.props.list.id})
+      .then(r => {
+        console.log(r);
+
+        getListMsgs(this.props.list.id)
+          .then(messages => {
+            this.setState({messages}, () => console.log(this.state))
+            this.props.updateListMsgs(messages)
+          })
+      })
+  }
+
+  handleSavingMsg = (listId) => {
+    addMessage({msg_id: this.state.message.id, list_id: listId})
+      .then(messages => {
+        console.log(messages)
+        this.setState({saveMsgStatus: true}, () => console.log(this.state))
+        this.props.toggleMove()
+      })
+  }
+
+  // handleSaveMsgChange = (msg) => {
+  //   this.setState({message: msg}, () => console.log(this.state))
+  //   this.props.lists ? null : getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
+  //   this.setState({saveMsg: true})
+  // }
+
   render() {
-    this.props.translation ? console.log(this.props.translation) : null
-    const { list, messages } = this.props
+    const { list } = this.props
+    const { messages } = this.state
 
     const renderMessages = () => {
       return messages.map((msg, i) => {
@@ -66,7 +153,7 @@ class List extends React.Component {
           top: positionY(i),
         }
         return (
-          <MessageContainer listReq handleSpeechClick={this.handleSpeechClick} handleTranslateClick={this.handleTranslateClick} msg={msg} styles={msgStyle} />
+          <MessageContainer listReq handleSpeechClick={this.handleSpeechClick} handleTranslateClick={this.handleTranslateClick} handleMoveClick={this.handleMoveClick} msg={msg} styles={msgStyle} />
           // <li style={msgStyle} className='list-msg' key={msg.id}>
           //   {msg.text}
           // </li>
@@ -100,6 +187,26 @@ class List extends React.Component {
       )
     }
 
+    const renderMoveForm = () => {
+      return (
+        <div className='save-msg'>
+          <div className='existing-container'>
+            <label>List to Move to:</label>
+            <select name='existingList' ref={el => this.existingList = el }>
+              { this.props.lists ? this.props.lists.map(list => <option key={list.id} value={list.id}>{list.name}</option>) : <option disabled>No Lists</option> }
+            </select>
+            <button onClick={this.handleExistingList}>Move to this List</button>
+          </div>
+
+          <h1 className='save-msg-title'>Move the Message Here</h1>
+
+          <form onSubmit={this.handleNewList}>
+            <input type='text' name='newList' value={this.state.newList} onChange={this.handleChange} placeholder='Create New List--Name Here' autoFocus={true}/>
+          </form>
+        </div>
+      )
+    }
+
     return(
       <div className='list-container'>
         <header className='header'>
@@ -109,7 +216,7 @@ class List extends React.Component {
         <section>
           { this.props.speechPrompt ? renderSpeechForm() : null }
           { this.props.translatePrompt ? renderTranslateForm() : null }
-
+          { this.props.movePrompt ? renderMoveForm() : null }
         </section>
 
         <main className='list-messages'>
@@ -127,6 +234,8 @@ const mapStateToProps = (state) => {
     selectedMessage: state.appState.selectedMessage,
     translation: state.appState.translation,
     translatePrompt: state.appState.prompts.translatePrompt,
+    currentUser: state.appState.currentUser,
+    movePrompt: state.appState.prompts.movePrompt,
   }
 }
 
@@ -135,6 +244,8 @@ const mapDispatchToProps = (dispatch) => {
     toggleSpeech: () => dispatch(toggleSpeech()),
     updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
     toggleTranslate: () => dispatch(toggleTranslate()),
+    toggleMove: () => dispatch(toggleMove()),
+    updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
     // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
