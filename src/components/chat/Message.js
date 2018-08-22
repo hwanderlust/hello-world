@@ -1,13 +1,14 @@
 import React from 'react';
 import Popup from "reactjs-popup";
+import Emoji from 'react-emoji-render';
 
 const Message = ({ type, classes, timestamp, togglePopup, msg, styles, popup }) => {
 
   const [classType, senderRecipient] = classes.split(' ')
 
   return (
-    <li id='msg' key={msg.id} class={classes} style={styles ? styles : null} onClick={(e) => togglePopup(e, msg)} >
-      {msg.text}
+    <Emoji text={msg.text} id='msg' key={msg.id} className={classes} style={styles ? styles : null} onClick={(e) => togglePopup(e, msg)} >
+      {/* {msg.text} */}
 
       { type === 'chat' && senderRecipient === 'recipient' ? <span className='timestamp'>{timestamp}</span> : null }
 
@@ -32,7 +33,7 @@ const Message = ({ type, classes, timestamp, togglePopup, msg, styles, popup }) 
 
       ) : null }
 
-    </li>
+    </Emoji>
   )
 }
 

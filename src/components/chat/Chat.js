@@ -233,6 +233,31 @@ class Chat extends React.Component {
   }
 
   render() {
+    // const available = spoken.listen.available();
+    // if (available) console.log('Hurray voice transcription is available!');
+
+    // const testTranscription = () => {
+    //   spoken.listen.on.end(continueCapture);
+    //   spoken.listen.on.error(continueCapture);
+    //
+    //   startCapture();
+    //
+    //   function startCapture() {
+    //       spoken.listen({ continuous : true }).then( transcript =>
+    //           console.log("Captured transcript: " + transcript)
+    //       ).catch( e => true );
+    //   }
+    //
+    //   async function continueCapture() {
+    //       await spoken.delay(300);
+    //       if (spoken.recognition.continuous) startCapture();
+    //   }
+    //
+    //   function stopCapture() {
+    //       spoken.recognition.continuous = false;
+    //       spoken.listen.stop();
+    //   }
+    // }
 
     const renderHeader = () => {
       const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
@@ -321,7 +346,7 @@ class Chat extends React.Component {
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
-
+        {/* { testTranscription() } */}
         { renderHeader() }
 
         <aside className='users-list'>
