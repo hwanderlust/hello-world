@@ -173,14 +173,7 @@ class Chat extends React.Component {
   }
 
   handleUserPicClick = () => {
-    console.log(`yayyy`);
     this.props.history.push('/profile')
-    // import withRouter
-    // push to profile
-    // change profile to take into consideration this click event
-    // update recipientUser to use for profile
-    // if click event use recipientUser, else use currentUser
-
   }
 
   handleChange = (e) => {
@@ -189,35 +182,78 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const splitted = this.state.text.split(' ')
-    const [firstWord, secondWord] = splitted
+    e.persist()
+    this.handleFeatures(e)
+  }
 
-    switch(firstWord) {
+  handleFeatures = (e) => {
 
-      case '//translate':
-        this.setState({text: ''}, () => console.log(this.state))
-        return this.props.toggleTranslate()
+    switch(e.type) {
+      case 'submit':
+        return this.handleTextShortcuts()
 
-      case '//transcript':
-        this.setState({text: 'speak now'}, () => console.log(this.state))
-        return this.handleTranscription()
-
-      case '//close':
-        if(secondWord) {
-          if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
-            const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
-            this.props.closeChat(updatedOpenChats)
-            return this.setState({text: ''}, () => console.log(this.state))
-          } else {
-            return alert(`Sorry but that chat isn't even open...`)
-          }
-        } else {
-          return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
-        }
+      case 'click':
+        return this.handleFeatureBtnClicks(e)
 
       default:
+        return console.log('something is wrong..');
+    }
+  }
+
+  handleTextShortcuts = () => {
+    switch(this.state.text) {
+      case '//t':
+        return this.handleTranslateShortcut()
+      case '//l':
+        return this.handleTranscribeShortcut()
+      case '//c':
+        return this.handleCloseChatShortcut()
+      default:
         this.newMessage({chat_id: this.props.chat, text: this.state.text})
-        this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+        return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+    }
+  }
+
+  handleFeatureBtnClicks = (e) => {
+    switch(e.target.id) {
+      case 'translateBtn':
+        return this.handleTranslateShortcut()
+      case 'transcribeBtn':
+        return this.handleTranscribeShortcut()
+      default:
+        return console.log(`there's another button???`);
+    }
+  }
+
+  handleTranslateShortcut = () => {
+    this.setState({text: ''}, () => console.log(this.state))
+    this.props.toggleTranslate()
+  }
+
+  handleTrascribeShortcut = () => {
+    this.setState({text: 'speak now'}, () => console.log(this.state))
+    this.handleTranscription()
+  }
+
+  handleCloseChatShortcut = () => {
+    const splitted = this.state.text.split(' ')
+    // eslint-disable-next-line
+    const [firstWord, secondWord] = splitted
+
+    if(secondWord) {
+
+      if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
+        const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
+
+        this.props.closeChat(updatedOpenChats)
+        return this.setState({text: ''}, () => console.log(this.state))
+
+      } else {
+        return alert(`Sorry but that chat isn't even open...`)
+      }
+
+    } else {
+      return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
     }
   }
 
@@ -259,14 +295,14 @@ class Chat extends React.Component {
         this.handleSavingMsg(newList.id)
         getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
       })
-    this.hideForms('save')
+    // this.hideForms('save')
     this.setState({newList: ''})
   }
 
   handleExistingList = () => {
     console.log(this.existingList.value);
     this.setState({existingList: this.existingList.value}, () => this.handleSavingMsg(this.state.existingList))
-    this.hideForms('save')
+    // this.hideForms('save')
   }
 
   hideForms = (form) => {
@@ -386,6 +422,15 @@ class Chat extends React.Component {
       }) : null
     }
 
+    const renderFeatureBtns = () => {
+      return (
+        <section>
+          <button onClick={this.handleFeatures} id='translateBtn'>Translate</button>
+          <button onClick={this.handleFeatures} id='transcribeBtn'>Transcribe</button>
+        </section>
+      )
+    }
+
     return (
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
@@ -404,6 +449,8 @@ class Chat extends React.Component {
         </div>
 
         { renderChatInput() }
+
+        { renderFeatureBtns() }
 
       </React.Fragment>
     )
