@@ -2,8 +2,53 @@
   position: absolute;
   top: 5vh;
   left: 10vw;
+  margin: 2rem;
+  width: 75%;
+}
+
+.about-container .about-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-container .about-wrapper section {
+  margin: 2rem;
+  font-size: 1rem;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.about-container .about-wrapper section p {
+  padding: 1rem;
+}
+
+.about-container .about-wrapper .align-left {
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+
+.about-container .about-wrapper .align-right {
+  display: grid;
+  grid-template-columns: 70% 30%;
 }
 
 .about-container img {
-  width: 20vw;
+  width: 100%;
 }
+
+.about-container span {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* .left-img {
+  float: left;
+  margin-right: 2rem;
+}
+
+.right-img {
+  float: right;
+  margin-left: 2rem;
+} */

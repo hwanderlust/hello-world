@@ -258,8 +258,12 @@ class Chat extends React.Component {
   }
 
   newMessage = (message) => {
-    const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
-    createMessage({...message, ...users})
+    if(this.props.recipientUser) {
+      const users = {sender_id: this.props.currentUser.id, recipient_id: this.props.recipientUser.id}
+      createMessage({...message, ...users})
+    } else {
+      alert(`you may have to choose someone to chat with first...`)
+    }
   }
 
   handleReceivedChat = response => {
@@ -343,7 +347,7 @@ class Chat extends React.Component {
       const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
       return (
         <React.Fragment>
-          
+
           { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ?
             <div className={className}>
               { this.props.speechPrompt ? renderSpeechForm() : null }

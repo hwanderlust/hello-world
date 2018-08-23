@@ -4,6 +4,7 @@ import PopupPopup from './Popup'
 
 const Message = ({ handleDragDelete, type, classes, timestamp, togglePopup, msg, styles, popup }) => {
 
+  // eslint-disable-next-line
   const [classType, senderRecipient] = classes.split(' ')
 
   return type === 'list' ? (

@@ -1,5 +1,10 @@
+// http://10.39.110.188:3000/
+// 10.39.111.255
+//
 export const API_ROOT = 'http://localhost:3001';
 export const API_WS_ROOT = 'ws://localhost:3001/cable';
+// export const API_ROOT = 'http://10.39.110.188:3001';
+// export const API_WS_ROOT = 'ws://10.39.110.188:3001/cable';
 
 export const HEADERS = {
   'Content-Type': 'application/json',
