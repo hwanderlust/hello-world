@@ -209,8 +209,15 @@ class Chat extends React.Component {
       case '//c':
         return this.handleCloseChatShortcut()
       default:
-        this.newMessage({chat_id: this.props.chat, text: this.state.text})
-        return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+        // debugger
+        if(this.state.text === '' && this.props.translation) {
+          this.newMessage({chat_id: this.props.chat, text: this.props.translation})
+          this.props.clearTranslation()
+          return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+        } else {
+          this.newMessage({chat_id: this.props.chat, text: this.state.text})
+          return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+        }
     }
   }
 
