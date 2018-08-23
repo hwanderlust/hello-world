@@ -1,10 +1,12 @@
 import React from 'react';
 
-const ProfileLangs = ({ user }) => {
+const ProfileLangs = ({ user, onClick, currentUser }) => {
   return user ? (
     <div className='user-lang'>
-      <i class="fas fa-language"></i>
-      <h3>Languages</h3>
+
+      { user === currentUser ? <i className="far fa-edit" onClick={onClick}></i> : null }
+
+      <i className="fas fa-language"></i>
       <p>{user.languages}</p>
     </div>
   ) : null

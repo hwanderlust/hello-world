@@ -11,6 +11,8 @@ import './css/Profile.css'
 import './css/Lists.css'
 import './css/List.css'
 import './css/Contact.css'
+import './css/Home.css'
+import './css/About.css'
 
 import TopBorder from './components/topborder/TopBorder'
 import Nav from './components/nav/Nav'
@@ -20,7 +22,7 @@ import ChatContainer from './components/chat/ChatContainer'
 import Profile from './components/user/Profile'
 import ListContainer from './components/user/list/ListContainer'
 
-import Home from './components/Home';
+import Home from './components/Home'
 import About from './components/About'
 import Contact from './components/Contact'
 

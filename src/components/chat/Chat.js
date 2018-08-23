@@ -114,12 +114,24 @@ class Chat extends React.Component {
 
   handleClick = (e, clickedUser) => {
     if(e.target.tagName !== 'IMG') {
-      this.props.handleNewChat({recipient_id: clickedUser.id})
-      this.setState({
-        x: this.state.x + 100,
-        y: this.state.y + 100,
-        chatBoxBgColor: bgColor()
-      }, () => console.log(this.state))
+
+      const check = this.props.openChats.filter(chat => chat.recipient_user.id === clickedUser.id)
+
+      if(check.length === 0) {
+        this.props.handleNewChat({recipient_id: clickedUser.id})
+        this.setState({
+          x: this.state.x + 100,
+          y: this.state.y + 100,
+          chatBoxBgColor: bgColor()
+        }, () => console.log(this.state))
+
+      } else {
+        alert('you already have a chat going, silly you')
+
+        this.props.updateChat(clickedUser.id)
+        const recUser = {id: clickedUser.id, username: clickedUser.username}
+        this.props.updateRecipientUser(recUser)
+      }
 
     } else {
       console.log(`clicked IMG`, clickedUser);

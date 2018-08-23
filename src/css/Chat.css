@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
+@import url('https://fonts.googleapis.com/css?family=Audiowide');
+@import url('https://fonts.googleapis.com/css?family=Bubblegum+Sans');
 
 .chat-container {
   position: absolute;
@@ -108,6 +110,8 @@
   transform: scale(0.8);
   transition: ease-in-out 250ms;
   cursor: pointer;
+  font-family: 'Audiowide', cursive;
+
 }
 
 .active-chat {
@@ -193,6 +197,8 @@ transform: scale(1);
   color: white;
   padding: 0.5rem;
   cursor: pointer;
+  font-family: 'Bubblegum Sans', cursive;
+
 }
 
 .sender {

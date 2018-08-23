@@ -1,0 +1,9 @@
+.about-container {
+  position: absolute;
+  top: 5vh;
+  left: 10vw;
+}
+
+.about-container img {
+  width: 20vw;
+}

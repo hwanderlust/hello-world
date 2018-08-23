@@ -24,6 +24,10 @@ const imgStyle = {
 
 const Profile = ({ currentUser, userPfView }) => {
 
+  const handleEditPfClick = () => {
+    alert('Coming soon!')
+  }
+
   return userPfView || currentUser ? (
 
     <div className='profile'>
@@ -31,14 +35,14 @@ const Profile = ({ currentUser, userPfView }) => {
       <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={userPfView ? userPfView.profile_picture : currentUser.profile_picture } />
 
       <ProfileHead user={ userPfView ? userPfView : currentUser } />
-
-      <ProfileLangs user={ userPfView ? userPfView : currentUser } />
+      
+      <ProfileLangs user={ userPfView ? userPfView : currentUser } currentUser={currentUser} onClick={handleEditPfClick} />
 
       <ProfileDetails user={ userPfView ? userPfView : currentUser } />
     </div>
 
   ) : null
-  
+
 }
 
 const mapStateToProps = (state) => {

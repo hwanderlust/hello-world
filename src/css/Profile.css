@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
+@import url('https://fonts.googleapis.com/css?family=Bubblegum+Sans');
 
 .profile {
   width: 100%;
@@ -10,6 +11,7 @@
   grid-template-columns: 30vw 30vw 30vw;
   grid-template-rows: 45vh 50vh;
   grid-template-areas: 'picture name languages' 'bot bot bot';
+  font-family: 'Bubblegum Sans', cursive;
 }
 
 .profile .user-main {
@@ -50,6 +52,27 @@
   align-items: center;
 }
 
+.fa-edit {
+  position: absolute;
+  font-size: 3rem;
+  top: 2vh;
+  left: calc(100% - 20vw);
+  z-index: 5;
+  transform: scale(0.8);
+  transition: ease-out 250ms;
+  cursor: pointer;
+}
+
+.fa-edit:hover {
+  color: white;
+  transform: scale(1);
+}
+
+.fa-edit:active {
+  opacity: 0.3;
+  transform: scale(0.8);
+}
+
 .profile .user-lang h3 {
   font-size: 2rem;
   margin: 0;
@@ -74,7 +97,7 @@
 .profile .user-details .intro i,
 .profile .user-details .goals i,
 .profile .user-details .hobbies i,
-.profile .user-lang i {
+.profile .user-lang .fa-language {
   font-size: 5rem;
 }
 
@@ -101,52 +124,4 @@
 
 .usericon-img:hover {
   transform: rotateY(120deg);
-}
-
-.profile h1 {
-}
-
-.profile h3 {
-}
-
-.profile p {
-}
-
-.profile #user-languages {
-}
-
-.profile #user-details {
-}
-
-.profile #user-info {
-}
-
-.profile aside {
-}
-
-.profile aside span {
-}
-
-.profile aside span h1 {
-}
-
-.profile aside main {
-}
-
-.profile aside main h3 {
-}
-
-.profile aside main h3:hover {
-}
-
-.profile aside main h3:hover::before {
-}
-
-.profile aside main h3:hover::after {
-}
-
-.img-wrapper {
-}
-
-.img-wrapper img {
 }
