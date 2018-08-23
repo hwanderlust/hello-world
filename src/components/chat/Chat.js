@@ -198,6 +198,10 @@ class Chat extends React.Component {
         this.setState({text: ''}, () => console.log(this.state))
         return this.props.toggleTranslate()
 
+      case '//transcript':
+        this.setState({text: 'speak now'}, () => console.log(this.state))
+        return this.handleTranscription()
+
       case '//close':
         if(secondWord) {
           if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
@@ -288,14 +292,16 @@ class Chat extends React.Component {
     this.setState({saveMsg: true})
   }
 
-  render() {
+  handleTranscription = () => {
+    spoken.listen()
+    .then( transcript => {
+      console.log(transcript)
+      this.setState({text: transcript}, () => console.log(this.state))
+    })
+    .catch(     error => console.warn(error.message) )
+  }
 
-    // const testTranscription = () => {
-      // spoken.listen.on.start( voice => { console.log('Started Listening') } );
-      // spoken.listen.on.end(   voice => { console.log('Ended Listening')   } );
-      // spoken.listen.on.error( voice => { console.log('Error Listening')   } );
-      // spoken.listen.stop();
-    // }
+  render() {
 
     const renderHeader = () => {
       const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
@@ -384,7 +390,7 @@ class Chat extends React.Component {
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
-        {/* { testTranscription() } */}
+
         { renderHeader() }
 
         <aside className='users-list'>
@@ -392,10 +398,6 @@ class Chat extends React.Component {
         </aside>
 
         <div className='messaging-area'>
-
-          <section className='chat-features'>
-
-          </section>
 
           { renderChatBoxes() }
 
