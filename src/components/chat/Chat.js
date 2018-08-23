@@ -226,7 +226,7 @@ class Chat extends React.Component {
   }
 
   handleTranslateShortcut = () => {
-    this.setState({text: ''}, () => console.log(this.state))
+    // this.setState({text: ''}, () => console.log(this.state))
     this.props.toggleTranslate()
   }
 
@@ -343,7 +343,7 @@ class Chat extends React.Component {
       const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header active' : 'chat-header'
       return (
         <React.Fragment>
-
+          
           { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ?
             <div className={className}>
               { this.props.speechPrompt ? renderSpeechForm() : null }
@@ -423,8 +423,11 @@ class Chat extends React.Component {
     }
 
     const renderFeatureBtns = () => {
+
+      const className = this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? 'chat-header feature-btns' : 'chat-header active feature-btns'
+
       return (
-        <section>
+        <section className={className}>
           <button onClick={this.handleFeatures} id='translateBtn'>Translate</button>
           <button onClick={this.handleFeatures} id='transcribeBtn'>Transcribe</button>
         </section>
@@ -438,6 +441,8 @@ class Chat extends React.Component {
 
         { renderHeader() }
 
+        { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ? null : renderFeatureBtns() }
+
         <aside className='users-list'>
           { this.renderUsers() }
         </aside>
@@ -450,7 +455,6 @@ class Chat extends React.Component {
 
         { renderChatInput() }
 
-        { renderFeatureBtns() }
 
       </React.Fragment>
     )
