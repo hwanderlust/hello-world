@@ -90,8 +90,8 @@ class Chat extends React.Component {
         i = 8
         this.props.updateChat(this.props.openChats[i].id)
       }
-      this.setState({textInputFocus: true}, () => console.log(this.state))
-      this.inputFocus.focus()
+      // this.setState({textInputFocus: true}, () => console.log(this.state))
+      // this.inputFocus.focus()
     }
   }
 
@@ -104,11 +104,28 @@ class Chat extends React.Component {
         this.setState({text: ''}, () => this.props.clearTranslation())
         this.props.clearSelectedMsg()
       }
+      if(this.props.speechPrompt) {
+        this.props.toggleSpeech()
+      }
+      if(this.props.translatePrompt) {
+        this.props.toggleTranslate()
+      }
+      if(this.props.savePrompt) {
+        this.props.toggleSave()
+      }
+      if(this.props.movePrompt) {
+        this.props.toggleMove()
+      }
+
     } else if(e.key === 'Backspace') {
       if(this.state.text.length === 1) {
         this.setState({text: ''}, () => console.log(this.state))
         this.props.clearTranslation()
       }
+
+    } else if (e.key === 'Alt') {
+      this.setState({textInputFocus: true}, () => console.log(this.state))
+      this.inputFocus.focus()
     }
   }
 
@@ -182,8 +199,10 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
+
     e.persist()
     this.handleFeatures(e)
+    this.setState({textInputFocus: false}, () => console.log(this.state))
   }
 
   handleFeatures = (e) => {
@@ -201,19 +220,24 @@ class Chat extends React.Component {
   }
 
   handleTextShortcuts = () => {
-    switch(this.state.text) {
-      case '//t':
+    const splitted = this.state.text.split(' ')
+    // eslint-disable-next-line
+    const [firstWord, secondWord] = splitted
+
+    switch(firstWord) {
+      case '//T':
         return this.handleTranslateShortcut()
-      case '//l':
+      case '//L':
         return this.handleTranscribeShortcut()
-      case '//c':
+      case '//C':
         return this.handleCloseChatShortcut()
+
       default:
-        // debugger
         if(this.state.text === '' && this.props.translation) {
           this.newMessage({chat_id: this.props.chat, text: this.props.translation})
           this.props.clearTranslation()
           return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+
         } else {
           this.newMessage({chat_id: this.props.chat, text: this.state.text})
           return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
@@ -233,11 +257,11 @@ class Chat extends React.Component {
   }
 
   handleTranslateShortcut = () => {
-    // this.setState({text: ''}, () => console.log(this.state))
+    this.setState({text: ''}, () => console.log(this.state))
     this.props.toggleTranslate()
   }
 
-  handleTrascribeShortcut = () => {
+  handleTranscribeShortcut = () => {
     this.setState({text: 'speak now'}, () => console.log(this.state))
     this.handleTranscription()
   }
@@ -251,7 +275,6 @@ class Chat extends React.Component {
 
       if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
         const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
-
         this.props.closeChat(updatedOpenChats)
         return this.setState({text: ''}, () => console.log(this.state))
 
@@ -445,6 +468,15 @@ class Chat extends React.Component {
       )
     }
 
+    const renderTips = () => {
+      const tips = ['enter //T for translation prompt', 'enter //C # to close a certain chat window', 'enter //L for transcribe prompt', 'press esc to remove prompts and/or clear text field', 'press alt or option to start typing in main text field']
+      return (
+        <div className='tip-container'>
+          <h1 className='tip'>{ tips[Math.floor(Math.random() * 5)] }</h1>
+        </div>
+      )
+    }
+
     return (
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
@@ -465,6 +497,8 @@ class Chat extends React.Component {
         </div>
 
         { renderChatInput() }
+
+        { renderTips() }
 
 
       </React.Fragment>

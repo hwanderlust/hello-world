@@ -87,6 +87,10 @@ class Translate extends React.Component {
     return translation
   }
 
+  test = (e) => {
+    debugger
+  }
+
   render() {
 
     const renderLanguages =  () => {
@@ -111,7 +115,8 @@ class Translate extends React.Component {
 
         <div className='translate-form'>
           <label>Translate to:</label>
-          <select onChange={this.handleChange} name='toLang'>
+          <select onInput={(e) => this.test(e)}onChange={this.handleChange} name='toLang'>
+            <option key='default' id='default' disabled selected>Choose one</option>
             { renderLanguages() }
           </select>
         </div>

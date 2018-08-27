@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { setTranslateTerm, updateListMsgs } from '../../actions'
+import { setTranslateTerm, updateListMsgs, toggleSpeech, toggleTranslate, toggleSave, toggleMove } from '../../actions'
 import { removeMsgFromList } from '../../adapter'
 import Message from './Message'
 
@@ -84,6 +84,62 @@ class MessageContainer extends React.Component {
     this.setState({popup: false})
   }
 
+  hideOtherFeatures = (selectedForm) => {
+    switch(selectedForm) {
+      case 'speech':
+        // hide translate save move
+        if(this.props.translatePrompt) {
+          this.props.toggleTranslate()
+        }
+        if(this.props.savePrompt) {
+          this.props.toggleSave()
+        }
+        if(this.props.movePrompt) {
+          this.props.toggleMove()
+        }
+        break
+      case 'translate':
+        // hide speech save move
+        if(this.props.speechPrompt) {
+          this.props.toggleSpeech()
+        }
+        if(this.props.savePrompt) {
+          this.props.toggleSave()
+        }
+        if(this.props.movePrompt) {
+          this.props.toggleMove()
+        }
+        break
+      case 'save':
+        // hide speech translate move
+        console.log(this.props);
+        if(this.props.translatePrompt) {
+          this.props.toggleTranslate()
+        }
+        if(this.props.speechPrompt) {
+          this.props.toggleSpeech()
+        }
+        if(this.props.movePrompt) {
+          this.props.toggleMove()
+        }
+        break
+      case 'move':
+        // hide speech translate save
+        if(this.props.translatePrompt) {
+          this.props.toggleTranslate()
+        }
+        if(this.props.savePrompt) {
+          this.props.toggleSave()
+        }
+        if(this.props.speechPrompt) {
+          this.props.toggleSpeech()
+        }
+        break
+      default:
+        return console.log('something is wronggggg');
+    }
+  }
+
   handleDragDelete = (e, msg) => {
     switch(e.type) {
 
@@ -107,12 +163,16 @@ class MessageContainer extends React.Component {
     console.log(e.target);
     switch(e.target.id) {
       case 'speech':
+        this.hideOtherFeatures('speech')
         return this.handleSpeech(msg)
       case 'translate':
+        this.hideOtherFeatures('translate')
         return this.handleTranslate(msg)
       case 'save':
+        this.hideOtherFeatures('save')
         return this.handleSave()
       case 'move':
+        this.hideOtherFeatures('move')
         return this.handleMove(msg)
       default:
         return this.setState({
@@ -158,6 +218,10 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.appState.currentUser,
     recipientUser: state.appState.recipientUser,
+    speechPrompt: state.appState.prompts.speechPrompt,
+    translatePrompt: state.appState.prompts.translatePrompt,
+    savePrompt: state.appState.prompts.savePrompt,
+    movePrompt: state.appState.prompts.movePrompt,
   }
 }
 
@@ -165,6 +229,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
     updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
+    toggleSpeech: () => dispatch(toggleSpeech()),
+    toggleTranslate: () => dispatch(toggleTranslate()),
+    toggleSave: () => dispatch(toggleSave()),
+    toggleMove: () => dispatch(toggleMove()),
   }
 }
 

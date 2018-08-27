@@ -283,3 +283,18 @@ transform: scale(1);
   background-size: contain;
   background-color: rgba(148, 16, 16, 1);
 }
+
+.tip-container {
+  position: absolute;
+  top: 85vh;
+  width: 75vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 138, 0, 0.7);
+}
+
+.tip {
+  word-wrap: break-word;
+  font-size: 1rem;
+}
