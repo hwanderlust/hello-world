@@ -13,7 +13,7 @@ class Contact extends React.Component {
           </div>
           <div className='github'>
             <i class="fab fa-github"></i>
-            <a href="https://github.com/pablopawpaw" target="_blank" rel="noopener noreferrer"><p>@pablopawpaw</p></a>
+            <a href="https://github.com/hwanderlust" target="_blank" rel="noopener noreferrer"><p>@hwanderlust</p></a>
           </div>
           <div className='ig'>
             <i class="fab fa-instagram"></i>
