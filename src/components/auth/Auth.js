@@ -35,6 +35,7 @@ class Auth extends React.Component {
       this.setState({accountForm: true}, () => console.log(this.state))
       this.setState({aboutForm: false}, () => console.log(this.state))
       this.setState({detailsForm: false}, () => console.log(this.state))
+      this.setState({login: false}, () => console.log(this.state))
     }
   }
 
@@ -156,20 +157,32 @@ class Auth extends React.Component {
       return <DetailsForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} introduction={this.state.introduction} hobbies={this.state.hobbies} goals={this.state.goals} />
     }
 
+    const renderCheckmark = () => {
+      return (
+        <div className='checkmark-container'>
+          <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/>
+        </div>
+      )
+    }
+
     return (
       <div className='auth-container'>
         <main className='auth-wrapper'>
           { renderHeader() }
 
-          { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? <img className='checkmark' src='https://png.icons8.com/cotton/2x/checkmark.png' alt='check mark'/> : renderPicUpload() }
+          { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? renderCheckmark() : renderPicUpload() }
 
           { this.state.accountForm || this.state.login ? renderAccountForm() : null }
           <br/>
-          { this.state.login? (
-            <button className='standout'><a href='/signup' className='form-button'>Sign up</a></button>
-          ) : (
+
+          { this.state.accountForm && !this.state.login ? (
             <button className='standout'><a href='/login' className='form-button'>Login</a></button>
-          )}
+          ) : null }
+
+          { this.state.accountForm && this.state.login ? (
+            <button className='standout'><a href='/signup' className='form-button'>Sign up</a></button>
+          ) : null }
+
           { this.state.aboutForm ? renderAboutForm() : null }
           { this.state.detailsForm ? renderDetailsForm() : null }
 

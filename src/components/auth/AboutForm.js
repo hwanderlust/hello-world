@@ -11,7 +11,7 @@ class AboutForm extends React.Component {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)} id='aboutForm' className='auth-children'>
-      <label htmlFor='location'>Where you at?</label>
+      <label htmlFor='location'>Where you at?</label><br/>
       <input type='text' name='location' className='inputs' onChange={handleChange} value={location} autoFocus="true" ref={c => (this.inputFocus = c)} />
       <br />
       <label htmlFor='age'>How wise are you? (age)</label>
