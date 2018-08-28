@@ -81,18 +81,18 @@ class Chat extends React.Component {
   }
 
   handleKeyPress = (e) => {
-    if(!this.state.textInputFocus) {
-      let i;
-      if(e.key > 0 && e.key <= 9) {
-        i = e.key - 1
-        this.props.updateChat(this.props.openChats[i].id)
-      } else if(e.key === 0) {
-        i = 8
-        this.props.updateChat(this.props.openChats[i].id)
-      }
-      // this.setState({textInputFocus: true}, () => console.log(this.state))
-      // this.inputFocus.focus()
-    }
+    // if(!this.state.textInputFocus) {
+    //   let i;
+    //   if(e.key > 0 && e.key <= 9) {
+    //     i = e.key - 1
+    //     this.props.updateChat(this.props.openChats[i].id)
+    //   } else if(e.key === 0) {
+    //     i = 8
+    //     this.props.updateChat(this.props.openChats[i].id)
+    //   }
+    //   // this.setState({textInputFocus: true}, () => console.log(this.state))
+    //   // this.inputFocus.focus()
+    // }
   }
 
   handleKeyDown = (e) => {

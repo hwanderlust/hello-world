@@ -1,6 +1,7 @@
 import React from 'react';
 import UserIcon from '../user/UserIcon'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 const containerStyle = {
   width: '1rem',
@@ -16,13 +17,17 @@ const imgStyle = {
   border: '2px solid red'
 }
 
-class TopBorder extends React.Component {
+class TopBorder extends React.PureComponent {
+
+  handlePfPicClick = () => {
+    this.props.history.push('/profile')
+  }
 
   render() {
     return (
       <div className='top-border' >
         <h1>Hello World</h1>
-        <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={this.props.currentUser ? this.props.currentUser.profile_picture : null}/>
+        <UserIcon onClick={this.handlePfPicClick} containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={this.props.currentUser ? this.props.currentUser.profile_picture : null}/>
       </div>
     )
   }
@@ -34,4 +39,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(TopBorder);
+export default withRouter(connect(mapStateToProps)(TopBorder));
