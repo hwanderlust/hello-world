@@ -1,10 +1,7 @@
-// http://10.39.110.188:3000/
-// 10.39.111.255
-//
-export const API_ROOT = 'http://localhost:3001';
-export const API_WS_ROOT = 'ws://localhost:3001/cable';
-// export const API_ROOT = 'https://77b11ce5.ngrok.io';
-// export const API_WS_ROOT = 'ws://77b11ce5.ngrok.io/cable';
+// export const API_ROOT = 'http://localhost:3001';
+// export const API_WS_ROOT = 'ws://localhost:3001/cable';
+export const API_ROOT = 'https://hello-world-rails-api.herokuapp.com/';
+export const API_WS_ROOT = 'ws://hello-world-rails-api.herokuapp.com/cable';
 
 export const HEADERS = {
   'Content-Type': 'application/json',
