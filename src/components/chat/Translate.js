@@ -19,6 +19,7 @@ class Translate extends React.Component {
       detectLang(this.props.selectedMessage)
 
       .then(data => {
+        console.log(data);
         const lang = data["data"]["detections"][0][0]["language"]
         const langOption = googleLanguages.find(item => item.code === lang)
         console.log(langOption);
