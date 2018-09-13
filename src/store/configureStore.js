@@ -7,7 +7,7 @@ import rootReducer from '../reducers';
 // THUNK AND REDUX DEV TOOLS: same as above but also uncomment lines 10 and 15
 
 export default function configureStore() {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose ;
   return createStore(
     rootReducer,
     composeEnhancers(
