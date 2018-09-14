@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { withRouter } from 'react-router-dom'
 
-import { createList, addMessage, getLists, createMessage, createChat } from '../../adapter'
+import { createList, addMessage, getLists, createMessage } from '../../adapter'
 import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
 
 import Chatbox from './Chatbox'
@@ -61,16 +61,7 @@ class Chat extends React.Component {
   componentDidMount() {
     console.log('COMPONENTDIDMOUNT', this.props);
     if(this.props.users) {
-      this.setState({users: this.props.users}, () => {
-        console.log(this.state)
-        // for every user create/find chat id and generate a message ActionCable
-        this.state.users.forEach(user => {
-          if(this.props.currentUser) {
-            createChat({sender_id: this.props.currentUser.id, recipient_id: user.id})
-            .then(chat => <ActionCable channel={{ channel: 'MessagesChannel', chat: chat.id }} onReceived={this.handleReceiveMsgs} />)
-          }
-        })
-      })
+      this.setState({users: this.props.users}, () => console.log(this.state))
     }
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
