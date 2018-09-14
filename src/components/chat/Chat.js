@@ -407,7 +407,6 @@ class Chat extends React.Component {
           <div>
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
-              {/* <option key='default' id='default' disabled selected>Choose one</option> */}
               { renderLanguages() }
             </select>
           </div>
