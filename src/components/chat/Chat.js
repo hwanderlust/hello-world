@@ -300,6 +300,10 @@ class Chat extends React.Component {
     console.log(response);
   }
 
+  handleReceiveMsgs = response => {
+    console.log(response);
+  }
+
   handleSpeechChange = (e) => {
     this.props.updateSelectedMsg(e.target.value)
   }
@@ -484,6 +488,7 @@ class Chat extends React.Component {
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
         <ActionCable channel={{ channel: 'ChatsChannel' }} onReceived={this.handleReceivedChat} />
+        <ActionCable channel={{ channel: 'MessagesChannel' }} onReceived={this.handleReceiveMsgs} />
 
         { renderHeader() }
 
