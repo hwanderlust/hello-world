@@ -2,7 +2,7 @@ import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
 // import spoken from '../../../node_modules/spoken/build/spoken.js';
-import spoken from './spoken';
+import spoken from '../spoken';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
