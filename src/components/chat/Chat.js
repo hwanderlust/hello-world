@@ -65,8 +65,10 @@ class Chat extends React.Component {
         console.log(this.state)
         // for every user create/find chat id and generate a message ActionCable
         this.state.users.forEach(user => {
-          createChat({sender_id: this.props.currentUser.id, recipient_id: user.id})
+          if(this.props.currentUser) {
+            createChat({sender_id: this.props.currentUser.id, recipient_id: user.id})
             .then(chat => <ActionCable channel={{ channel: 'MessagesChannel', chat: chat.id }} onReceived={this.handleReceiveMsgs} />)
+          }
         })
       })
     }
