@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "^6.5.3",
     "artyom.js": "^1.0.6",
     "react": "^16.4.2",
     "react-actioncable-provider": "^1.0.3",
