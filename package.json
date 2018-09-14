@@ -15,6 +15,7 @@
     "react-scripts": "1.1.4",
     "reactjs-popup": "^1.1.4",
     "redux": "^4.0.0",
+    "spoken": "^1.1.16",
     "superagent": "^3.8.3"
   },
   "scripts": {

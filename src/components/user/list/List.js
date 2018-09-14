@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-// import spoken from '../../../../node_modules/spoken/build/spoken';
-import spoken from '../../spoken';
+import spoken from '../../../../node_modules/spoken/build/spoken';
 
 import MessageContainer from '../../chat/MessageContainer'
 import { spokenVoices, spokenLanguages } from '../../../constants'
