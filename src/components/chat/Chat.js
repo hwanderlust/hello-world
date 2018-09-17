@@ -316,9 +316,10 @@ class Chat extends React.Component {
     e.persist()
     spoken.voices().then(r => r.find(v => v.lang === e.target.value))
     .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
-
+    .then(v => spoken.say(this.props.selectedMessage.text, this.state.spokenVoice.name))
     // spoken.say(this.props.selectedMessage.text, voice.name)
-    spoken.say(this.props.selectedMessage.text, this.state.spokenVoice.name)
+    // spoken.say(this.props.selectedMessage.text, this.state.spokenVoice.name)
+
     this.props.updateSelectedMsg('')
     this.props.toggleSpeech()
   }
