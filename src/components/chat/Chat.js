@@ -56,6 +56,7 @@ class Chat extends React.Component {
       textInputFocus: false,
       placeholder: '',
       spokenLangOptions: null,
+      spokenVoice: null,
     };
   };
 
@@ -312,9 +313,9 @@ class Chat extends React.Component {
   handleSpeechSubmit = (e) => {
     // const voice = spokenVoices.find(v => v.lang === e.target.value)
     // console.log(voice);
-    let voice;
-    spoken.voices().then(r => voice = r.find(v => v.lang === e.target.value))
-    console.log(voice);
+    spoken.voices().then(r => r.find(v => v.lang === e.target.value))
+    .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
+
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
     this.props.toggleSpeech()
@@ -423,7 +424,7 @@ class Chat extends React.Component {
       let options;
       spoken.voices().then(r => {
         options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
-        this.setState({spokenLangOptions: options}, () => console.log(options))
+        this.setState({spokenLangOptions: options}, () => console.log(this.state))
       })
       // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
