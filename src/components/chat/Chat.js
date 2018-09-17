@@ -313,6 +313,7 @@ class Chat extends React.Component {
   handleSpeechSubmit = (e) => {
     // const voice = spokenVoices.find(v => v.lang === e.target.value)
     // console.log(voice);
+    e.persist()
     spoken.voices().then(r => r.find(v => v.lang === e.target.value))
     .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
 
