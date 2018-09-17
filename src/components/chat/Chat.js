@@ -312,7 +312,7 @@ class Chat extends React.Component {
     // const voice = spokenVoices.find(v => v.lang === e.target.value)
     // console.log(voice);
     let voice;
-    spoken.voices().then(r => r.json()).then(r => voice = r.find(v => v.lang === e.target.value))
+    spoken.voices().then(r => voice = r.find(v => v.lang === e.target.value))
     console.log(voice);
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
@@ -419,7 +419,7 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      return spoken.voices().then(r => r.json()).then(r => r.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>))
+      return spoken.voices().then(r => r.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>))
       // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
