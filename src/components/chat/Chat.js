@@ -55,6 +55,7 @@ class Chat extends React.Component {
       chatBoxBgColor: null,
       textInputFocus: false,
       placeholder: '',
+      spokenLangOptions: null,
     };
   };
 
@@ -411,7 +412,7 @@ class Chat extends React.Component {
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
               <option key='default' id='default' disabled selected>Choose one</option>
-              { renderLanguages() }
+              { this.state.spokenLangOptions ? this.state.spokenLangOptions : renderLanguages() }
             </select>
           </div>
         </form>
@@ -422,10 +423,8 @@ class Chat extends React.Component {
       let options;
       spoken.voices().then(r => {
         options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
-        console.log(options);
-        return options
+        this.setState({spokenLangOptions: options}, () => console.log(options))
       })
-      return options
       // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
