@@ -422,8 +422,9 @@ class Chat extends React.Component {
       let options;
       spoken.voices().then(r => {
         options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
+        console.log(options);
+        return options
       })
-      console.log(options);
       return options
       // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
