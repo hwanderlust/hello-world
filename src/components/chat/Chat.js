@@ -8,7 +8,7 @@ import { createList, addMessage, getLists, createMessage } from '../../adapter'
 import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
 
 import Chatbox from './Chatbox'
-import Translate from './Translate'
+import Translate from '../features/Translate'
 import UserIcon from '../user/UserIcon'
 import Speech from '../features/Speech'
 
