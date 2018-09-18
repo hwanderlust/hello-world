@@ -5,7 +5,7 @@ import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg, updateSpokenLangs } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
@@ -66,9 +66,6 @@ class Chat extends React.Component {
     }
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
-    // if(!this.props.spokenLanguages) {
-    //   spoken.voices().then(r => this.props.updateSpokenLangs(r))
-    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -308,17 +305,6 @@ class Chat extends React.Component {
     console.log(response);
   }
 
-  // handleSpeechChange = (e) => {
-  //   this.props.updateSelectedMsg(e.target.value)
-  // }
-
-  // handleSpeechSubmit = (e) => {
-  //   const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
-  //   spoken.say(this.props.selectedMessage.text, voice.name)
-  //   this.props.updateSelectedMsg('')
-  //   this.props.toggleSpeech()
-  // }
-
   handleSavingMsg = (listId) => {
     addMessage({msg_id: this.state.message.id, list_id: listId})
       .then(messages => {
@@ -387,7 +373,6 @@ class Chat extends React.Component {
 
           { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ?
             <div className={className}>
-              {/* { this.props.speechPrompt ? renderSpeechForm() : null } */}
               { this.props.speechPrompt ? <Speech /> : null }
               { this.props.translatePrompt ? <Translate /> : null }
               { this.props.savePrompt ? renderSaveMsgForm() : null }
@@ -399,29 +384,6 @@ class Chat extends React.Component {
         </React.Fragment>
           )
     }
-
-    // const renderSpeechForm = () => {
-    //   return (
-    //     <form className='speech-form'>
-    //       <div>
-    //         <label>Listen to:</label>
-    //         <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
-    //       </div>
-    //
-    //       <div>
-    //         <label>Choose an appropriate voice:</label>
-    //         <select id='selected-lang' onChange={this.handleSpeechSubmit}>
-    //           <option key='default' id='default' disabled selected>Choose one</option>
-    //           { this.props.spokenLanguages ? renderLanguages() : null }
-    //         </select>
-    //       </div>
-    //     </form>
-    //   )
-    // }
-
-    // const renderLanguages = () => {
-    //   return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
-    // }
 
     const renderChatInput = () => {
       return (
@@ -540,7 +502,6 @@ const mapDispatchToProps = (dispatch) => {
     closeChat: (chats) => dispatch(closeChat(chats)),
     clearTranslation: () => dispatch(clearTranslation()),
     toggleSpeech: () => dispatch(toggleSpeech()),
-    updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
     toggleTranslate: () => dispatch(toggleTranslate()),
     toggleSave: () => dispatch(toggleSave()),
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),

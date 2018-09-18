@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import spoken from '../../../../node_modules/spoken/build/spoken';
+// import spoken from '../../../../node_modules/spoken/build/spoken';
 
 import MessageContainer from '../../chat/MessageContainer'
 import Translate from '../../chat/Translate'
+import Speech from '../../features/Speech'
 
 import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation, updateSpokenLangs } from '../../../actions'
 import { createList, getLists, addMessage, getListMsgs, removeMsgFromList } from '../../../adapter'
@@ -35,9 +36,9 @@ class List extends React.Component {
   }
   componentDidMount() {
     this.setState({messages: this.props.messages}, () => console.log(this.state))
-    if(!this.props.spokenLanguages) {
-      spoken.voices().then(r => this.props.updateSpokenLangs(r))
-    }
+    // if(!this.props.spokenLanguages) {
+    //   spoken.voices().then(r => this.props.updateSpokenLangs(r))
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -51,16 +52,16 @@ class List extends React.Component {
     this.props.updateSelectedMsg(msg)
   }
 
-  handleSpeechChange = (e) => {
-    this.props.updateSelectedMsg(e.target.value)
-  }
-
-  handleSpeechSubmit = (e) => {
-    const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
-    spoken.say(this.props.selectedMessage.text, voice.name)
-    this.props.updateSelectedMsg('')
-    this.props.toggleSpeech()
-  }
+  // handleSpeechChange = (e) => {
+  //   this.props.updateSelectedMsg(e.target.value)
+  // }
+  //
+  // handleSpeechSubmit = (e) => {
+  //   const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
+  //   spoken.say(this.props.selectedMessage.text, voice.name)
+  //   this.props.updateSelectedMsg('')
+  //   this.props.toggleSpeech()
+  // }
 
   handleTranslateClick = (msg) => {
     this.props.toggleTranslate()
@@ -146,34 +147,28 @@ class List extends React.Component {
       })
     }
 
-    const renderSpeechForm = () => {
-      return (
-        <form className='speech-form'>
-          <div>
-            <label>Listen to:</label>
-            <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
-          </div>
-
-          <div>
-            <label>Choose an appropriate voice:</label>
-            <select id='selected-lang' onChange={this.handleSpeechSubmit}>
-              <option key='default' id='default' disabled selected>Choose one</option>
-              { this.props.spokenLanguages ? renderLanguages() : null }
-            </select>
-          </div>
-        </form>
-      )
-    }
-
-    const renderLanguages = () => {
-      return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
-    }
-
-    const renderTranslateForm = () => {
-      return (
-        <Translate toggleTranslate={this.props.toggleTranslate} />
-      )
-    }
+    // const renderSpeechForm = () => {
+    //   return (
+    //     <form className='speech-form'>
+    //       <div>
+    //         <label>Listen to:</label>
+    //         <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
+    //       </div>
+    //
+    //       <div>
+    //         <label>Choose an appropriate voice:</label>
+    //         <select id='selected-lang' onChange={this.handleSpeechSubmit}>
+    //           <option key='default' id='default' disabled selected>Choose one</option>
+    //           { this.props.spokenLanguages ? renderLanguages() : null }
+    //         </select>
+    //       </div>
+    //     </form>
+    //   )
+    // }
+    //
+    // const renderLanguages = () => {
+    //   return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
+    // }
 
     const renderMoveForm = () => {
       return (
@@ -206,8 +201,9 @@ class List extends React.Component {
         </header>
 
         <section>
-          { this.props.speechPrompt ? renderSpeechForm() : null }
-          { this.props.translatePrompt ? renderTranslateForm() : null }
+          {/* { this.props.speechPrompt ? renderSpeechForm() : null } */}
+          { this.props.speechPrompt ? <Speech /> : null }
+          { this.props.translatePrompt ? <Translate /> : null }
           { renderTranslation() }
           { this.props.movePrompt ? renderMoveForm() : null }
         </section>
@@ -242,7 +238,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleMove: () => dispatch(toggleMove()),
     updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
     clearTranslation: () => dispatch(clearTranslation()),
-    updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
+    // updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
   }
 }
 
