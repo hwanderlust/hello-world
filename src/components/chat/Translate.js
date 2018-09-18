@@ -17,7 +17,6 @@ class Translate extends React.Component {
     console.log(this.state);
     if(this.props.selectedMessage) {
       detectLang(this.props.selectedMessage)
-
       .then(data => {
         console.log(data);
         const lang = data["data"]["detections"][0][0]["language"]
@@ -36,7 +35,20 @@ class Translate extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(`Translate componentDidUpdate:`, this.props.selectedMessage);
+    if(this.props.translatePrompt && this.props.selectedMessage) {
+      console.log(`Translate componentDidUpdate:`, this.props.selectedMessage);
+      detectLang(this.props.selectedMessage)
+      .then(data => {
+        console.log(data);
+        const lang = data["data"]["detections"][0][0]["language"]
+        const langOption = googleLanguages.find(item => item.code === lang)
+        console.log(langOption);
+
+        if(langOption) {
+          this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
+        }
+      })
+    }
   }
 
   handleChange = (e) => {
