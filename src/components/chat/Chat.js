@@ -10,6 +10,7 @@ import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, t
 import Chatbox from './Chatbox'
 import Translate from './Translate'
 import UserIcon from '../user/UserIcon'
+import Speech from '../features/Speech'
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -65,9 +66,9 @@ class Chat extends React.Component {
     }
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
-    if(!this.props.spokenLanguages) {
-      spoken.voices().then(r => this.props.updateSpokenLangs(r))
-    }
+    // if(!this.props.spokenLanguages) {
+    //   spoken.voices().then(r => this.props.updateSpokenLangs(r))
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -307,16 +308,16 @@ class Chat extends React.Component {
     console.log(response);
   }
 
-  handleSpeechChange = (e) => {
-    this.props.updateSelectedMsg(e.target.value)
-  }
+  // handleSpeechChange = (e) => {
+  //   this.props.updateSelectedMsg(e.target.value)
+  // }
 
-  handleSpeechSubmit = (e) => {
-    const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
-    spoken.say(this.props.selectedMessage.text, voice.name)
-    this.props.updateSelectedMsg('')
-    this.props.toggleSpeech()
-  }
+  // handleSpeechSubmit = (e) => {
+  //   const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
+  //   spoken.say(this.props.selectedMessage.text, voice.name)
+  //   this.props.updateSelectedMsg('')
+  //   this.props.toggleSpeech()
+  // }
 
   handleSavingMsg = (listId) => {
     addMessage({msg_id: this.state.message.id, list_id: listId})
@@ -386,8 +387,9 @@ class Chat extends React.Component {
 
           { this.props.speechPrompt || this.props.translatePrompt || this.props.savePrompt || this.state.saveMsgStatus ?
             <div className={className}>
-              { this.props.speechPrompt ? renderSpeechForm() : null }
-              { this.props.translatePrompt ? <Translate toggleTranslate={this.props.toggleTranslate} /> : null }
+              {/* { this.props.speechPrompt ? renderSpeechForm() : null } */}
+              { this.props.speechPrompt ? <Speech /> : null }
+              { this.props.translatePrompt ? <Translate /> : null }
               { this.props.savePrompt ? renderSaveMsgForm() : null }
               { this.state.saveMsgStatus ? renderCheckmark() : null }
 
@@ -398,28 +400,28 @@ class Chat extends React.Component {
           )
     }
 
-    const renderSpeechForm = () => {
-      return (
-        <form className='speech-form'>
-          <div>
-            <label>Listen to:</label>
-            <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
-          </div>
+    // const renderSpeechForm = () => {
+    //   return (
+    //     <form className='speech-form'>
+    //       <div>
+    //         <label>Listen to:</label>
+    //         <input type='text' value={this.props.selectedMessage.text} onChange={this.handleSpeechChange} />
+    //       </div>
+    //
+    //       <div>
+    //         <label>Choose an appropriate voice:</label>
+    //         <select id='selected-lang' onChange={this.handleSpeechSubmit}>
+    //           <option key='default' id='default' disabled selected>Choose one</option>
+    //           { this.props.spokenLanguages ? renderLanguages() : null }
+    //         </select>
+    //       </div>
+    //     </form>
+    //   )
+    // }
 
-          <div>
-            <label>Choose an appropriate voice:</label>
-            <select id='selected-lang' onChange={this.handleSpeechSubmit}>
-              <option key='default' id='default' disabled selected>Choose one</option>
-              { this.props.spokenLanguages ? renderLanguages() : null }
-            </select>
-          </div>
-        </form>
-      )
-    }
-
-    const renderLanguages = () => {
-      return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
-    }
+    // const renderLanguages = () => {
+    //   return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
+    // }
 
     const renderChatInput = () => {
       return (

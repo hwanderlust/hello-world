@@ -17,17 +17,6 @@ class Translate extends React.Component {
     console.log(this.state);
     if(this.props.selectedMessage) {
       this.handleLangDetection()
-      // detectLang(this.props.selectedMessage)
-      // .then(data => {
-      //   console.log(data);
-      //   const lang = data["data"]["detections"][0][0]["language"]
-      //   const langOption = googleLanguages.find(item => item.code === lang)
-      //   console.log(langOption);
-      //
-      //   if(langOption) {
-      //     this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
-      //   }
-      // })
 
     } else {
       console.log('focussssssss');
@@ -39,17 +28,6 @@ class Translate extends React.Component {
     if(prevProps.selectedMessage !== this.props.selectedMessage) {
       console.log(`Translate componentDidUpdate:`, this.props.selectedMessage);
       this.handleLangDetection()
-      // detectLang(this.props.selectedMessage)
-      // .then(data => {
-      //   console.log(data);
-      //   const lang = data["data"]["detections"][0][0]["language"]
-      //   const langOption = googleLanguages.find(item => item.code === lang)
-      //   console.log(langOption);
-      //
-      //   if(langOption) {
-      //     this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
-      //   }
-      // })
     }
   }
 
@@ -160,6 +138,7 @@ const mapStateToProps = (state) => {
     language: state.appState.language,
     translateTerm: state.appState.translateTerm,
     selectedMessage: state.appState.selectedMessage,
+
   }
 }
 
@@ -167,6 +146,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLang: (lang) => dispatch(updateLang(lang)),
     setTranslation: (translation) => dispatch(setTranslation(translation)),
+    toggleTranslate: () => dispatch(toggleTranslate()),
   }
 }
 
