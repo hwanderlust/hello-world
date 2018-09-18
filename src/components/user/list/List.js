@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import spoken from '../../../../node_modules/spoken/build/spoken';
 
 import MessageContainer from '../../chat/MessageContainer'
-// import { spokenVoices, spokenLanguages } from '../../../constants'
 import Translate from '../../chat/Translate'
 
 import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation, updateSpokenLangs } from '../../../actions'
@@ -57,9 +56,6 @@ class List extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    // const voice = spokenVoices.find(v => v.lang === e.target.value)
-    // console.log(voice);
-    // spoken.say(this.props.selectedMessage.text, voice.name)
     const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
@@ -171,7 +167,6 @@ class List extends React.Component {
 
     const renderLanguages = () => {
       return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
-      // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
     }
 
     const renderTranslateForm = () => {
@@ -248,7 +243,6 @@ const mapDispatchToProps = (dispatch) => {
     updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
     clearTranslation: () => dispatch(clearTranslation()),
     updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
-    // setTranslateTerm: (term) => dispatch(setTranslateTerm(term)),
   }
 }
 
