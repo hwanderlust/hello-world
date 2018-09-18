@@ -67,6 +67,7 @@ class Chat extends React.Component {
     }
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
+    spoken.voices().then(r => this.setState({spokenLangOptions: r}, () => console.log(this.state)))
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -313,11 +314,12 @@ class Chat extends React.Component {
   handleSpeechSubmit = (e) => {
     // const voice = spokenVoices.find(v => v.lang === e.target.value)
     // console.log(voice);
-    e.persist()
-    spoken.voices().then(r => r.find(v => v.lang === e.target.value))
-    .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
-    .then(v => spoken.say(this.props.selectedMessage.text, `${this.state.spokenVoice.name}`))
-    // spoken.say(this.props.selectedMessage.text, voice.name)
+    // e.persist()
+    const voice = this.state.spokenLangOptions.find(v => v.lang === e.target.value)
+    // spoken.voices().then(r => r.find(v => v.lang === e.target.value))
+    // .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
+    // .then(v => spoken.say(this.props.selectedMessage.text, `${this.state.spokenVoice.name}`))
+    spoken.say(this.props.selectedMessage.text, voice.name)
     // spoken.say(this.props.selectedMessage.text, this.state.spokenVoice.name)
 
     this.props.updateSelectedMsg('')
@@ -416,7 +418,8 @@ class Chat extends React.Component {
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
               <option key='default' id='default' disabled selected>Choose one</option>
-              { this.state.spokenLangOptions ? this.state.spokenLangOptions : renderLanguages() }
+              {/* { this.state.spokenLangOptions ? this.state.spokenLangOptions : renderLanguages() } */}
+              { this.state.spokenLangOptions ? renderLanguages() : null }
             </select>
           </div>
         </form>
@@ -424,12 +427,17 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      let options;
-      spoken.voices().then(r => {
-        options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
-        this.setState({spokenLangOptions: options}, () => console.log(this.state))
-      })
+      // let options;
+      // spoken.voices().then(r => {
+      //   this.setState({spokenLangOptions: r}, () => {
+      //     console.log(this.state)
+      //     this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
+      //   })
+        // options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
+        // this.setState({spokenLangOptions: options}, () => console.log(this.state))
+      // })
       // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
+      return this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
     }
 
     const renderChatInput = () => {
