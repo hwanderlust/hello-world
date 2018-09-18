@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-import ProfileDetails from './profile/ProfileDetails'
-import ProfileHead from './profile/ProfileHead'
-import ProfileLangs from './profile/ProfileLangs'
+import ProfileDetails from './ProfileDetails'
+import ProfileHead from './ProfileHead'
+import ProfileLangs from './ProfileLangs'
 import UserIcon from '../UserIcon'
 
 const containerStyle = {
