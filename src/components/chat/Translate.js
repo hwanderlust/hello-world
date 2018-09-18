@@ -35,6 +35,10 @@ class Translate extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log(`Translate componentDidUpdate:`, this.props.selectedMessage);
+  }
+
   handleChange = (e) => {
     e.persist()
 
