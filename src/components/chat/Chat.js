@@ -312,16 +312,8 @@ class Chat extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    // const voice = spokenVoices.find(v => v.lang === e.target.value)
-    // console.log(voice);
-    // e.persist()
     const voice = this.state.spokenLangOptions.find(v => v.lang === e.target.value)
-    // spoken.voices().then(r => r.find(v => v.lang === e.target.value))
-    // .then(voice => this.setState({spokenVoice: voice}, () => console.log(this.state)))
-    // .then(v => spoken.say(this.props.selectedMessage.text, `${this.state.spokenVoice.name}`))
     spoken.say(this.props.selectedMessage.text, voice.name)
-    // spoken.say(this.props.selectedMessage.text, this.state.spokenVoice.name)
-
     this.props.updateSelectedMsg('')
     this.props.toggleSpeech()
   }
@@ -382,7 +374,7 @@ class Chat extends React.Component {
       console.log(transcript)
       this.setState({text: transcript}, () => console.log(this.state))
     })
-    .catch(     error => console.warn(error.message) )
+    .catch(error => console.warn(error.message))
   }
 
   render() {
@@ -418,7 +410,6 @@ class Chat extends React.Component {
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
               <option key='default' id='default' disabled selected>Choose one</option>
-              {/* { this.state.spokenLangOptions ? this.state.spokenLangOptions : renderLanguages() } */}
               { this.state.spokenLangOptions ? renderLanguages() : null }
             </select>
           </div>
@@ -427,17 +418,7 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      // let options;
-      // spoken.voices().then(r => {
-      //   this.setState({spokenLangOptions: r}, () => {
-      //     console.log(this.state)
-      //     this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
-      //   })
-        // options = r.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
-        // this.setState({spokenLangOptions: options}, () => console.log(this.state))
-      // })
-      // return spokenLanguages.map(lang => <option id={lang.code} key={lang.code} value={lang.code}>{lang.name}</option>)
-      return this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.lang} value={language.lang}>{language.name}</option>)
+      return this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
     }
 
     const renderChatInput = () => {
