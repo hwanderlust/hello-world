@@ -507,7 +507,6 @@ const mapDispatchToProps = (dispatch) => {
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     toggleUserPf: (user) => dispatch(toggleUserPf(user)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
-    updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
   }
 }
 
