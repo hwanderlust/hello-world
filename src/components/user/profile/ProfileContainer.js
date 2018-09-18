@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ProfileDetails from './profile/ProfileDetails'
 import ProfileHead from './profile/ProfileHead'
 import ProfileLangs from './profile/ProfileLangs'
-import UserIcon from './UserIcon'
+import UserIcon from '../UserIcon'
 
 const containerStyle = {
   backgroundRepeat: 'no-repeat',
@@ -35,7 +35,7 @@ const Profile = ({ currentUser, userPfView }) => {
       <UserIcon containerStyle={containerStyle} imgStyle={imgStyle} imgSrc={userPfView ? userPfView.profile_picture : currentUser.profile_picture } />
 
       <ProfileHead user={ userPfView ? userPfView : currentUser } />
-      
+
       <ProfileLangs user={ userPfView ? userPfView : currentUser } currentUser={currentUser} onClick={handleEditPfClick} />
 
       <ProfileDetails user={ userPfView ? userPfView : currentUser } />
