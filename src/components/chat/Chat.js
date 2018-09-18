@@ -5,11 +5,11 @@ import spoken from '../../../node_modules/spoken/build/spoken.js';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, updateSelectedMsg, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg, updateSpokenLangs } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
-import { spokenVoices, spokenLanguages } from '../../constants'
+// import { spokenVoices, spokenLanguages } from '../../constants'
 import UserIcon from '../user/UserIcon'
 
 const bgColor = () => {
@@ -55,7 +55,7 @@ class Chat extends React.Component {
       chatBoxBgColor: null,
       textInputFocus: false,
       placeholder: '',
-      spokenLangOptions: null,
+      spokenLanguages: null,
       spokenVoice: null,
     };
   };
@@ -67,7 +67,10 @@ class Chat extends React.Component {
     }
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
-    spoken.voices().then(r => this.setState({spokenLangOptions: r}, () => console.log(this.state)))
+    if(!this.props.spokenLanguages) {
+      // spoken.voices().then(r => this.setState({spokenLanguages: r}, () => console.log(this.state)))
+      spoken.voices().then(r => this.props.updateSpokenLangs(r))
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -312,7 +315,8 @@ class Chat extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    const voice = this.state.spokenLangOptions.find(v => v.lang === e.target.value)
+    // const voice = this.state.spokenLanguages.find(v => v.lang === e.target.value)
+    const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
     this.props.toggleSpeech()
@@ -410,7 +414,8 @@ class Chat extends React.Component {
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
               <option key='default' id='default' disabled selected>Choose one</option>
-              { this.state.spokenLangOptions ? renderLanguages() : null }
+              {/* { this.state.spokenLanguages ? renderLanguages() : null } */}
+              { this.props.spokenLanguages ? renderLanguages() : null }
             </select>
           </div>
         </form>
@@ -418,11 +423,11 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      return this.state.spokenLangOptions.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
+      // return this.state.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
+      return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
     }
 
     const renderChatInput = () => {
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', this.state);
       return (
         <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
           <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autoFocus="true" ref={c => this.inputFocus = c} />
@@ -527,6 +532,7 @@ const mapStateToProps = (state) => {
     translation: state.appState.translation,
     translatePrompt: state.appState.prompts.translatePrompt,
     savePrompt: state.appState.prompts.savePrompt,
+    spokenLanguages: state.appState.spokenLanguages,
   }
 }
 
@@ -544,6 +550,7 @@ const mapDispatchToProps = (dispatch) => {
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     toggleUserPf: (user) => dispatch(toggleUserPf(user)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
+    updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
   }
 }
 
