@@ -9,7 +9,6 @@ import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, t
 
 import Chatbox from './Chatbox'
 import Translate from './Translate'
-// import { spokenVoices, spokenLanguages } from '../../constants'
 import UserIcon from '../user/UserIcon'
 
 const bgColor = () => {
@@ -43,7 +42,6 @@ class Chat extends React.Component {
     this.state = {
       users: null,
       text: '',
-      // langPrompt: false,
       speech: '',
       saveMsg: false,
       message: null,
@@ -68,7 +66,6 @@ class Chat extends React.Component {
     window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
     if(!this.props.spokenLanguages) {
-      // spoken.voices().then(r => this.setState({spokenLanguages: r}, () => console.log(this.state)))
       spoken.voices().then(r => this.props.updateSpokenLangs(r))
     }
   }
@@ -315,7 +312,6 @@ class Chat extends React.Component {
   }
 
   handleSpeechSubmit = (e) => {
-    // const voice = this.state.spokenLanguages.find(v => v.lang === e.target.value)
     const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
     spoken.say(this.props.selectedMessage.text, voice.name)
     this.props.updateSelectedMsg('')
@@ -414,7 +410,6 @@ class Chat extends React.Component {
             <label>Choose an appropriate voice:</label>
             <select id='selected-lang' onChange={this.handleSpeechSubmit}>
               <option key='default' id='default' disabled selected>Choose one</option>
-              {/* { this.state.spokenLanguages ? renderLanguages() : null } */}
               { this.props.spokenLanguages ? renderLanguages() : null }
             </select>
           </div>
@@ -423,7 +418,6 @@ class Chat extends React.Component {
     }
 
     const renderLanguages = () => {
-      // return this.state.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
       return this.props.spokenLanguages.map(language => <option id={language.lang} key={language.voiceURI} value={language.lang}>{language.name}</option>)
     }
 
