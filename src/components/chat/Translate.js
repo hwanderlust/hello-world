@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { updateLang, setTranslation } from '../../actions'
+import { updateLang, setTranslation, toggleTranslate } from '../../actions'
 import { translateText, detectLang } from '../../adapter'
 import { googleLanguages } from '../../constants'
 
