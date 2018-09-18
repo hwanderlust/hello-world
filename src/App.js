@@ -19,12 +19,12 @@ import Nav from './components/nav/Nav'
 
 import AuthContainer from './components/auth/AuthContainer'
 import ChatContainer from './components/chat/ChatContainer'
-import Profile from './components/user/Profile'
+import Profile from './components/user/profile/ProfileContainer'
 import ListContainer from './components/user/list/ListContainer'
 
-import Home from './components/Home'
-import About from './components/About'
-import Contact from './components/Contact'
+import Home from './components/static/Home'
+import About from './components/static/About'
+import Contact from './components/static/Contact'
 
 import { getUser } from './adapter'
 import { updateUser } from './actions/index'
