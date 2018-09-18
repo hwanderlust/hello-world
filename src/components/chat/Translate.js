@@ -35,7 +35,7 @@ class Translate extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.translatePrompt && this.props.selectedMessage) {
+    if(prevProps.selectedMessage !== this.props.selectedMessage) {
       console.log(`Translate componentDidUpdate:`, this.props.selectedMessage);
       detectLang(this.props.selectedMessage)
       .then(data => {
