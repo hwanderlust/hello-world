@@ -42,7 +42,7 @@ class Speech extends React.PureComponent {
           <label>Choose an appropriate voice:</label>
           <select id='selected-lang' onChange={this.handleSpeechSubmit}>
             <option key='default' id='default' disabled selected>Choose one</option>
-            { renderLanguages() }
+            { spokenLanguages ? renderLanguages() : null }
           </select>
         </div>
       </form>
