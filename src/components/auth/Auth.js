@@ -45,7 +45,11 @@ class Auth extends React.Component {
 
   handleChange = (e) => {
     if(e.target.name === 'languages') {
-      if(!this.state.languages.includes(e.target.value)) {
+      if(this.state.languages.includes(e.target.value)) {
+        // remove from array
+        const i = this.state.languages.indexOf(e.target.value)
+        this.setState({languages: this.state.languages.slice(i, 1)}, () => console.log(this.state))
+      } else {
         this.setState({languages: [...this.state.languages, e.target.value]}, () => console.log(this.state))
       }
     } else {
