@@ -49,13 +49,11 @@ class Chatbox extends React.Component {
 
   handleSpeechClick = (msg) => {
     if(!this.props.speechPrompt) {this.props.toggleSpeech()}
-    // this.props.speechPrompt ? null : this.props.toggleSpeech()
     this.props.updateSelectedMsg(msg)
   }
 
   handleTranslateClick = (msg) => {
     if(!this.props.translatePrompt) {this.props.toggleTranslate()}
-    // this.props.translatePrompt ? null : this.props.toggleTranslate()
     console.log(msg.text);
     const term = encodeURI(msg.text)
     this.props.updateSelectedMsg(term)
@@ -63,7 +61,6 @@ class Chatbox extends React.Component {
 
   handleSaveMsgClick = (msg) => {
     if(!this.props.savePrompt) {this.props.toggleSave()}
-    // this.props.savePrompt ? null : this.props.toggleSave()
     this.props.handleSaveMsgChange(msg)
   }
 
