@@ -48,19 +48,22 @@ class Chatbox extends React.Component {
   }
 
   handleSpeechClick = (msg) => {
-    this.props.speechPrompt ? null : this.props.toggleSpeech()
+    if(!this.props.speechPrompt) {this.props.toggleSpeech()}
+    // this.props.speechPrompt ? null : this.props.toggleSpeech()
     this.props.updateSelectedMsg(msg)
   }
 
   handleTranslateClick = (msg) => {
-    this.props.translatePrompt ? null : this.props.toggleTranslate()
+    if(!this.props.translatePrompt) {this.props.toggleTranslate()}
+    // this.props.translatePrompt ? null : this.props.toggleTranslate()
     console.log(msg.text);
     const term = encodeURI(msg.text)
     this.props.updateSelectedMsg(term)
   }
 
   handleSaveMsgClick = (msg) => {
-    this.props.savePrompt ? null : this.props.toggleSave()
+    if(!this.props.savePrompt) {this.props.toggleSave()}
+    // this.props.savePrompt ? null : this.props.toggleSave()
     this.props.handleSaveMsgChange(msg)
   }
 
