@@ -48,8 +48,8 @@ class Auth extends React.Component {
       if(this.state.languages.includes(e.target.value)) {
         const i = this.state.languages.indexOf(e.target.value)
         let updatedLangs = this.state.languages.slice()
-        updateLangs.splice(i, 1)
-        this.setState({languages: updateLangs}, () => console.log(this.state))
+        updatedLangs.splice(i, 1)
+        this.setState({languages: updatedLangs}, () => console.log(this.state))
       } else {
         this.setState({languages: [...this.state.languages, e.target.value]}, () => console.log(this.state))
       }
