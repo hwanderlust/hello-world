@@ -31,9 +31,13 @@ class Auth extends React.Component {
       this.setState({login: true}, () => console.log(this.state))
     }
     if(window.location.pathname === '/signup') {
-      this.setState({aboutForm: false}, () => console.log(this.state))
-      this.setState({detailsForm: false}, () => console.log(this.state))
-      this.setState({login: false}, () => console.log(this.state))
+      this.setState({
+        aboutForm: false,
+        detailsForm: false,
+        login: false
+      }, () => console.log(this.state))
+      // this.setState({detailsForm: false}, () => console.log(this.state))
+      // this.setState({login: false}, () => console.log(this.state))
     }
   }
 
@@ -67,14 +71,14 @@ class Auth extends React.Component {
       case 'accountForm':
         if(this.state.login) {
           if(this.state.username === '' || this.state.password === '') {
-            alert('Kindly fill out all fields')
+            alert('Kindly enter all fields')
           } else {
             this.props.handleAuth({username: this.state.username, password: this.state.password})
           }
 
         } else {
           if(this.state.username === '' || this.state.password === '' || this.state.uploadedFileCloudinaryUrl === null) {
-            alert('Kindly fill out all fields and upload a profile picture')
+            alert('Kindly fill out all fields and upload a profile picture, or wait till the picture has successfully uploaded')
           } else {
            this.toggleFormStatus(e)
            this.setState({aboutForm: !this.state.aboutForm}, () => console.log(this.state))
@@ -84,7 +88,7 @@ class Auth extends React.Component {
 
       case 'aboutForm':
         if(this.state.location === '' || this.state.age === 0 || this.state.nationality === '' || this.state.languages === '') {
-           alert('Kindly fill out all fields')
+           alert('Kindly submit all fields')
          } else {
            this.toggleFormStatus(e)
            this.setState({detailsForm: !this.state.detailsForm}, () => console.log(this.state))
@@ -94,18 +98,18 @@ class Auth extends React.Component {
       case 'detailsForm':
         if(this.state.introduction === '' || this.state.hobbies === '' || this.state.goals === '') {
            alert('Kindly fill out all fields')
-         } else {
-           this.toggleFormStatus(e)
-           console.log(this.state);
 
+         } else {
+           // only actually upload pic here to limit uploads 
+           this.toggleFormStatus(e)
            const { username, password, location, age, nationality, languages, introduction, hobbies, goals } = this.state
+
            if(this.state.languages.includes('')) {
-             console.log(`languages:`, languages);
              const filtered = this.state.languages.filter(lang => lang !== '')
-             console.log(`filtered:`, filtered);
-             this.setState({languages: filtered.join(' ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+             this.setState({languages: filtered.join(', ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+
            } else {
-             this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(' '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
+             this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(', '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
            }
          }
         break

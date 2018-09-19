@@ -26,18 +26,16 @@ class AboutForm extends React.Component {
         <br />
         <label htmlFor='nationality'>Where's your passport from?</label>
         <br />
-        <select name='nationality' className='form-inputs' onChange={handleChange}>
+        <select name='nationality' className='form-inputs' onChange={handleChange} value={nationality}>
           <option key='default' id='default' disabled selected>Choose one</option>
           { renderCountries() }
         </select>
-        {/* <input type='text' name='nationality' className='inputs' onChange={handleChange} value={nationality} /> */}
         <br />
         <label htmlFor='languages'>Which languages do you speak?</label>
         <br />
         <select name='languages' multiple={true} className='form-inputs multiple-select' onChange={handleChange} value={languages}>
           { renderLanguages() }
         </select>
-        {/* <input type='text' name='languages' className='inputs' onChange={handleChange} value={languages} /> */}
         <br />
         <input type='submit' className='' />
       </form>
