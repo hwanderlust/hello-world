@@ -13,6 +13,7 @@ class Auth extends React.Component {
     username: '',
     password: '',
     login: false,
+    uploadedFile: null,
     uploadedFileCloudinaryUrl: null,
     location: '',
     age: 0,
@@ -75,8 +76,9 @@ class Auth extends React.Component {
           }
 
         } else {
-          if(this.state.username === '' || this.state.password === '' || this.state.uploadedFileCloudinaryUrl === null) {
-            alert('Kindly fill out all fields and upload a profile picture, or wait till the picture has successfully uploaded')
+          // if(this.state.username === '' || this.state.password === '' || this.state.uploadedFileCloudinaryUrl === null) {
+          if(this.state.username === '' || this.state.password === '' || this.state.uploadedFile === null) {
+            alert('Kindly fill out all fields and upload a profile picture')
           } else {
            this.toggleFormStatus(e)
            this.setState({aboutForm: !this.state.aboutForm}, () => console.log(this.state))
