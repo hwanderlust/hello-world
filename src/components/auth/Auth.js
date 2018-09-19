@@ -17,7 +17,7 @@ class Auth extends React.Component {
     location: '',
     age: 0,
     nationality: '',
-    languages: '',
+    languages: [],
     introduction: '',
     hobbies: '',
     goals: '',
@@ -44,7 +44,13 @@ class Auth extends React.Component {
   }
 
   handleChange = (e) => {
-    this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
+    if(e.target.name === 'languages') {
+      if(!this.state.languages.includes(e.target.value)) {
+        this.setState({languages: [...this.state.languages, e.target.value]}, () => console.log(this.state))
+      }
+    } else {
+      this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
+    }
   }
 
   handleSubmit = (e) => {
