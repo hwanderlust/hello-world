@@ -29,14 +29,20 @@ class Auth extends React.Component {
 
   componentDidMount() {
     if(window.location.pathname === '/login') {
-      this.setState({login: true}, () => console.log(this.state))
+      if(!this.state.login) {
+        this.setState({login: true}, () => console.log(this.state))
+      }
     }
     if(window.location.pathname === '/signup') {
-      this.setState({
-        aboutForm: false,
-        detailsForm: false,
-        login: false
-      }, () => console.log(this.state))
+      if(this.state.login) {
+        this.setState({login: false})
+      }
+      if(this.state.aboutForm) {
+        this.setState({aboutForm: false})
+      }
+      if(this.state.detailsForm) {
+        this.setState({detailsForm: false})
+      }
     }
   }
 
