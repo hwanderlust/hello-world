@@ -8,9 +8,9 @@ import { login, signup } from '../../adapter'
 import { updateUser, removeUser } from '../../actions/index'
 
 class AuthContainer extends React.Component {
-  state ={
-    login: false,
-  }
+  // state ={
+  //   login: false,
+  // }
 
   componentDidMount() {
     if(window.location.pathname === '/logout') {
@@ -27,7 +27,7 @@ class AuthContainer extends React.Component {
     const { updateUser, history } = this.props
 
     localStorage.setItem('token', userData.id)
-    this.setState({login: true}, () => console.log(this.state))
+    // this.setState({login: true}, () => console.log(this.state))
 
     updateUser(userData)
     history.push('/chat')
@@ -65,7 +65,7 @@ class AuthContainer extends React.Component {
 
   handleLogout = () => {
     localStorage.removeItem("token")
-    this.setState({login: false}, () => console.log(this.state))
+    // this.setState({login: false}, () => console.log(this.state))
     // localStorage.removeItem("chat")
     // localStorage.removeItem("msgs")
     removeUser()
@@ -76,7 +76,8 @@ class AuthContainer extends React.Component {
 
     return (
       <React.Fragment>
-        <Auth handleAuth={this.handleAuth} login={this.state.login} />
+        {/* <Auth handleAuth={this.handleAuth} login={this.state.login} /> */}
+        <Auth handleAuth={this.handleAuth} />
       </React.Fragment>
     )
   }
