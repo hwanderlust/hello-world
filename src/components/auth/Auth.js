@@ -4,7 +4,6 @@ import request from 'superagent';
 import AccountForm from './AccountForm';
 import AboutForm from './AboutForm';
 import DetailsForm from './DetailsForm';
-// import { uploadPic } from '../../adapter'
 
 const CLOUDINARY_UPLOAD_PRESET = 'vsicareb';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/pablopawpaw/upload';
@@ -30,10 +29,8 @@ class Auth extends React.Component {
   componentDidMount() {
     if(window.location.pathname === '/login') {
       this.setState({login: true}, () => console.log(this.state))
-      // this.setState({accountForm: true}, () => console.log(this.state))
     }
     if(window.location.pathname === '/signup') {
-      // this.setState({accountForm: true}, () => console.log(this.state))
       this.setState({aboutForm: false}, () => console.log(this.state))
       this.setState({detailsForm: false}, () => console.log(this.state))
       this.setState({login: false}, () => console.log(this.state))
@@ -120,6 +117,7 @@ class Auth extends React.Component {
     upload.end((err, response) => {
       if (err) {
         console.error(err);
+        alert(err)
       }
 
       if (response.body.secure_url !== '') {
