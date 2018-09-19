@@ -26,7 +26,7 @@ class AboutForm extends React.Component {
         <br />
         <label htmlFor='nationality'>Where's your passport from?</label>
         <br />
-        <select className='form-inputs'>
+        <select name='nationality' className='form-inputs' onChange={handleChange}>
           <option key='default' id='default' disabled selected>Choose one</option>
           { renderCountries() }
         </select>
@@ -34,7 +34,7 @@ class AboutForm extends React.Component {
         <br />
         <label htmlFor='languages'>Which languages do you speak?</label>
         <br />
-        <select multiple className='form-inputs multiple-select'>
+        <select name='languages' multiple className='form-inputs multiple-select' onChange={handleChange}>
           { renderLanguages() }
         </select>
         {/* <input type='text' name='languages' className='inputs' onChange={handleChange} value={languages} /> */}
