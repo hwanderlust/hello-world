@@ -34,8 +34,7 @@ class AboutForm extends React.Component {
         <br />
         <label htmlFor='languages'>Which languages do you speak?</label>
         <br />
-        <select multiple className='form-inputs'>
-          <option key='default' id='default' disabled selected>Choose one</option>
+        <select multiple className='form-inputs multiple-select'>
           { renderLanguages() }
         </select>
         {/* <input type='text' name='languages' className='inputs' onChange={handleChange} value={languages} /> */}

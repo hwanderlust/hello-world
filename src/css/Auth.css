@@ -53,12 +53,12 @@
   outline: none;
   border: 1px solid rgba(0, 16, 54, 1);
   color: white;
-  font-size: 2rem;
   text-align: center;
+  font-size: 2rem;
 }
 
-.select-inputs {
-  
+.multiple-select {
+  height: 5vh;
 }
 
 .form-button {
