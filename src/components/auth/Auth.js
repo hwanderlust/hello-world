@@ -108,19 +108,6 @@ class Auth extends React.Component {
          } else {
            this.handleImageUpload(this.state.uploadedFile);
            this.toggleFormStatus(e)
-           const { username, password, location, age, nationality, languages, introduction, hobbies, goals } = this.state
-
-           if(this.state.languages.includes('')) {
-             const filtered = this.state.languages.filter(lang => lang !== '')
-             if(this.state.uploadedFileCloudinaryUrl) {
-               this.setState({languages: filtered.join(', ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
-             }
-
-           } else {
-             if(this.state.uploadedFileCloudinaryUrl) {
-               this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(', '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
-             }
-           }
          }
         break
 
@@ -151,9 +138,28 @@ class Auth extends React.Component {
       }
 
       if (response.body.secure_url !== '') {
-        this.setState({uploadedFileCloudinaryUrl: response.body.secure_url}, () => console.log(this.state));
+        this.setState({uploadedFileCloudinaryUrl: response.body.secure_url}, () => {
+          console.log(this.state)
+          this.finishSignup()
+        });
       }
     });
+  }
+
+  finishSignup = () => {
+    const { username, password, location, age, nationality, languages, introduction, hobbies, goals } = this.state
+
+    if(this.state.languages.includes('')) {
+      const filtered = this.state.languages.filter(lang => lang !== '')
+      if(this.state.uploadedFileCloudinaryUrl) {
+        this.setState({languages: filtered.join(', ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+      }
+
+    } else {
+      if(this.state.uploadedFileCloudinaryUrl) {
+        this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(', '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
+      }
+    }
   }
 
   render() {
