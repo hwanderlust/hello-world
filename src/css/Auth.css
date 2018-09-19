@@ -32,6 +32,18 @@
   font-size: 2rem;
 }
 
+.form-inputs {
+  position: relative;
+  left: 1rem;
+  width: 80%;
+  height: 2.5vh;
+  background-color: rgba(0, 16, 54, 1);
+  outline: none;
+  border: 1px solid rgba(0, 16, 54, 1);
+  color: white;
+  text-align: center;
+}
+
 .inputs {
   position: relative;
   left: 1rem;
@@ -43,6 +55,10 @@
   color: white;
   font-size: 2rem;
   text-align: center;
+}
+
+.select-inputs {
+  
 }
 
 .form-button {

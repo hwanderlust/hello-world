@@ -22,17 +22,19 @@ class AboutForm extends React.Component {
         <input type='text' name='location' className='inputs' onChange={handleChange} value={location} autoFocus="true" ref={c => (this.inputFocus = c)} />
         <br />
         <label htmlFor='age'>How wise are you? (age)</label>
-        <input type='number' name='age' className='inputs' onChange={handleChange} value={age} />
+        <input type='number' name='age' min='5' max='122' className='inputs' onChange={handleChange} value={age} />
         <br />
         <label htmlFor='nationality'>Where's your passport from?</label>
-        <select>
+        <br />
+        <select className='form-inputs'>
           <option key='default' id='default' disabled selected>Choose one</option>
           { renderCountries() }
         </select>
         {/* <input type='text' name='nationality' className='inputs' onChange={handleChange} value={nationality} /> */}
         <br />
         <label htmlFor='languages'>Which languages do you speak?</label>
-        <select multiple>
+        <br />
+        <select multiple className='form-inputs'>
           <option key='default' id='default' disabled selected>Choose one</option>
           { renderLanguages() }
         </select>
