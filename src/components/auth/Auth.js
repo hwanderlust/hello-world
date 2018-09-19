@@ -36,8 +36,6 @@ class Auth extends React.Component {
         detailsForm: false,
         login: false
       }, () => console.log(this.state))
-      // this.setState({detailsForm: false}, () => console.log(this.state))
-      // this.setState({login: false}, () => console.log(this.state))
     }
   }
 
@@ -100,16 +98,20 @@ class Auth extends React.Component {
            alert('Kindly fill out all fields')
 
          } else {
-           // only actually upload pic here to limit uploads 
+           this.handleImageUpload(this.state.uploadedFile);
            this.toggleFormStatus(e)
            const { username, password, location, age, nationality, languages, introduction, hobbies, goals } = this.state
 
            if(this.state.languages.includes('')) {
              const filtered = this.state.languages.filter(lang => lang !== '')
-             this.setState({languages: filtered.join(', ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+             if(this.state.uploadedFileCloudinaryUrl) {
+               this.setState({languages: filtered.join(', ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+             }
 
            } else {
-             this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(', '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
+             if(this.state.uploadedFileCloudinaryUrl) {
+               this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(', '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
+             }
            }
          }
         break
@@ -124,11 +126,9 @@ class Auth extends React.Component {
   }
 
   onImageDrop = (files) => {
-    this.setState({
-      uploadedFile: files[0]
-    });
+    this.setState({uploadedFile: files[0]}, () => console.log(this.state));
 
-    this.handleImageUpload(files[0]);
+    // this.handleImageUpload(files[0]);
   }
 
   handleImageUpload(file) {
@@ -191,7 +191,7 @@ class Auth extends React.Component {
         <main className='auth-wrapper'>
           { renderHeader() }
 
-          { !this.state.accountForm || this.state.login ? null : this.state.uploadedFileCloudinaryUrl ? renderCheckmark() : renderPicUpload() }
+          { !this.state.accountForm || this.state.login ? null : this.state.uploadedFile ? renderCheckmark() : renderPicUpload() }
 
           { this.state.accountForm || this.state.login ? renderAccountForm() : null }
           <br/>
