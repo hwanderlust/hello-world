@@ -103,9 +103,9 @@ class Auth extends React.Component {
              console.log(`languages:`, languages);
              const filtered = this.state.languages.filter(lang => lang !== '')
              console.log(`filtered:`, filtered);
-             this.setState({languages: filtered}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
+             this.setState({languages: filtered.join(' ')}, () => this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl }))
            } else {
-             this.props.handleAuth({ username, password, location, age, nationality, languages, introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
+             this.props.handleAuth({ username, password, location, age, nationality, languages: languages.join(' '), introduction, hobbies, goals, profile_picture: this.state.uploadedFileCloudinaryUrl })
            }
          }
         break
