@@ -101,7 +101,8 @@ const manageApp = (state = initialState, action) => {
 
     case CLOSE_CHAT:
       return {...state,
-        openChats: action.payload
+        openChats: action.payload,
+        recipientUser: null
       }
 
     case LIST_MESSAGES:
