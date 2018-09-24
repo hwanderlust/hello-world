@@ -68,7 +68,7 @@ export const countries = [
   'Greece',
   'Indonesia',
   'Italy',
-  'Japna',
+  'Japan',
   'Malaysia',
   'Mexico',
   'Mongolia',
