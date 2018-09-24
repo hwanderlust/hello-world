@@ -115,6 +115,7 @@
   /* background-color: rgba(148, 16, 16, 1); */
   border-left: 1px solid rgba(255, 216, 170, 1);
   padding-top: 1rem;
+  width: 100%;
 }
 
 .user {
