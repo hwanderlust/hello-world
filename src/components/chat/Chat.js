@@ -33,7 +33,10 @@ const containerStyle = {
 const imgStyle = {
   borderRadius: '50%',
   width: '2rem',
-  height: '2rem'
+  height: '2rem',
+  position: 'absolute',
+  top: '-1.3rem',
+  marginRight: '1rem'
 }
 
 class Chat extends React.Component {

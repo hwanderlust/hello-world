@@ -110,9 +110,7 @@
   justify-content: flex-start;
   align-items: baseline;
   overflow: scroll;
-  /* background-color: rgba(122, 134, 173, 1); */
   background-color: #0067B2;
-  /* background-color: rgba(148, 16, 16, 1); */
   border-left: 1px solid rgba(255, 216, 170, 1);
   padding-top: 1rem;
   width: 100%;
@@ -146,6 +144,7 @@
   align-self: center;
   margin-left: 2rem;
   position: relative;
+  font-size: 1rem;
 }
 
 .user:hover {
