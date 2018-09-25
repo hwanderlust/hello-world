@@ -24,7 +24,7 @@ class Home extends React.Component {
               <i class="fas fa-sign-language"></i><li>Exchange Languages</li>
               <i class="fas fa-exchange-alt"></i><li>Exchange Cultures</li>
               <i class="fas fa-language"></i><li>Translation</li>
-              <i class="fas fa-language"></i><li>Text-to-Speech</li>
+              <i class="fas fa-volume-up"></i><li>Text-to-Speech</li>
             </div>
 
             <div id='home-pic' className='home-img-container'>
