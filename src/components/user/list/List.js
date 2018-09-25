@@ -153,7 +153,13 @@ class List extends React.Component {
     }
 
     const renderTranslation = () => {
-      return this.props.translation ? <span onClick={this.clearTranslation}>{this.props.translation}</span> : null
+      setTimeout(this.clearTranslation, 3000)
+      return <span onClick={this.clearTranslation}>{this.props.translation}</span>
+    }
+
+    const renderAdvice = () => {
+      const advice = ['If empty, go chat with someone and click on a message to save it to a list!', 'Click and drag a message to delete or remove it.', 'Click a message to access text-to-speech and translation features.', 'Did you know you can move a message to a different list if you clicked on it?']
+      return advice[Math.floor(Math.random() * advice.length)]
     }
 
     return(
@@ -165,8 +171,9 @@ class List extends React.Component {
         <section>
           { this.props.speechPrompt ? <Speech /> : null }
           { this.props.translatePrompt ? <Translate /> : null }
-          { renderTranslation() }
+          { this.props.translation ? renderTranslation() : null }
           { this.props.movePrompt ? renderMoveForm() : null }
+          { this.props.speechPrompt || this.props.translatePrompt || this.props.translation || this.props.movePrompt ? null : renderAdvice() }
         </section>
 
         <main className='list-messages'>
