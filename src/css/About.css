@@ -3,6 +3,7 @@
   top: 5vh;
   left: 10vw;
   margin: 2rem;
+  margin-top: 1rem;
   width: 75%;
 }
 
@@ -43,12 +44,31 @@
   font-size: 1.2rem;
 }
 
-/* .left-img {
-  float: left;
-  margin-right: 2rem;
+.about-wrapper .top-img {
+  width: 30vw;
 }
 
-.right-img {
-  float: right;
-  margin-left: 2rem;
-} */
+.about-container .about-wrapper header section {
+  margin-bottom: 0;
+}
+
+.about-container .about-wrapper header {
+  margin-bottom: 0;
+}
+
+.about-container .about-wrapper header p {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+aside {
+  font-size: 5rem;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 3rem;
+}
+
+.about-container .about-wrapper h1 {
+  text-decoration: underline;
+  font-size: 3em;
+}

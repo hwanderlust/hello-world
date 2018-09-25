@@ -6,18 +6,24 @@ class About extends React.Component {
     return (
       <div className='about-container'>
         <div className='about-wrapper'>
+          <header>
+            <img src='https://images.pexels.com/photos/315658/pexels-photo-315658.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' alt='inspiration--bulb with green plant growing out of' className='top-img'/>
+            <h1>Inspiration</h1>
+            <section>
+              <p>Each and every language has <span>their own personality, their own history, culture, and beauty.</span> It is a shame to see these languages gradually disappear!</p>
 
-          <h1>Inspiration</h1>
-          <p>Having had learned two foreign languages--at a conversational level--as an adult, I learned that each and every language has <span>their own personality, their own history, culture, and beauty.</span> It is a shame to see these languages gradually disappear as globalization increases and more and more folks concentrating on the most spoken languages around the globe.</p>
+              <p>Growing up as a first-generation American <span>I regret not learning my parents' languages.</span> I mean, it's unnecessary in America, right?</p>
 
-          <p>It's only natural people flock to the most common languages in the world to learn--for business, for studies, for politics, for communication--but does it make all other languages insignificant? Growing up as a first-generation American <span>I regret not learning my parents' languages.</span> I mean, it's unnecessary in America, right?</p>
+              <p>In Japanese or Korean, <span>"I miss you"</span> translates on the most simplest level to <span>"I want to see you (again)."</span> These subtleties may seem insignificant, but isn't it interesting and beautiful?</p>
 
-          <p>Did you know that if you wanted to express feelings of missing someone in Japanese or Korean, you literally say you want to see/meet them? It never occurred to me that essentially <span>"I miss you" translates on the most simplest level to "I want to see you (again)."</span> These subtleties may seem insignificant, but isn't it interesting and beautiful?</p>
-
-          <p>"Overall, a median of 92% of European students are learning a language in school." Compare that to a mere 20% in America!</p>
-
+              <p>"Overall, a median of <span>92%</span> of European students are learning a language in school." Compare that to a mere <span>20%</span> in America!</p>
+            </section>
+          </header>
+          <aside>.....</aside>
+          <main>
+            <img src='https://images.pexels.com/photos/712786/pexels-photo-712786.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' alt='magnifying glass on city landscape with city buildings in focus'  className='top-img'/>
           <h1>Studies have shown</h1>
-          
+
           <section className='align-left'>
             <img src='https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' alt='hand holding small globe in nice landscape' className='left-img' />
 
@@ -55,6 +61,7 @@ class About extends React.Component {
 
             <p>“Our ability to differentiate our own beliefs and values … is tied up in the <span>richness of the cultural experiences that we have had.”</span></p>
           </section>
+        </main>
 
         </div>
       </div>
