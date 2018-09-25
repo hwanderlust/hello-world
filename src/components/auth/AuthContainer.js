@@ -15,6 +15,7 @@ class AuthContainer extends React.Component {
     } else {
       const loggedIn = localStorage.getItem('token')
       if(loggedIn) {
+        alert(`Silly you, you're already logged in!`)
         this.props.history.push('/home')
       }
     }
@@ -66,7 +67,6 @@ class AuthContainer extends React.Component {
   }
 
   render() {
-
     return (
       <React.Fragment>
         <Auth handleAuth={this.handleAuth} />

@@ -211,11 +211,11 @@ class Auth extends React.Component {
           <br/>
 
           { this.state.accountForm && !this.state.login ? (
-            <button className='standout'><a href='/login' className='form-button'>Login</a></button>
+            <a href='/login' className='form-button'>Login</a>
           ) : null }
 
           { this.state.accountForm && this.state.login ? (
-            <button className='standout'><a href='/signup' className='form-button'>Sign up</a></button>
+            <a href='/signup' className='form-button'>Sign up</a>
           ) : null }
 
           { this.state.aboutForm ? renderAboutForm() : null }

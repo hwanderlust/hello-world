@@ -8,8 +8,8 @@ const AccountForm = ({ username, password, handleChange, handleSubmit }) => {
       <br />
       <label className='form-label' htmlFor='password'>Password</label>
       <input className='inputs' type='password' name='password'  value={password} onChange={(e) => handleChange(e)} />
-      <br />
-      <input type='submit' className='form-button' />
+      <br /><br />
+      <input type='submit' className='form-button standout' />
     </form>
   )
 };

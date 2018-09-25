@@ -10,7 +10,7 @@
 }
 
 .auth-wrapper {
-  width: 45vw;
+  width: 40vw;
   height: 55vh;
   border: 1px solid black;
   background-color: #0067B2;
@@ -20,12 +20,6 @@
   align-items: stretch;
   box-shadow: 2px 3px 5px #C4C4C4, 2px 3px 5px #FF8A00;
   border-radius: 3px;
-}
-
-.auth-header {
-}
-
-.auth-children {
 }
 
 .form-label {
@@ -47,14 +41,14 @@
 .inputs {
   position: relative;
   left: 1rem;
-  width: 80%;
+  width: 20vw;
   height: 2.5vh;
   background-color: rgba(0, 16, 54, 1);
   outline: none;
   border: 1px solid rgba(0, 16, 54, 1);
   color: white;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 .multiple-select {
@@ -64,6 +58,11 @@
 .form-button {
   width: 10vw;
   align-self: center;
+  color: inherit;
+}
+
+.form-button:visited {
+  color: black;
 }
 
 .standout {
@@ -77,11 +76,7 @@
   outline: none;
   box-shadow: 1px 1px 2px #C4C4C4, 1px 2px 3px #FF8A00;
   font-size: 1rem;
-}
-
-.standout a {
-  text-decoration: none;
-  color: inherit;
+  font-family: 'Audiowide', cursive;
 }
 
 .dropzone {
