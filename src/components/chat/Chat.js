@@ -390,8 +390,8 @@ class Chat extends React.Component {
 
     const renderChatInput = () => {
       return (
-        <form class='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
-          <input class='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autoFocus="true" ref={c => this.inputFocus = c} />
+        <form className='chat-input-wrapper' onSubmit={(e) => this.handleSubmit(e)}>
+          <input className='chat-input' type='text' name='text' placeholder={this.state.placeholder} value={this.state.text || this.props.translation || ""} onChange={e => this.handleChange(e)} autoFocus="true" ref={c => this.inputFocus = c} />
         </form>
       )
     }

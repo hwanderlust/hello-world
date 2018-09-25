@@ -38,16 +38,16 @@ class Nav extends React.Component {
       return (
         <React.Fragment>
           <a href='/profile' className='nav-item'>
-            <li><i class="far fa-user-circle"></i><br/>Profile</li>
+            <li><i className="far fa-user-circle"></i><br/>Profile</li>
           </a>
           <a href='/lists' className='nav-item'>
-            <li><i class="far fa-list-alt"></i><br/>Lists</li>
+            <li><i className="far fa-list-alt"></i><br/>Lists</li>
           </a>
           <a href='/chat' className='nav-item'>
-            <li><i class="far fa-comment-alt"></i><br />Chat</li>
+            <li><i className="far fa-comment-alt"></i><br />Chat</li>
           </a>
           <a href='/logout' className='nav-item'>
-            <li><i class="fas fa-sign-out-alt"></i><br/>Logout</li>
+            <li><i className="fas fa-sign-out-alt"></i><br/>Logout</li>
           </a>
         </React.Fragment>
       )
@@ -57,7 +57,7 @@ class Nav extends React.Component {
       return (
         <React.Fragment>
           <a href='/login' className='nav-item'>
-            <li><i class="fas fa-sign-in-alt"></i><br/>Login</li>
+            <li><i className="fas fa-sign-in-alt"></i><br/>Login</li>
           </a>
         </React.Fragment>
       )
@@ -77,13 +77,13 @@ class Nav extends React.Component {
       return (
         <React.Fragment>
           <a href='/home' className='nav-item'>
-            <li><i class="fas fa-home"></i><br/>Home</li>
+            <li><i className="fas fa-home"></i><br/>Home</li>
           </a>
           <a href='/about' className='nav-item'>
-            <li><i class="fas fa-info-circle"></i><br/>About</li>
+            <li><i className="fas fa-info-circle"></i><br/>About</li>
           </a>
           <a href='/contact' className='nav-item'>
-            <li><i class="far fa-address-card"></i><br/>Contact</li>
+            <li><i className="far fa-address-card"></i><br/>Contact</li>
           </a>
           { this.state.loggedIn ? loggedInItems() : NotLoggedInItems() }
         </React.Fragment>
