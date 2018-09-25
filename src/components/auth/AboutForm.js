@@ -21,7 +21,7 @@ class AboutForm extends React.Component {
         <label htmlFor='location'>Where you at?</label><br/>
         <input type='text' name='location' className='inputs' onChange={handleChange} value={location} autoFocus="true" ref={c => (this.inputFocus = c)} />
         <br />
-        <label htmlFor='age'>How wise are you? (age)</label>
+        <label htmlFor='age'>How wise are you? (age)</label><br/>
         <input type='number' name='age' min='5' max='122' className='inputs' onChange={handleChange} value={age} />
         <br />
         <label htmlFor='nationality'>Where's your passport from?</label>
