@@ -175,10 +175,12 @@ class MessageContainer extends React.Component {
         this.hideOtherFeatures('move')
         return this.handleMove(msg)
       default:
-        return this.setState({
+        this.setState({
           popup: !this.state.popup,
           message: msg
         }, () => console.log(this.state))
+        setTimeout(() => this.setState({popup: false}, () => console.log(this.state)), 2000)
+        break
     }
   }
 
