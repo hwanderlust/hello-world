@@ -1,5 +1,4 @@
-// a reducer is a PURE function that takes the previous state and an action as arguments and returns new state based on the action.type
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION, TOGGLE_SPEECH, UPDATE_SELECTED_MSG, TOGGLE_TRANSLATE, TOGGLE_SAVE, TOGGLE_MOVE, TOGGLE_PF_VIEW, CLEAR_SELECTED_MSG, UPDATE_SPOKEN_LANGS } from '../actions/types'
+import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION, TOGGLE_SPEECH, UPDATE_SELECTED_MSG, TOGGLE_TRANSLATE, TOGGLE_SAVE, TOGGLE_MOVE, TOGGLE_PF_VIEW, CLEAR_SELECTED_MSG, UPDATE_SPOKEN_LANGS, TOGGLE_SPINNER } from '../actions/types'
 
 const initialState = {
   currentUser: null,
@@ -23,6 +22,7 @@ const initialState = {
   selectedMessage: null,
   userPfView: null,
   spokenLanguages: null,
+  loading: false,
 }
 
 const manageApp = (state = initialState, action) => {
@@ -156,6 +156,11 @@ const manageApp = (state = initialState, action) => {
     case UPDATE_SPOKEN_LANGS:
       return {...state,
         spokenLanguages: action.payload
+      }
+
+    case TOGGLE_SPINNER:
+      return {...state,
+        loading: !state.loading
       }
 
     case REMOVE_USER:

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { updateLang, setTranslation, toggleTranslate } from '../../actions'
+import { updateLang, setTranslation, toggleTranslate, toggleSpinner } from '../../actions'
 import { translateText, detectLang } from '../../adapter'
 import { googleLanguages } from '../../constants'
 
@@ -55,6 +55,7 @@ class Translate extends React.Component {
           code: e.target.selectedOptions[0].id
         }}, () => console.log(this.state))
       case 'toLang':
+        this.props.toggleSpinner()
         return this.handleTranslation(e)
       default:
         return console.log('fked up');
@@ -76,6 +77,7 @@ class Translate extends React.Component {
         .then(r => {
           const translation = this.formatTranslation(r)
           this.props.setTranslation(translation)
+          this.props.toggleSpinner()
         })
 
       } else if(this.props.selectedMessage) {
@@ -84,6 +86,7 @@ class Translate extends React.Component {
         .then(r => {
           const translation = this.formatTranslation(r)
           this.props.setTranslation(translation)
+          this.props.toggleSpinner()
         })
       }
 
@@ -138,7 +141,7 @@ const mapStateToProps = (state) => {
     language: state.appState.language,
     translateTerm: state.appState.translateTerm,
     selectedMessage: state.appState.selectedMessage,
-
+    loading: state.appState.loading,
   }
 }
 
@@ -147,6 +150,7 @@ const mapDispatchToProps = (dispatch) => {
     updateLang: (lang) => dispatch(updateLang(lang)),
     setTranslation: (translation) => dispatch(setTranslation(translation)),
     toggleTranslate: () => dispatch(toggleTranslate()),
+    toggleSpinner: () => dispatch(toggleSpinner()),
   }
 }
 

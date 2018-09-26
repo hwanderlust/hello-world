@@ -1,16 +1,17 @@
 import React from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux'
-import spoken from '../../../node_modules/spoken/build/spoken.js';
+import spoken from '../../../node_modules/spoken/build/spoken';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg, toggleSpinner } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from '../features/Translate'
 import UserIcon from '../user/UserIcon'
 import Speech from '../features/Speech'
+import LoadingSpinner from '../features/LoadingSpinner'
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -251,6 +252,7 @@ class Chat extends React.Component {
 
   handleTranscribeShortcut = () => {
     this.setState({text: 'speak now'}, () => console.log(this.state))
+    this.props.toggleSpinner()
     this.handleTranscription()
   }
 
@@ -347,6 +349,7 @@ class Chat extends React.Component {
     .then( transcript => {
       console.log(transcript)
       this.setState({text: transcript}, () => console.log(this.state))
+      this.props.toggleSpinner()
     })
     .catch(error => console.warn(error.message))
   }
@@ -436,6 +439,10 @@ class Chat extends React.Component {
       )
     }
 
+    // const renderLoadingSpinner = () => {
+    //   return <img className='loading-spinner' src='https://cdn.dribbble.com/users/503653/screenshots/3143656/fluid-loader.gif' alt='loading spinner page loading' />
+    // }
+
     return (
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
@@ -452,6 +459,8 @@ class Chat extends React.Component {
         <div className='messaging-area'>
 
           { renderChatBoxes() }
+
+          { this.props.loading ? <LoadingSpinner /> : null }
 
         </div>
 
@@ -478,6 +487,7 @@ const mapStateToProps = (state) => {
     translatePrompt: state.appState.prompts.translatePrompt,
     savePrompt: state.appState.prompts.savePrompt,
     spokenLanguages: state.appState.spokenLanguages,
+    loading: state.appState.loading,
   }
 }
 
@@ -494,6 +504,7 @@ const mapDispatchToProps = (dispatch) => {
     updateRecipientUser: (user) => dispatch(updateRecipientUser(user)),
     toggleUserPf: (user) => dispatch(toggleUserPf(user)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
+    toggleSpinner: () => dispatch(toggleSpinner()),
   }
 }
 

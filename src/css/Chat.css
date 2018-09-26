@@ -297,3 +297,10 @@ transform: scale(1);
   word-wrap: break-word;
   font-size: 1rem;
 }
+
+.loading-spinner {
+  position: fixed;
+  top: 25vh;
+  left: 35vw;
+  z-index: 100;
+}

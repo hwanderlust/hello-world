@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import MessageContainer from '../../chat/MessageContainer'
 import Translate from '../../features/Translate'
 import Speech from '../../features/Speech'
+import LoadingSpinner from '../../features/LoadingSpinner'
 
-import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation } from '../../../actions'
+import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation, toggleSpinner } from '../../../actions'
 import { createList, getLists, addMessage, getListMsgs, updateMessageList } from '../../../adapter'
 
 const bgColor = () => {
@@ -31,6 +32,7 @@ class List extends React.Component {
     message: null,
     newList: '',
   }
+
   componentDidMount() {
     this.setState({messages: this.props.messages}, () => console.log(this.state))
   }
@@ -168,7 +170,8 @@ class List extends React.Component {
           { this.props.translatePrompt ? <Translate /> : null }
           { this.props.translation ? renderTranslation() : null }
           { this.props.movePrompt ? renderMoveForm() : null }
-          { this.props.speechPrompt || this.props.translatePrompt || this.props.translation || this.props.movePrompt ? null : renderAdvice() }
+          { this.props.loading ? <LoadingSpinner /> : null }
+          { this.props.speechPrompt || this.props.translatePrompt || this.props.translation || this.props.movePrompt || this.props.loading ? null : renderAdvice() }
         </section>
 
         <main className='list-messages'>
@@ -189,6 +192,7 @@ const mapStateToProps = (state) => {
     currentUser: state.appState.currentUser,
     movePrompt: state.appState.prompts.movePrompt,
     messages: state.appState.messages,
+    loading: state.appState.loading,
   }
 }
 
@@ -200,6 +204,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleMove: () => dispatch(toggleMove()),
     updateListMsgs: (msgs) => dispatch(updateListMsgs(msgs)),
     clearTranslation: () => dispatch(clearTranslation()),
+    toggleSpinner: () => dispatch(toggleSpinner()),
   }
 }
 

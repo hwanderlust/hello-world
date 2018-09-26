@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import spoken from '../../../node_modules/spoken/build/spoken.js';
-import { toggleSpeech, updateSelectedMsg, clearSelectedMsg, updateSpokenLangs } from '../../actions'
-
+import { toggleSpeech, updateSelectedMsg, clearSelectedMsg, updateSpokenLangs, toggleSpinner } from '../../actions'
 
 class Speech extends React.PureComponent {
 
@@ -17,8 +16,10 @@ class Speech extends React.PureComponent {
   }
 
   handleSpeechSubmit = (e) => {
+    this.props.toggleSpinner()
     const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
     spoken.say(this.props.selectedMessage.text, voice.name)
+    .then(speechInfo => this.props.toggleSpinner())
     this.props.clearSelectedMsg()
     this.props.toggleSpeech()
   }
@@ -55,6 +56,7 @@ const mapStateToProps = (state) => {
   return {
     selectedMessage: state.appState.selectedMessage,
     spokenLanguages: state.appState.spokenLanguages,
+    loading: state.appState.loading,
   }
 }
 
@@ -64,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     updateSelectedMsg: (msg) => dispatch(updateSelectedMsg(msg)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
     updateSpokenLangs: (langs) => dispatch(updateSpokenLangs(langs)),
+    toggleSpinner: () => dispatch(toggleSpinner()),
   }
 }
 
