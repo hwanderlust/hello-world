@@ -35,12 +35,16 @@ class Translate extends React.Component {
     detectLang(this.props.selectedMessage)
     .then(data => {
       console.log(data);
-      const lang = data["data"]["detections"][0][0]["language"]
-      const langOption = googleLanguages.find(item => item.code === lang)
-      console.log(langOption);
+      if(data["data"]["detections"][0][0]["language"]) {
+        const lang = data["data"]["detections"][0][0]["language"]
+        const langOption = googleLanguages.find(item => item.code === lang)
+        console.log(langOption);
 
-      if(langOption) {
-        this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
+        if(langOption) {
+          this.setState({detectedLang: {name: langOption.name, code: langOption.code}}, () => console.log(this.state))
+        }
+      } else {
+        console.log(`Message's language couldn't be determined.`);
       }
     })
   }
@@ -94,11 +98,16 @@ class Translate extends React.Component {
   }
 
   formatTranslation = (r) => {
-    const data = r.data.translations[0].translatedText
-    const check = data.match(/=>(.*)\S/) ? true : false
-    const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
-    console.log(translation);
-    return translation
+    console.log(r);
+    if(r.data.translations) {
+      const data = r.data.translations[0].translatedText
+      const check = data.match(/=>(.*)\S/) ? true : false
+      const translation = check ? data.match(/=>(.*)\S/)[1].trim() : data
+      console.log(translation);
+      return translation
+    } else {
+      return `Couldn't be properly translated. Perhaps try a more grammatically correct structure.`
+    }
   }
 
   render() {

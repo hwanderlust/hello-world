@@ -19,7 +19,9 @@ class Speech extends React.PureComponent {
     this.props.toggleSpinner()
     const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
     spoken.say(this.props.selectedMessage.text, voice.name)
-    .then(speechInfo => this.props.toggleSpinner())
+    .then(speechInfo => {
+      this.props.toggleSpinner()
+    })
     this.props.clearSelectedMsg()
     this.props.toggleSpeech()
   }
