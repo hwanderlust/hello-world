@@ -60,11 +60,6 @@ export function createMessage(message) {
   fetch(url, options)
 }
 
-// export function getChatMessages(id) {
-//   const url = `${API_ROOT}/users/${id}`
-//   return fetch(url).then(r => r.json())
-// }
-
 export function getChatMessages(id) {
   const url = `${API_ROOT}/chats/${id}`
   return fetch(url).then(r => r.json())
@@ -115,6 +110,16 @@ export function addMessage(msgObj) {
   const url = `${API_ROOT}/save_message`
   const options = {
     method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({message: msgObj})
+  }
+  return fetch(url, options).then(r => r.json())
+}
+
+export function updateMessageList(msgObj) {
+  const url = `${API_ROOT}/save_message`
+  const options = {
+    method: 'PATCH',
     headers: HEADERS,
     body: JSON.stringify({message: msgObj})
   }

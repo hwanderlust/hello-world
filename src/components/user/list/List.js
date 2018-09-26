@@ -6,7 +6,7 @@ import Translate from '../../features/Translate'
 import Speech from '../../features/Speech'
 
 import { toggleSpeech, updateSelectedMsg, toggleTranslate, toggleMove, updateListMsgs, clearTranslation } from '../../../actions'
-import { createList, getLists, addMessage, getListMsgs, removeMsgFromList } from '../../../adapter'
+import { createList, getLists, addMessage, getListMsgs, updateMessageList } from '../../../adapter'
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -29,16 +29,14 @@ class List extends React.Component {
   state = {
     messages: null,
     message: null,
-    saveMsgStatus: false,
     newList: '',
-    saveMsg: false,
   }
   componentDidMount() {
     this.setState({messages: this.props.messages}, () => console.log(this.state))
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.messages !== this.props.messages) {
+    if(prevState.messages !== this.props.messages) {
       this.setState({messages: this.props.messages}, () => console.log(this.state))
     }
   }
@@ -62,7 +60,6 @@ class List extends React.Component {
       getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
     }
 
-    this.setState({saveMsg: true})
     this.props.toggleMove()
   }
 
@@ -81,31 +78,29 @@ class List extends React.Component {
     this.setState({[e.target.name]: e.target.value}, () => console.log(this.state))
   }
 
-  handleExistingList = () => {
-    this.handleRemovingMsg()
-
-    const listId = this.existingList.value
-    this.handleSavingMsg(listId)
+  handleListMessages = () => {
+    getListMsgs(this.props.list.id)
+      .then(messages => {
+        this.setState({messages}, () => console.log(this.state))
+        this.props.updateListMsgs(messages)
+      })
   }
 
-  handleRemovingMsg = () => {
-    removeMsgFromList({msg_id: this.state.message.id, list_id: this.props.list.id})
-      .then(r => {
-        console.log(r);
+  handleExistingList = () => {
+    const listId = this.existingList.value
 
-        getListMsgs(this.props.list.id)
-          .then(messages => {
-            this.setState({messages}, () => console.log(this.state))
-            this.props.updateListMsgs(messages)
-          })
-      })
+    updateMessageList({msg_id: this.state.message.id, list_id: listId})
+    .then(messages => {
+      console.log(messages)
+      this.props.toggleMove()
+      this.handleListMessages()
+    })
   }
 
   handleSavingMsg = (listId) => {
     addMessage({msg_id: this.state.message.id, list_id: listId})
       .then(messages => {
         console.log(messages)
-        this.setState({saveMsgStatus: true}, () => console.log(this.state))
         this.props.toggleMove()
       })
   }

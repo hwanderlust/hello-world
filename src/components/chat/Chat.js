@@ -67,7 +67,6 @@ class Chat extends React.Component {
     if(this.props.users) {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
-    window.addEventListener('keypress', this.handleKeyPress)
     window.addEventListener('keydown', this.handleKeyDown)
   }
 
@@ -82,21 +81,6 @@ class Chat extends React.Component {
     } else {
       this.renderUsers()
     }
-  }
-
-  handleKeyPress = (e) => {
-    // if(!this.state.textInputFocus) {
-    //   let i;
-    //   if(e.key > 0 && e.key <= 9) {
-    //     i = e.key - 1
-    //     this.props.updateChat(this.props.openChats[i].id)
-    //   } else if(e.key === 0) {
-    //     i = 8
-    //     this.props.updateChat(this.props.openChats[i].id)
-    //   }
-    //   // this.setState({textInputFocus: true}, () => console.log(this.state))
-    //   // this.inputFocus.focus()
-    // }
   }
 
   handleKeyDown = (e) => {
