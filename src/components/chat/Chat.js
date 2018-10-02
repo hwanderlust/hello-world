@@ -5,7 +5,7 @@ import spoken from '../../../node_modules/spoken/build/spoken';
 import { withRouter } from 'react-router-dom'
 
 import { createList, addMessage, getLists, createMessage } from '../../adapter'
-import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg, toggleSpinner } from '../../actions'
+import { updateLists, updateMessages, updateChat, closeChat, clearTranslation, toggleSpeech, toggleTranslate, toggleSave, updateRecipientUser, toggleUserPf, clearSelectedMsg, toggleSpinner, closeChats } from '../../actions'
 
 import Chatbox from './Chatbox'
 import Translate from '../features/Translate'
@@ -261,19 +261,24 @@ class Chat extends React.Component {
     // eslint-disable-next-line
     const [firstWord, secondWord] = splitted
 
-    if(secondWord) {
+    if(!secondWord) return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
 
-      if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
-        const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
-        this.props.closeChat(updatedOpenChats)
+    if(secondWord.toLowerCase() === 'all') {
+      if(this.props.openChats.length > 0) {
+        this.props.closeChats()
         return this.setState({text: ''}, () => console.log(this.state))
-
       } else {
-        return alert(`Sorry but that chat isn't even open...`)
+        return alert(`Oh no, no chat windows to close!`)
       }
+    }
+
+    if(this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
+      const updatedOpenChats = this.props.openChats.filter(chat => chat.id !== Number(secondWord))
+      this.props.closeChat(updatedOpenChats)
+      return this.setState({text: ''}, () => console.log(this.state))
 
     } else {
-      return alert(`You gotta give the chat number--you can find it after the user's name on the chat window!`)
+      return alert(`Sorry but that chat isn't open, or you might have a typo.`)
     }
   }
 
@@ -311,14 +316,12 @@ class Chat extends React.Component {
         this.handleSavingMsg(newList.id)
         getLists(this.props.currentUser.id).then(lists => this.props.updateLists(lists))
       })
-    // this.hideForms('save')
     this.setState({newList: ''})
   }
 
   handleExistingList = () => {
     console.log(this.existingList.value);
     this.setState({existingList: this.existingList.value}, () => this.handleSavingMsg(this.state.existingList))
-    // this.hideForms('save')
   }
 
   hideForms = (form) => {
@@ -431,17 +434,13 @@ class Chat extends React.Component {
     }
 
     const renderTips = () => {
-      const tips = ['enter //T for translation prompt', 'enter //C # to close a certain chat window', 'enter //L for transcribe prompt', 'press esc to remove prompts and/or clear text field', 'press alt or option to start typing in main text field']
+      const tips = [`enter "//T" for translation prompt`, `enter "//C #" to close a certain chat window`, `enter "//L" for transcribe prompt`, `press "Esc" to remove prompts and/or clear text field`, `press "alt" or "option" to start typing in main text field`, `enter "//C all" to close all chat windows`]
       return (
         <div className='tip-container'>
           <h1 className='tip'>{ tips[Math.floor(Math.random() * 5)] }</h1>
         </div>
       )
     }
-
-    // const renderLoadingSpinner = () => {
-    //   return <img className='loading-spinner' src='https://cdn.dribbble.com/users/503653/screenshots/3143656/fluid-loader.gif' alt='loading spinner page loading' />
-    // }
 
     return (
       <React.Fragment>
@@ -505,6 +504,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleUserPf: (user) => dispatch(toggleUserPf(user)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
     toggleSpinner: () => dispatch(toggleSpinner()),
+    closeChats: () => dispatch(closeChats()),
   }
 }
 
