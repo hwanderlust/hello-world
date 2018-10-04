@@ -15,10 +15,10 @@ const handleSignup = () => {
         </div>
 
         <div className='home-bullet-container'>
-          <i class="fas fa-globe-americas"></i><li>Exchange Languages</li>
+          <i className="fas fa-globe-americas"></i><li>Exchange Languages</li>
           <i className="fas fa-language"></i><li>Translation</li>
           <i className="fas fa-volume-up"></i><li>Text-to-Speech</li>
-          <i class="far fa-grin-hearts"></i><li>Emoji Support</li>
+          <i className="far fa-grin-hearts"></i><li>Emoji Support</li>
         </div>
 
         <div id='home-pic' className='home-img-container'>

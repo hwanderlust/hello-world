@@ -56,10 +56,10 @@ class Chat extends React.Component {
       x: -100,
       y: -100,
       chatBoxBgColor: null,
-      textInputFocus: false,
       placeholder: '',
       spokenLanguages: null,
       spokenVoice: null,
+      tip: `enter "//T" for translation prompt`,
     };
   };
 
@@ -69,6 +69,7 @@ class Chat extends React.Component {
       this.setState({users: this.props.users}, () => console.log(this.state))
     }
     window.addEventListener('keydown', this.handleKeyDown)
+    this.interval = setInterval(this.renderTips, 60000)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -82,6 +83,10 @@ class Chat extends React.Component {
     } else {
       this.renderUsers()
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
   handleKeyDown = (e) => {
@@ -111,10 +116,6 @@ class Chat extends React.Component {
         this.setState({text: ''}, () => console.log(this.state))
         this.props.clearTranslation()
       }
-
-    } else if (e.key === 'Alt') {
-      this.setState({textInputFocus: true}, () => console.log(this.state))
-      this.inputFocus.focus()
     }
   }
 
@@ -191,7 +192,6 @@ class Chat extends React.Component {
 
     e.persist()
     this.handleFeatures(e)
-    this.setState({textInputFocus: false}, () => console.log(this.state))
   }
 
   handleFeatures = (e) => {
@@ -225,11 +225,11 @@ class Chat extends React.Component {
         if(this.state.text === '' && this.props.translation) {
           this.newMessage({chat_id: this.props.chat, text: this.props.translation})
           this.props.clearTranslation()
-          return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+          return this.setState({text: ''}, () => console.log(this.state))
 
         } else {
           this.newMessage({chat_id: this.props.chat, text: this.state.text})
-          return this.setState({text: '', textInputFocus: false}, () => console.log(this.state))
+          return this.setState({text: ''}, () => console.log(this.state))
         }
     }
   }
@@ -357,6 +357,11 @@ class Chat extends React.Component {
     .catch(error => console.warn(error.message))
   }
 
+  renderTips = () => {
+    const tips = [`enter "//T" for translation prompt`, `enter "//C #" to close a certain chat window`, `enter "//L" for transcribe prompt`, `press "Esc" to remove prompts and/or clear text field`, `click main background and press "tab" to type`, `enter "//C all" to close all chat windows`]
+    this.setState({tip: tips[Math.floor(Math.random() * 5)]}, () => console.log(this.state))
+  }
+
   render() {
 
     const renderHeader = () => {
@@ -433,15 +438,6 @@ class Chat extends React.Component {
       )
     }
 
-    const renderTips = () => {
-      const tips = [`enter "//T" for translation prompt`, `enter "//C #" to close a certain chat window`, `enter "//L" for transcribe prompt`, `press "Esc" to remove prompts and/or clear text field`, `press "alt" or "option" to start typing in main text field`, `enter "//C all" to close all chat windows`]
-      return (
-        <div className='tip-container'>
-          <h1 className='tip'>{ tips[Math.floor(Math.random() * 5)] }</h1>
-        </div>
-      )
-    }
-
     return (
       <React.Fragment>
         <ActionCable channel={{ channel: 'UsersChannel' }} onReceived={this.handleReceivedUser} />
@@ -465,8 +461,9 @@ class Chat extends React.Component {
 
         { renderChatInput() }
 
-        { renderTips() }
-
+        <div className='tip-container'>
+          <h1 className='tip'>{ this.state.tip }</h1>
+        </div>
 
       </React.Fragment>
     )
