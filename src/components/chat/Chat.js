@@ -40,7 +40,14 @@ const imgStyle = {
   marginRight: '1rem'
 }
 
-const tips = [`enter "//T" for translation prompt`, `enter "//C #" to close a certain chat window`, `enter "//L" for transcribe prompt`, `press "Esc" to remove prompts and/or clear text field`, `click main background and press "tab" to type`, `enter "//C all" to close all chat windows`]
+const tips = [
+  `enter "//T" for translation prompt`,
+  `enter "//C #" to close a certain chat window`,
+  `enter "//L" for transcribe prompt`,
+  `press "Esc" to remove prompts and/or clear text field`, 
+  `click main background and press "tab" to type`,
+  `enter "//C all" to close all chat windows`
+]
 
 class Chat extends React.Component {
   constructor(props) {
