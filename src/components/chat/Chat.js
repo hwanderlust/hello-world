@@ -92,7 +92,7 @@ class Chat extends React.Component {
       this.setState({ users: this.props.users }, () => console.log(this.state));
     }
     window.addEventListener("keydown", this.handleKeyDown);
-    this.setState({ tip: tips[Math.floor(Math.random() * 5)] }, () =>
+    this.setState({ tip: tips[Math.floor(Math.random() * tips.length)] }, () =>
       console.log(this.state)
     );
     this.interval = setInterval(this.renderTips, 60000);
@@ -159,16 +159,24 @@ class Chat extends React.Component {
       );
 
       if (check.length === 0) {
-        this.props.handleNewChat({ recipient_id: clickedUser.id });
+        // this.props.handleNewChat({ recipient_id: clickedUser.id });
+        const x = parseInt(Math.random() * 300, 10);
+        const y = parseInt(Math.random() * 300, 10);
         this.setState(
-          (prevState, prevProps) => {
-            return {
-              x: parseInt(Math.random() * 300, 10),
-              y: parseInt(Math.random() * 300, 10),
-              chatBoxBgColor: bgColor()
-            };
+          {
+            x,
+            y,
+            chatBoxBgColor: bgColor()
           },
-          nextState => console.log(nextState)
+          () => {
+            console.log(this.state);
+            this.props.handleNewChat({
+              recipient_id: clickedUser.id,
+              x: this.state.x,
+              y: this.state.y,
+              color: this.state.chatBoxBgColor
+            });
+          }
         );
       } else {
         alert("you already have a chat going, silly you");
@@ -436,7 +444,6 @@ class Chat extends React.Component {
   };
 
   renderTips = () => {
-    // const tips = [`enter "//T" for translation prompt`, `enter "//C #" to close a certain chat window`, `enter "//L" for transcribe prompt`, `press "Esc" to remove prompts and/or clear text field`, `click main background and press "tab" to type`, `enter "//C all" to close all chat windows`]
     this.setState({ tip: tips[Math.floor(Math.random() * 5)] }, () =>
       console.log(this.state)
     );

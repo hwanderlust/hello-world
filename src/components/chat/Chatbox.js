@@ -10,7 +10,8 @@ import {
   updateSelectedMsg,
   toggleTranslate,
   toggleSave,
-  closeChat
+  closeChat,
+  updateChatbox
 } from "../../actions";
 import { connect } from "react-redux";
 import { ActionCable } from "react-actioncable-provider";
@@ -84,16 +85,35 @@ class Chatbox extends React.Component {
   };
 
   handleBoxClick = e => {
-    if (e.target.dataset.username) {
-      console.log(e.target.dataset);
+    const user = e.target.dataset.username;
+    const chatId = parseInt(e.target.dataset.chat, 10);
+    const userId = parseInt(e.target.dataset.userid, 10);
 
-      this.props.updateChat(e.target.dataset.chat);
-      const recUser = {
-        id: e.target.dataset.userid,
-        username: e.target.dataset.username
-      };
-      this.props.updateRecipientUser(recUser);
-      this.setState({ z: this.state.z + 1 }, () => console.log(this.state));
+    if (user && chatId && userId) {
+      console.log(e.target.dataset);
+      console.log(`activeChat:`, this.props.activeChat);
+
+      if (this.props.activeChat !== chatId) {
+        this.props.updateChat(chatId);
+        const recUser = {
+          id: userId,
+          username: user
+        };
+        this.props.updateRecipientUser(recUser);
+        this.setState({ z: this.state.z + 1 }, () => console.log(this.state));
+        return;
+      }
+    }
+
+    const thisChat = this.props.openChats.find(chat => chat.id === chatId);
+    if (thisChat) {
+      if (
+        thisChat.chatbox.x !== e.screenX ||
+        thisChat.chatbox.y !== e.screenY
+      ) {
+        this.props.updateChatbox({ chatId, x: e.screenX, y: e.screenY });
+        return;
+      }
     }
   };
 
@@ -225,7 +245,8 @@ const mapStateToProps = state => {
     translatePrompt: state.appState.prompts.translatePrompt,
     speechPrompt: state.appState.prompts.speechPrompt,
     savePrompt: state.appState.prompts.savePrompt,
-    openChats: state.appState.openChats
+    openChats: state.appState.openChats,
+    activeChat: state.appState.chat
   };
 };
 
@@ -238,7 +259,8 @@ const mapDispatchToProps = dispatch => {
     updateSelectedMsg: msg => dispatch(updateSelectedMsg(msg)),
     toggleTranslate: () => dispatch(toggleTranslate()),
     toggleSave: () => dispatch(toggleSave()),
-    closeChat: chats => dispatch(closeChat(chats))
+    closeChat: chats => dispatch(closeChat(chats)),
+    updateChatbox: chat => dispatch(updateChatbox(chat))
   };
 };
 

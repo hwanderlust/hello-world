@@ -156,17 +156,11 @@
   transform: scale(0.9);
 }
 
-.chat-input-container {
-}
-
 .chat-input-wrapper {
   grid-area: input;
   position: relative;
   top: 0;
   width: 100%;
-}
-
-.chatbox-container {
 }
 
 .chat-input {

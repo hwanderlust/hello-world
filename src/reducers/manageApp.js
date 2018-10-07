@@ -24,7 +24,8 @@ import {
   CLEAR_SELECTED_MSG,
   UPDATE_SPOKEN_LANGS,
   TOGGLE_SPINNER,
-  CLOSE_ALL_CHATS
+  CLOSE_ALL_CHATS,
+  UPDATE_CHATBOX
 } from "../actions/types";
 
 const initialState = {
@@ -235,6 +236,20 @@ const manageApp = (state = initialState, action) => {
         openChats: [],
         recipientUser: null
       };
+
+    case UPDATE_CHATBOX:
+      const originalChats = [...state.openChats];
+      const chat = originalChats.find(
+        chat => chat.id === action.payload.chatId
+      );
+      let updatedChat = { ...chat };
+      updatedChat.chatbox.x = action.payload.x;
+      updatedChat.chatbox.y = action.payload.y;
+      const updated = originalChats.map(
+        chat => (chat.id === updatedChat.id ? updatedChat : chat)
+      );
+
+      return { ...state, openChats: updated };
 
     default:
       return state;
