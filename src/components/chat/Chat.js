@@ -338,10 +338,7 @@ class Chat extends React.Component {
     }
 
     if (this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
-      const updatedOpenChats = this.props.openChats.filter(
-        chat => chat.id !== Number(secondWord)
-      );
-      this.props.closeChat(updatedOpenChats);
+      this.props.closeChat(Number(secondWord));
       return this.setState({ text: "" }, () => console.log(this.state));
     } else {
       return alert(`Sorry but that chat isn't open, or you might have a typo.`);

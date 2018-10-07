@@ -101,10 +101,7 @@ class Chatbox extends React.Component {
     const chatId = parseInt(e.target.parentElement.dataset.chat, 10);
     if (chatId) {
       if (this.props.openChats.map(c => c.id).includes(chatId)) {
-        const updatedOpenChats = this.props.openChats.filter(
-          chat => chat.id !== chatId
-        );
-        this.props.closeChat(updatedOpenChats);
+        this.props.closeChat(chatId);
         return;
       } else {
         return console.log(`chat isn't open`, this.props.openChats);

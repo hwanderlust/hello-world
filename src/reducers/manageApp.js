@@ -1,4 +1,31 @@
-import { UPDATE_USER, UPDATE_USERS, UPDATE_LANG, SET_TRANSLATE_TERM, SET_DETECTED_LANG, UPDATE_RECIPIENT_USER, REMOVE_USER, UPDATE_LIST, UPDATE_MESSAGES, UPDATE_LISTS, OPEN_CHAT, UPDATE_CHAT, LIST_MESSAGES, CLOSE_CHAT, SET_TRANSLATION, CLEAR_TRANSLATION, TOGGLE_SPEECH, UPDATE_SELECTED_MSG, TOGGLE_TRANSLATE, TOGGLE_SAVE, TOGGLE_MOVE, TOGGLE_PF_VIEW, CLEAR_SELECTED_MSG, UPDATE_SPOKEN_LANGS, TOGGLE_SPINNER, CLOSE_ALL_CHATS } from '../actions/types'
+import {
+  UPDATE_USER,
+  UPDATE_USERS,
+  UPDATE_LANG,
+  SET_TRANSLATE_TERM,
+  SET_DETECTED_LANG,
+  UPDATE_RECIPIENT_USER,
+  REMOVE_USER,
+  UPDATE_LIST,
+  UPDATE_MESSAGES,
+  UPDATE_LISTS,
+  OPEN_CHAT,
+  UPDATE_CHAT,
+  LIST_MESSAGES,
+  CLOSE_CHAT,
+  SET_TRANSLATION,
+  CLEAR_TRANSLATION,
+  TOGGLE_SPEECH,
+  UPDATE_SELECTED_MSG,
+  TOGGLE_TRANSLATE,
+  TOGGLE_SAVE,
+  TOGGLE_MOVE,
+  TOGGLE_PF_VIEW,
+  CLEAR_SELECTED_MSG,
+  UPDATE_SPOKEN_LANGS,
+  TOGGLE_SPINNER,
+  CLOSE_ALL_CHATS
+} from "../actions/types";
 
 const initialState = {
   currentUser: null,
@@ -7,7 +34,7 @@ const initialState = {
   users: null,
   language: null,
   translateTerm: null,
-  detectedLang: 'en',
+  detectedLang: "en",
   translation: null,
   lists: null,
   list: null,
@@ -17,167 +44,201 @@ const initialState = {
     translatePrompt: false,
     speechPrompt: false,
     savePrompt: false,
-    movePrompt: false,
+    movePrompt: false
   },
   selectedMessage: null,
   userPfView: null,
   spokenLanguages: null,
-  loading: false,
-}
+  loading: false
+};
 
 const manageApp = (state = initialState, action) => {
-  switch (action.type){
+  switch (action.type) {
     case UPDATE_USER:
-      return {...state,
+      return {
+        ...state,
         currentUser: action.payload
-      }
+      };
 
     case UPDATE_USERS:
-      return {...state,
+      return {
+        ...state,
         users: action.payload
-      }
+      };
 
     case UPDATE_LANG:
-      return {...state,
+      return {
+        ...state,
         language: action.payload
-      }
+      };
 
     case SET_TRANSLATE_TERM:
-      return {...state,
+      return {
+        ...state,
         translateTerm: action.payload
-      }
+      };
 
     case SET_DETECTED_LANG:
-      return {...state,
+      return {
+        ...state,
         detectedLang: action.payload
-      }
+      };
 
     case SET_TRANSLATION:
-      return {...state,
+      return {
+        ...state,
         translation: action.payload
-      }
+      };
 
     case CLEAR_TRANSLATION:
-      return {...state,
+      return {
+        ...state,
         translation: null,
-        detectedLang: 'en',
+        detectedLang: "en",
         translateTerm: null,
         language: null
-      }
+      };
 
     case UPDATE_RECIPIENT_USER:
-      return {...state,
+      return {
+        ...state,
         recipientUser: action.payload
-      }
+      };
 
     case UPDATE_LIST:
-      return {...state,
+      return {
+        ...state,
         list: action.payload
-      }
+      };
 
     case UPDATE_LISTS:
-      return {...state,
+      return {
+        ...state,
         lists: action.payload
-      }
+      };
 
     case UPDATE_MESSAGES:
-      let oldChats = [...state.openChats]
-      let activeChat = oldChats.find(chat => chat.id === action.payload.id)
-      let updatedActiveChat = {...activeChat, messages: action.payload.messages}
-      const updatedChats = oldChats.map(chat => chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
-      return {...state,
+      let oldChats = [...state.openChats];
+      let activeChat = oldChats.find(chat => chat.id === action.payload.id);
+      let updatedActiveChat = {
+        ...activeChat,
+        messages: action.payload.messages
+      };
+      const updatedChats = oldChats.map(
+        chat => (chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
+      );
+      return {
+        ...state,
         openChats: updatedChats
-      }
+      };
 
     case OPEN_CHAT:
-      return {...state,
+      return {
+        ...state,
         openChats: [...state.openChats, action.payload]
-      }
+      };
 
     case UPDATE_CHAT:
-      return {...state,
+      return {
+        ...state,
         chat: action.payload
-      }
+      };
 
     case CLOSE_CHAT:
-      return {...state,
-        openChats: action.payload,
+      return {
+        ...state,
+        openChats: state.openChats.filter(chat => chat.id !== action.payload),
         recipientUser: null
-      }
+      };
 
     case LIST_MESSAGES:
-      return {...state,
+      return {
+        ...state,
         messages: action.payload
-      }
+      };
 
     case TOGGLE_SPEECH:
-      return {...state,
-        prompts: {...state.prompts,
+      return {
+        ...state,
+        prompts: {
+          ...state.prompts,
           speechPrompt: !state.prompts.speechPrompt
         }
-      }
+      };
 
     case TOGGLE_TRANSLATE:
-      return {...state,
-        prompts: {...state.prompts,
+      return {
+        ...state,
+        prompts: {
+          ...state.prompts,
           translatePrompt: !state.prompts.translatePrompt
         }
-      }
+      };
 
     case TOGGLE_SAVE:
-      return {...state,
-        prompts: {...state.prompts,
+      return {
+        ...state,
+        prompts: {
+          ...state.prompts,
           savePrompt: !state.prompts.savePrompt
         }
-      }
+      };
 
     case TOGGLE_MOVE:
-      return {...state,
-        prompts: {...state.prompts,
+      return {
+        ...state,
+        prompts: {
+          ...state.prompts,
           movePrompt: !state.prompts.movePrompt
         }
-      }
+      };
 
     case UPDATE_SELECTED_MSG:
-      return {...state,
+      return {
+        ...state,
         selectedMessage: action.payload
-      }
+      };
 
     case TOGGLE_PF_VIEW:
-      return {...state,
+      return {
+        ...state,
         userPfView: action.payload
-      }
+      };
 
     case CLEAR_SELECTED_MSG:
-      return {...state,
+      return {
+        ...state,
         selectedMessage: null
-      }
+      };
 
     case UPDATE_SPOKEN_LANGS:
-      return {...state,
+      return {
+        ...state,
         spokenLanguages: action.payload
-      }
+      };
 
     case TOGGLE_SPINNER:
-      return {...state,
+      return {
+        ...state,
         loading: !state.loading
-      }
+      };
 
     case REMOVE_USER:
-      return {...state,
+      return {
+        ...state,
         currentUser: null
-      }
+      };
 
     case CLOSE_ALL_CHATS:
-      return {...state,
+      return {
+        ...state,
         openChats: [],
         recipientUser: null
-      }
-      
-    default:
-      return state
+      };
 
+    default:
+      return state;
   }
-}
+};
 
 export default manageApp;
