@@ -16,7 +16,7 @@ import {
 import { connect } from "react-redux";
 import { ActionCable } from "react-actioncable-provider";
 
-class Chatbox extends React.Component {
+class Chatbox extends React.PureComponent {
   state = {
     messages: null,
     bgColor: null,

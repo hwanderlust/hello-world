@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import spoken from "../../../node_modules/spoken/build/spoken";
 import { withRouter } from "react-router-dom";
 
-import { createList, addMessage, getLists, createMessage } from "../../adapter";
+import { createList, addMessage, getLists } from "../../adapter";
 import {
   updateLists,
   updateMessages,
@@ -18,7 +18,9 @@ import {
   toggleUserPf,
   clearSelectedMsg,
   toggleSpinner,
-  closeChats
+  closeChats,
+  setTranscription,
+  clearTranscription,
 } from "../../actions";
 
 import Chatbox from "./Chatbox";
@@ -26,6 +28,7 @@ import Translate from "../features/Translate";
 import UserIcon from "../user/UserIcon";
 import Speech from "../features/Speech";
 import LoadingSpinner from "../features/LoadingSpinner";
+import ChatInput from './ChatInput';
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -63,7 +66,7 @@ const tips = [
   `enter "//C all" to close all chat windows`
 ];
 
-class Chat extends React.Component {
+class Chat extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -107,7 +110,7 @@ class Chat extends React.Component {
       !this.props.savePrompt &&
       !this.props.translatePrompt
     ) {
-      this.inputFocus.focus();
+      // this.inputFocus.focus();
     }
 
     if (
@@ -119,10 +122,10 @@ class Chat extends React.Component {
       this.renderUsers();
     }
 
-    if(this.props.translation && prevState.tip !== tips[3]) {
+    if (this.props.translation && prevState.tip !== tips[3]) {
       this.setState({
         tip: tips[3]
-      })
+      });
     }
   }
 
@@ -132,13 +135,7 @@ class Chat extends React.Component {
 
   handleKeyDown = e => {
     if (e.key === "Escape") {
-      if (this.state.text) {
-        this.setState({ text: "" }, () => console.log(this.state));
-      }
-      if (this.props.translation) {
-        this.setState({ text: "" }, () => this.props.clearTranslation());
-        this.props.clearSelectedMsg();
-      }
+
       if (this.props.speechPrompt) {
         this.props.toggleSpeech();
       }
@@ -151,12 +148,22 @@ class Chat extends React.Component {
       if (this.props.movePrompt) {
         this.props.toggleMove();
       }
-    } else if (e.key === "Backspace") {
-      if (this.state.text.length === 1) {
-        this.setState({ text: "" }, () => console.log(this.state));
+
+      if (this.props.translation) {
         this.props.clearTranslation();
+        this.props.clearSelectedMsg();
       }
-    }
+
+      if (this.props.transcription) {
+        this.props.clearTranscription();
+      }
+    } 
+    // else if (e.key === "Backspace") {
+    //   if (this.state.text.length === 1) {
+    //     this.setState({ text: "" }, () => console.log(this.state));
+    //     this.props.clearTranslation();
+    //   }
+    // }
   };
 
   handleClick = (e, clickedUser) => {
@@ -203,11 +210,7 @@ class Chat extends React.Component {
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
 
-    this.setState(
-      {
-        ...this.state,
-        users: updatedUsers
-      },
+    this.setState({ ...this.state, users: updatedUsers },
       () => console.log(this.state)
     );
   };
@@ -257,119 +260,22 @@ class Chat extends React.Component {
     this.props.history.push("/profile");
   };
 
+  // saving a Msg also uses this
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value }, () =>
       console.log(this.state)
     );
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    e.persist();
-    this.handleFeatures(e);
-  };
-
-  handleFeatures = e => {
-    switch (e.type) {
-      case "submit":
-        return this.handleTextShortcuts();
-
-      case "click":
-        return this.handleFeatureBtnClicks(e);
-
-      default:
-        return console.log("something is wrong..");
-    }
-  };
-
-  handleTextShortcuts = () => {
-    const splitted = this.state.text.split(" ");
-    // eslint-disable-next-line
-    const [firstWord, secondWord] = splitted;
-
-    switch (firstWord) {
-      case "//T":
-        return this.handleTranslateShortcut();
-      case "//L":
-        return this.handleTranscribeShortcut();
-      case "//C":
-        return this.handleCloseChatShortcut();
-
-      default:
-        if (this.state.text === "" && this.props.translation) {
-          this.newMessage({
-            chat_id: this.props.chat,
-            text: this.props.translation
-          });
-          this.props.clearTranslation();
-          return this.setState({ text: "" }, () => console.log(this.state));
-        } else {
-          this.newMessage({ chat_id: this.props.chat, text: this.state.text });
-          return this.setState({ text: "" }, () => console.log(this.state));
-        }
-    }
-  };
-
-  handleFeatureBtnClicks = e => {
-    switch (e.target.id) {
-      case "translateBtn":
-        return this.handleTranslateShortcut();
-      case "transcribeBtn":
-        return this.handleTranscribeShortcut();
-      default:
-        return console.log(`there's another button???`);
-    }
-  };
-
   handleTranslateShortcut = () => {
-    this.setState({ text: "" }, () => console.log(this.state));
     this.props.toggleTranslate();
   };
 
+  // slightly diff from the keyboard shortcut trigger
   handleTranscribeShortcut = () => {
-    this.setState({ text: "speak now" }, () => console.log(this.state));
+    this.props.setTranscription('speak now')
     this.props.toggleSpinner();
     this.handleTranscription();
-  };
-
-  handleCloseChatShortcut = () => {
-    const splitted = this.state.text.split(" ");
-    // eslint-disable-next-line
-    const [firstWord, secondWord] = splitted;
-
-    if (!secondWord)
-      return alert(
-        `You gotta give the chat number--you can find it after the user's name on the chat window!`
-      );
-
-    if (secondWord.toLowerCase() === "all") {
-      if (this.props.openChats.length > 0) {
-        this.props.closeChats();
-        return this.setState({ text: "" }, () => console.log(this.state));
-      } else {
-        return alert(`Oh no, no chat windows to close!`);
-      }
-    }
-
-    if (this.props.openChats.map(c => c.id).includes(Number(secondWord))) {
-      this.props.closeChat(Number(secondWord));
-      return this.setState({ text: "" }, () => console.log(this.state));
-    } else {
-      return alert(`Sorry but that chat isn't open, or you might have a typo.`);
-    }
-  };
-
-  newMessage = message => {
-    if (this.props.recipientUser) {
-      const users = {
-        sender_id: this.props.currentUser.id,
-        recipient_id: this.props.recipientUser.id
-      };
-      createMessage({ ...message, ...users });
-    } else {
-      alert(`you may have to choose someone to chat with first...`);
-    }
   };
 
   handleReceivedChat = response => {
@@ -439,12 +345,13 @@ class Chat extends React.Component {
     this.setState({ saveMsg: true });
   };
 
+  // both here and in ChatInput
   handleTranscription = () => {
     spoken
       .listen()
       .then(transcript => {
         console.log(transcript);
-        this.setState({ text: transcript }, () => console.log(this.state));
+        this.props.setTranscription(transcript);
         this.props.toggleSpinner();
       })
       .catch(error => console.warn(error.message));
@@ -479,26 +386,6 @@ class Chat extends React.Component {
             </div>
           ) : null}
         </React.Fragment>
-      );
-    };
-
-    const renderChatInput = () => {
-      return (
-        <form
-          className="chat-input-wrapper"
-          onSubmit={e => this.handleSubmit(e)}
-        >
-          <input
-            className="chat-input"
-            type="text"
-            name="text"
-            placeholder={this.state.placeholder}
-            value={this.state.text || this.props.translation || ""}
-            onChange={e => this.handleChange(e)}
-            autoFocus="true"
-            ref={c => (this.inputFocus = c)}
-          />
-        </form>
       );
     };
 
@@ -577,10 +464,10 @@ class Chat extends React.Component {
 
       return (
         <section className={className}>
-          <button onClick={this.handleFeatures} id="translateBtn">
+          <button onClick={this.handleTranslateShortcut} id="translateBtn">
             Translate
           </button>
-          <button onClick={this.handleFeatures} id="transcribeBtn">
+          <button onClick={this.handleTranscribeShortcut} id="transcribeBtn">
             Transcribe
           </button>
         </section>
@@ -615,7 +502,7 @@ class Chat extends React.Component {
           {this.props.loading ? <LoadingSpinner /> : null}
         </div>
 
-        {renderChatInput()}
+        <ChatInput />
 
         <div className="tip-container">
           <h1 className="tip">{this.state.tip}</h1>
@@ -638,7 +525,8 @@ const mapStateToProps = state => {
     translatePrompt: state.appState.prompts.translatePrompt,
     savePrompt: state.appState.prompts.savePrompt,
     spokenLanguages: state.appState.spokenLanguages,
-    loading: state.appState.loading
+    loading: state.appState.loading,
+    transcription: state.appState.transcription,
   };
 };
 
@@ -656,7 +544,9 @@ const mapDispatchToProps = dispatch => {
     toggleUserPf: user => dispatch(toggleUserPf(user)),
     clearSelectedMsg: () => dispatch(clearSelectedMsg()),
     toggleSpinner: () => dispatch(toggleSpinner()),
-    closeChats: () => dispatch(closeChats())
+    closeChats: () => dispatch(closeChats()),
+    setTranscription: (transcription) => dispatch(setTranscription(transcription)),
+    clearTranscription: () => dispatch(clearTranscription()),
   };
 };
 

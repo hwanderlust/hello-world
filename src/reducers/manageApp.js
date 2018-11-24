@@ -25,7 +25,9 @@ import {
   UPDATE_SPOKEN_LANGS,
   TOGGLE_SPINNER,
   CLOSE_ALL_CHATS,
-  UPDATE_CHATBOX
+  UPDATE_CHATBOX,
+  SET_TRANSCRIPTION,
+  CLEAR_TRANSCRIPTION,
 } from "../actions/types";
 
 const initialState = {
@@ -50,46 +52,29 @@ const initialState = {
   selectedMessage: null,
   userPfView: null,
   spokenLanguages: null,
-  loading: false
+  loading: false,
+  transcription: null,
 };
 
 const manageApp = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_USER:
-      return {
-        ...state,
-        currentUser: action.payload
-      };
+      return { ...state, currentUser: action.payload };
 
     case UPDATE_USERS:
-      return {
-        ...state,
-        users: action.payload
-      };
+      return { ...state, users: action.payload };
 
     case UPDATE_LANG:
-      return {
-        ...state,
-        language: action.payload
-      };
+      return { ...state, language: action.payload };
 
     case SET_TRANSLATE_TERM:
-      return {
-        ...state,
-        translateTerm: action.payload
-      };
+      return { ...state, translateTerm: action.payload };
 
     case SET_DETECTED_LANG:
-      return {
-        ...state,
-        detectedLang: action.payload
-      };
+      return { ...state, detectedLang: action.payload };
 
     case SET_TRANSLATION:
-      return {
-        ...state,
-        translation: action.payload
-      };
+      return { ...state, translation: action.payload };
 
     case CLEAR_TRANSLATION:
       return {
@@ -101,22 +86,13 @@ const manageApp = (state = initialState, action) => {
       };
 
     case UPDATE_RECIPIENT_USER:
-      return {
-        ...state,
-        recipientUser: action.payload
-      };
+      return { ...state, recipientUser: action.payload };
 
     case UPDATE_LIST:
-      return {
-        ...state,
-        list: action.payload
-      };
+      return { ...state, list: action.payload };
 
     case UPDATE_LISTS:
-      return {
-        ...state,
-        lists: action.payload
-      };
+      return { ...state, lists: action.payload };
 
     case UPDATE_MESSAGES:
       let oldChats = [...state.openChats];
@@ -128,22 +104,13 @@ const manageApp = (state = initialState, action) => {
       const updatedChats = oldChats.map(
         chat => (chat.id === updatedActiveChat.id ? updatedActiveChat : chat)
       );
-      return {
-        ...state,
-        openChats: updatedChats
-      };
+      return { ...state, openChats: updatedChats };
 
     case OPEN_CHAT:
-      return {
-        ...state,
-        openChats: [...state.openChats, action.payload]
-      };
+      return { ...state, openChats: [...state.openChats, action.payload] };
 
     case UPDATE_CHAT:
-      return {
-        ...state,
-        chat: action.payload
-      };
+      return { ...state, chat: action.payload };
 
     case CLOSE_CHAT:
       return {
@@ -153,10 +120,7 @@ const manageApp = (state = initialState, action) => {
       };
 
     case LIST_MESSAGES:
-      return {
-        ...state,
-        messages: action.payload
-      };
+      return { ...state, messages: action.payload };
 
     case TOGGLE_SPEECH:
       return {
@@ -195,40 +159,22 @@ const manageApp = (state = initialState, action) => {
       };
 
     case UPDATE_SELECTED_MSG:
-      return {
-        ...state,
-        selectedMessage: action.payload
-      };
+      return { ...state, selectedMessage: action.payload };
 
     case TOGGLE_PF_VIEW:
-      return {
-        ...state,
-        userPfView: action.payload
-      };
+      return { ...state, userPfView: action.payload };
 
     case CLEAR_SELECTED_MSG:
-      return {
-        ...state,
-        selectedMessage: null
-      };
+      return { ...state, selectedMessage: null };
 
     case UPDATE_SPOKEN_LANGS:
-      return {
-        ...state,
-        spokenLanguages: action.payload
-      };
+      return { ...state, spokenLanguages: action.payload };
 
     case TOGGLE_SPINNER:
-      return {
-        ...state,
-        loading: !state.loading
-      };
+      return { ...state, loading: !state.loading };
 
     case REMOVE_USER:
-      return {
-        ...state,
-        currentUser: null
-      };
+      return { ...state, currentUser: null };
 
     case CLOSE_ALL_CHATS:
       return {
@@ -250,6 +196,12 @@ const manageApp = (state = initialState, action) => {
       );
 
       return { ...state, openChats: updated };
+
+    case SET_TRANSCRIPTION:
+        return { ...state, transcription: action.payload }
+
+    case CLEAR_TRANSCRIPTION:
+        return { ...state, transcription: null }
 
     default:
       return state;

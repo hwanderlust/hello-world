@@ -25,7 +25,9 @@ import {
   UPDATE_SPOKEN_LANGS,
   TOGGLE_SPINNER,
   CLOSE_ALL_CHATS,
-  UPDATE_CHATBOX
+  UPDATE_CHATBOX,
+  SET_TRANSCRIPTION,
+  CLEAR_TRANSCRIPTION,
 } from "./types";
 
 export const updateUser = user => {
@@ -207,3 +209,16 @@ export const updateChatbox = chatObj => {
     payload: chatObj
   };
 };
+
+export const setTranscription = (transcription) => {
+  return {
+    type: SET_TRANSCRIPTION,
+    payload: transcription
+  }
+}
+
+export const clearTranscription = () => {
+  return {
+    type: CLEAR_TRANSCRIPTION
+  }
+}
