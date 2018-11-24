@@ -20,7 +20,6 @@ class ChatInput extends React.PureComponent {
 
     this.state = {
       text: "",
-      placeholder: ""
     };
 
     this.inputFocus = React.createRef();
@@ -170,7 +169,6 @@ class ChatInput extends React.PureComponent {
           className="chat-input"
           type="text"
           name="text"
-          placeholder={this.state.placeholder}
           value={this.props.translation || this.props.transcription || this.state.text || ""}
           onChange={this.handleChange}
           autoFocus="true"

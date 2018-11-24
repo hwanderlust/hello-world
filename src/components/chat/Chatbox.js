@@ -81,7 +81,7 @@ class Chatbox extends React.PureComponent {
     if (!this.props.savePrompt) {
       this.props.toggleSave();
     }
-    this.props.handleSaveMsgChange(msg);
+    this.props.handleSaveMsgSelection(msg);
   };
 
   handleBoxClick = e => {

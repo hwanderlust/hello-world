@@ -4,9 +4,7 @@ import { connect } from "react-redux";
 import spoken from "../../../node_modules/spoken/build/spoken";
 import { withRouter } from "react-router-dom";
 
-import { createList, addMessage, getLists } from "../../adapter";
 import {
-  updateLists,
   updateMessages,
   updateChat,
   closeChat,
@@ -30,6 +28,7 @@ import Speech from "../features/Speech";
 import LoadingSpinner from "../features/LoadingSpinner";
 import ChatInput from './ChatInput';
 import Button from './Button';
+import SaveMsg from './SaveMsg';
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -73,17 +72,11 @@ class Chat extends React.PureComponent {
 
     this.state = {
       users: null,
-      text: "",
       speech: "",
-      saveMsg: false,
-      message: null,
-      newList: "",
-      saveMsgStatus: false,
-      existingList: null,
+      saveMessage: null,
       x: 0,
       y: 0,
       chatBoxBgColor: null,
-      placeholder: "",
       spokenLanguages: null,
       spokenVoice: null,
       tip: ""
@@ -261,13 +254,6 @@ class Chat extends React.PureComponent {
     this.props.history.push("/profile");
   };
 
-  // saving a Msg also uses this
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value }, () =>
-      console.log(this.state)
-    );
-  };
-
   handleTranslateShortcut = () => {
     this.props.toggleTranslate();
   };
@@ -287,63 +273,8 @@ class Chat extends React.PureComponent {
     console.log(response);
   };
 
-  handleSavingMsg = listId => {
-    addMessage({ msg_id: this.state.message.id, list_id: listId }).then(
-      messages => {
-        console.log(messages);
-        this.setState({ saveMsgStatus: true }, () => console.log(this.state));
-        this.props.toggleSave();
-      }
-    );
-  };
-
-  handleNewList = e => {
-    e.preventDefault();
-    createList({
-      name: this.state.newList,
-      user_id: this.props.currentUser.id
-    }).then(newList => {
-      console.log(newList);
-      this.handleSavingMsg(newList.id);
-      getLists(this.props.currentUser.id).then(lists =>
-        this.props.updateLists(lists)
-      );
-    });
-    this.setState({ newList: "" });
-  };
-
-  handleExistingList = () => {
-    console.log(this.existingList.value);
-    this.setState({ existingList: this.existingList.value }, () =>
-      this.handleSavingMsg(this.state.existingList)
-    );
-  };
-
-  hideForms = form => {
-    switch (form) {
-      case "speech":
-        return this.setState({ speech: "" }, () => console.log(this.state));
-      case "translation":
-        return this.setState({ langPrompt: false }, () =>
-          console.log(this.state)
-        );
-      case "save":
-        return this.setState({ saveMsg: false }, () => console.log(this.state));
-      default:
-        return console.log("hideForms failed");
-    }
-  };
-
-  handleSaveMsgChange = msg => {
-    this.setState({ message: msg }, () => console.log(this.state));
-
-    if (!this.props.lists) {
-      getLists(this.props.currentUser.id).then(lists =>
-        this.props.updateLists(lists)
-      );
-    }
-
-    this.setState({ saveMsg: true });
+  handleSaveMsgSelection = msg => {
+    this.setState({ saveMessage: msg }, () => console.log(this.state));
   };
 
   // both here and in ChatInput
@@ -369,70 +300,15 @@ class Chat extends React.PureComponent {
       const className =
         this.props.speechPrompt ||
         this.props.translatePrompt ||
-        this.props.savePrompt ||
-        this.state.saveMsgStatus
+        this.props.savePrompt 
           ? "chat-header active"
           : "chat-header";
       return (
-        <React.Fragment>
-          {this.props.speechPrompt ||
-          this.props.translatePrompt ||
-          this.props.savePrompt ||
-          this.state.saveMsgStatus ? (
-            <div className={className}>
-              {this.props.speechPrompt ? <Speech /> : null}
-              {this.props.translatePrompt ? <Translate /> : null}
-              {this.props.savePrompt ? renderSaveMsgForm() : null}
-              {this.state.saveMsgStatus ? renderCheckmark() : null}
-            </div>
-          ) : null}
-        </React.Fragment>
-      );
-    };
-
-    const renderSaveMsgForm = () => {
-      return (
-        <div className="save-msg">
-          <div className="existing-container">
-            <label>List to Save to:</label>
-            <select name="existingList" ref={el => (this.existingList = el)}>
-              {this.props.lists ? (
-                this.props.lists.map(list => (
-                  <option key={list.id} value={list.id}>
-                    {list.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No Lists</option>
-              )}
-            </select>
-            <Button handleClick={this.handleExistingList} text="Add to this List"/>
-          </div>
-
-          <h1 className="save-msg-title">Save a Message to Review!</h1>
-
-          <form onSubmit={this.handleNewList}>
-            <input
-              type="text"
-              name="newList"
-              value={this.state.newList}
-              onChange={this.handleChange}
-              placeholder="Create New List--Name Here"
-              autoFocus={true}
-            />
-          </form>
+        <div className={className}>
+          {this.props.speechPrompt ? <Speech /> : null}
+          {this.props.translatePrompt ? <Translate /> : null}
+          {this.props.savePrompt ? <SaveMsg msgId={this.state.saveMessage.id} /> : null}
         </div>
-      );
-    };
-
-    const renderCheckmark = () => {
-      setTimeout(() => this.setState({ saveMsgStatus: false }), 600);
-      return (
-        <img
-          className="checkmark"
-          src="https://png.icons8.com/cotton/2x/checkmark.png"
-          alt="check mark"
-        />
       );
     };
 
@@ -443,7 +319,7 @@ class Chat extends React.PureComponent {
             console.log(obj);
             return (
               <Chatbox
-                handleSaveMsgChange={this.handleSaveMsgChange}
+                handleSaveMsgSelection={this.handleSaveMsgSelection}
                 chat={obj}
                 x={this.state.x}
                 y={this.state.y}
@@ -486,8 +362,7 @@ class Chat extends React.PureComponent {
 
         {this.props.speechPrompt ||
         this.props.translatePrompt ||
-        this.props.savePrompt ||
-        this.state.saveMsgStatus
+        this.props.savePrompt
           ? null
           : renderFeatureBtns()}
 
@@ -512,7 +387,6 @@ class Chat extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     currentUser: state.appState.currentUser,
-    lists: state.appState.lists,
     openChats: state.appState.openChats,
     recipientUser: state.appState.recipientUser,
     chat: state.appState.chat,
@@ -529,7 +403,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateLists: lists => dispatch(updateLists(lists)),
     updateMessages: messages => dispatch(updateMessages(messages)),
     updateChat: chat => dispatch(updateChat(chat)),
     closeChat: chats => dispatch(closeChat(chats)),
