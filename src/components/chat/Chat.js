@@ -29,6 +29,7 @@ import UserIcon from "../user/UserIcon";
 import Speech from "../features/Speech";
 import LoadingSpinner from "../features/LoadingSpinner";
 import ChatInput from './ChatInput';
+import Button from './Button';
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -405,7 +406,7 @@ class Chat extends React.PureComponent {
                 <option disabled>No Lists</option>
               )}
             </select>
-            <button onClick={this.handleExistingList}>Add to this List</button>
+            <Button handleClick={this.handleExistingList} text="Add to this List"/>
           </div>
 
           <h1 className="save-msg-title">Save a Message to Review!</h1>
@@ -464,12 +465,8 @@ class Chat extends React.PureComponent {
 
       return (
         <section className={className}>
-          <button onClick={this.handleTranslateShortcut} id="translateBtn">
-            Translate
-          </button>
-          <button onClick={this.handleTranscribeShortcut} id="transcribeBtn">
-            Transcribe
-          </button>
+          <Button handleClick={this.handleTranslateShortcut} text="Translate" />
+          <Button handleClick={this.handleTranscribeShortcut} text="Transcribe" />
         </section>
       );
     };
