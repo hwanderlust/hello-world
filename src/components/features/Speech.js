@@ -16,12 +16,13 @@ class Speech extends React.PureComponent {
   }
 
   handleSpeechSubmit = (e) => {
+
     this.props.toggleSpinner()
     const voice = this.props.spokenLanguages.find(v => v.lang === e.target.value)
+    
+    setTimeout(this.props.toggleSpinner, 2000)  
     spoken.say(this.props.selectedMessage.text, voice.name)
-    .then(speechInfo => {
-      this.props.toggleSpinner()
-    })
+  
     this.props.clearSelectedMsg()
     this.props.toggleSpeech()
   }
