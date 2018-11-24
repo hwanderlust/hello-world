@@ -4,7 +4,8 @@ import {
   updateLang,
   setTranslation,
   toggleTranslate,
-  toggleSpinner
+  toggleSpinner,
+  clearSelectedMsg
 } from "../../actions";
 import { translateText, detectLang } from "../../adapter";
 import { googleLanguages } from "../../constants";
@@ -88,29 +89,21 @@ class Translate extends React.Component {
   handleTranslation = e => {
     e.persist();
     this.props.updateLang(e.target.selectedOptions[0].id);
+    const translationTerm = encodeURI(this.state.input) || this.props.selectedMessage
 
-    if (this.state.input) {
-      const term = encodeURI(this.state.input);
-      translateText(
-        term,
-        this.state.detectedLang.code,
-        e.target.selectedOptions[0].id
-      ).then(r => {
-        const translation = this.formatTranslation(r);
-        this.props.setTranslation(translation);
-        this.props.toggleSpinner();
-      });
-    } else if (this.props.selectedMessage) {
-      translateText(
-        this.props.selectedMessage,
-        this.state.detectedLang.code,
-        e.target.selectedOptions[0].id
-      ).then(r => {
-        const translation = this.formatTranslation(r);
-        this.props.setTranslation(translation);
-        this.props.toggleSpinner();
-      });
-    }
+    translateText(
+      translationTerm,
+      this.state.detectedLang.code,
+      e.target.selectedOptions[0].id
+    )
+    
+    .then(r => {
+      const translation = this.formatTranslation(r);
+      this.props.setTranslation(translation);
+      
+      this.props.toggleSpinner();
+      this.props.clearSelectedMsg();
+    })
 
     this.props.toggleTranslate();
   };
@@ -191,7 +184,8 @@ const mapDispatchToProps = dispatch => {
     updateLang: lang => dispatch(updateLang(lang)),
     setTranslation: translation => dispatch(setTranslation(translation)),
     toggleTranslate: () => dispatch(toggleTranslate()),
-    toggleSpinner: () => dispatch(toggleSpinner())
+    toggleSpinner: () => dispatch(toggleSpinner()),
+    clearSelectedMsg: () => dispatch(clearSelectedMsg()),
   };
 };
 
