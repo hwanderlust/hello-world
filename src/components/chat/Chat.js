@@ -99,7 +99,8 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("COMPONENTDIDUPDATE", this.props);
+    console.log("COMPONENTDIDUPDATE props", prevProps);
+    // console.log("COMPONENTDIDUPDATE state", prevState);
 
     if (
       !this.props.speechPrompt &&
@@ -116,6 +117,12 @@ class Chat extends React.Component {
     ) {
     } else {
       this.renderUsers();
+    }
+
+    if(this.props.translation && prevState.tip !== tips[3]) {
+      this.setState({
+        tip: tips[3]
+      })
     }
   }
 
