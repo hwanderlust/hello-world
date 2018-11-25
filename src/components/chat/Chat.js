@@ -29,6 +29,7 @@ import LoadingSpinner from "../features/LoadingSpinner";
 import ChatInput from './ChatInput';
 import Button from './Button';
 import SaveMsg from './SaveMsg';
+import ChatAdvice from './ChatAdvice';
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -57,14 +58,6 @@ const imgStyle = {
   marginRight: "1rem"
 };
 
-const tips = [
-  `enter "//T" for translation prompt`,
-  `enter "//C #" to close a certain chat window`,
-  `enter "//L" for transcribe prompt`,
-  `press "Esc" to remove prompts and/or clear text field`,
-  `click main background and press "tab" to type`,
-  `enter "//C all" to close all chat windows`
-];
 
 class Chat extends React.PureComponent {
   constructor(props) {
@@ -77,9 +70,6 @@ class Chat extends React.PureComponent {
       x: 0,
       y: 0,
       chatBoxBgColor: null,
-      spokenLanguages: null,
-      spokenVoice: null,
-      tip: ""
     };
   }
 
@@ -89,10 +79,6 @@ class Chat extends React.PureComponent {
       this.setState({ users: this.props.users }, () => console.log(this.state));
     }
     window.addEventListener("keydown", this.handleKeyDown);
-    this.setState({ tip: tips[Math.floor(Math.random() * tips.length)] }, () =>
-      console.log(this.state)
-    );
-    this.interval = setInterval(this.renderTips, 60000);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -107,24 +93,10 @@ class Chat extends React.PureComponent {
       // this.inputFocus.focus();
     }
 
-    if (
-      prevState.users &&
-      this.state.users &&
-      prevState.users.length === this.state.users.length
-    ) {
+    if (prevState.users && this.state.users && prevState.users.length === this.state.users.length) {
     } else {
       this.renderUsers();
     }
-
-    if (this.props.translation && prevState.tip !== tips[3]) {
-      this.setState({
-        tip: tips[3]
-      });
-    }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
   }
 
   handleKeyDown = e => {
@@ -289,11 +261,6 @@ class Chat extends React.PureComponent {
       .catch(error => console.warn(error.message));
   };
 
-  renderTips = () => {
-    this.setState({ tip: tips[Math.floor(Math.random() * 5)] }, () =>
-      console.log(this.state)
-    );
-  };
 
   render() {
     const renderHeader = () => {
@@ -376,9 +343,8 @@ class Chat extends React.PureComponent {
 
         <ChatInput />
 
-        <div className="tip-container">
-          <h1 className="tip">{this.state.tip}</h1>
-        </div>
+        <ChatAdvice />
+
       </React.Fragment>
     );
   }
@@ -395,7 +361,6 @@ const mapStateToProps = state => {
     translation: state.appState.translation,
     translatePrompt: state.appState.prompts.translatePrompt,
     savePrompt: state.appState.prompts.savePrompt,
-    spokenLanguages: state.appState.spokenLanguages,
     loading: state.appState.loading,
     transcription: state.appState.transcription,
   };
