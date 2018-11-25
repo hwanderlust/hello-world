@@ -4,6 +4,16 @@ import { connect } from "react-redux";
 import spoken from "../../../node_modules/spoken/build/spoken";
 import { withRouter } from "react-router-dom";
 
+import Chatbox from "./Chatbox";
+import Translate from "../features/Translate";
+import UserIcon from "../user/UserIcon";
+import Speech from "../features/Speech";
+import LoadingSpinner from "../features/LoadingSpinner";
+import ChatInput from "./ChatInput";
+import Button from "./Button";
+import SaveMsg from "./SaveMsg";
+import ChatAdvice from "./ChatAdvice";
+
 import {
   updateMessages,
   updateChat,
@@ -21,15 +31,7 @@ import {
   clearTranscription,
 } from "../../actions";
 
-import Chatbox from "./Chatbox";
-import Translate from "../features/Translate";
-import UserIcon from "../user/UserIcon";
-import Speech from "../features/Speech";
-import LoadingSpinner from "../features/LoadingSpinner";
-import ChatInput from './ChatInput';
-import Button from './Button';
-import SaveMsg from './SaveMsg';
-import ChatAdvice from './ChatAdvice';
+
 
 const bgColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -60,10 +62,8 @@ const imgStyle = {
 
 
 class Chat extends React.PureComponent {
-  constructor(props) {
-    super(props);
 
-    this.state = {
+    state = {
       users: null,
       speech: "",
       saveMessage: null,
@@ -71,7 +71,6 @@ class Chat extends React.PureComponent {
       y: 0,
       chatBoxBgColor: null,
     };
-  }
 
   componentDidMount() {
     console.log("COMPONENTDIDMOUNT", this.props);
@@ -142,14 +141,13 @@ class Chat extends React.PureComponent {
         // this.props.handleNewChat({ recipient_id: clickedUser.id });
         const x = parseInt(Math.random() * 300, 10);
         const y = parseInt(Math.random() * 300, 10);
-        this.setState(
-          {
+        this.setState({
             x,
             y,
             chatBoxBgColor: bgColor()
-          },
-          () => {
+          }, () => {
             console.log(this.state);
+            
             this.props.handleNewChat({
               recipient_id: clickedUser.id,
               x: this.state.x,
@@ -325,12 +323,10 @@ class Chat extends React.PureComponent {
           onReceived={this.handleReceivedChat}
         />
 
-        {renderHeader()}
-
         {this.props.speechPrompt ||
         this.props.translatePrompt ||
         this.props.savePrompt
-          ? null
+          ? renderHeader()
           : renderFeatureBtns()}
 
         <aside className="users-list">{this.renderUsers()}</aside>
